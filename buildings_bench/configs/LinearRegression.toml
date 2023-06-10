@@ -1,0 +1,7 @@
+[model]
+context_len = 168
+pred_len = 168
+continuous_loads = true
+
+[transfer_learning]
+ignore_scoring_rules = true

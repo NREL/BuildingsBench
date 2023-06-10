@@ -1,0 +1,27 @@
+[model]
+context_len = 168
+pred_len = 24
+vocab_size = 2274
+num_encoder_layers = 3
+num_decoder_layers = 3
+d_model = 512
+nhead = 8
+dim_feedforward = 1024
+dropout = 0.0
+activation = 'gelu'
+continuous_loads = false
+ignore_spatial = false
+
+[pretrain]
+batch_size = 256
+init_scale = 0.02
+warmup_steps = 10000
+lr = 0.00006
+scheduler_steps = 162760
+tokenizer_without_merge = false
+
+[zero_shot]
+tokenizer_without_merge = false
+
+[transfer_learning]
+tokenizer_without_merge = false

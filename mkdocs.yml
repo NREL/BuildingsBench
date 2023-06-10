@@ -1,0 +1,57 @@
+site_name: BuildingsBench
+site_description: The documentation for the BuildingsBench platform.
+site_author: Patrick Emami
+site_url: https://nrel.github.io/BuildingsBench
+
+repo_name: NREL/BuildingsBench
+repo_url: https://github.com/NREL/BuildingsBench/
+
+theme:
+  name: material
+  features:
+      - navigation.sections  # Sections are included in the navigation on the left.
+      - toc.integrate  # Table of contents is integrated on the left; does not appear separately on the right.
+      - header.autohide  # header disappears as you scroll
+plugins:
+  - search
+  - autorefs  # Cross-links to headings
+  - mkdocstrings:
+      handlers:
+          python:
+            selection:
+                inherited_members: true  # Allow looking up inherited methods
+            rendering:
+                show_root_heading: false  # actually display anything at all...
+                show_root_full_path: true  # display "diffrax.asdf" not just "asdf"
+                show_signature_annotations: true
+                show_source: false  # don't include source code
+                members_order: source  # order methods according to their order of definition in the source code, not alphabetical order
+                heading_level: 2
+
+
+nav: 
+  - Home: index.md
+  - Running The Benchmark: running.md
+  - Tutorials: tutorials.md
+  - API: 
+    - Data:
+      - API/data/buildings_bench-data.md
+    - Models:
+      - API/models/buildings_bench-models.md
+    - Utilities:
+      - API/utilities/buildings_bench-evaluation.md
+      - API/utilities/buildings_bench-tokenizer.md
+      - API/utilities/buildings_bench-transforms.md
+      - API/utilities/buildings_bench-utils.md
+
+extra_css:
+    - css/extra.css
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences

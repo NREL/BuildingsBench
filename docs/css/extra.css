@@ -1,0 +1,103 @@
+/* Remove elements */
+.wy-nav-content .wy-breadcrumbs-aside,
+.ea-placement,
+.ethical-rtd > div.ethical-sidebar,
+.ethical-rtd > div.ethical-footer {
+  display: none !important;
+}
+
+.rst-content a:visited {
+    color: #3091d1;  /* No visiting color */
+  }
+
+/* Titles */
+h1 {
+    font-family: inherit;
+    display: inline-block;
+    max-width: 100%;
+    font-size: 38px;
+    overflow-wrap: break-word;
+    background: linear-gradient(92deg,#ffd200 0%,#f7a11a 32%,#5dd2ff 52%,#0079c2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  h1 span.highlighted {
+    -webkit-text-fill-color: initial;
+  }
+  h2,
+  .rst-content .toctree-wrapper > p.caption {
+    font-family: inherit;
+    font-weight: 200;
+  }
+
+  /* Code */
+.highlight .kn,
+.highlight .k {
+  color: #d73a49;
+}
+.highlight .nn {
+  color: inherit;
+  font-weight: inherit;
+}
+.highlight .nc {
+  color: #e36209;
+  font-weight: inherit;
+}
+.highlight .fm,
+.highlight .nd,
+.highlight .nf,
+.highlight .nb {
+  color: #6f42c1;
+}
+.highlight .bp,
+.highlight .n {
+  color: inherit;
+}
+.highlight .kc,
+.highlight .s1,
+.highlight .s2,
+.highlight .mi,
+.highlight .mf,
+.highlight .bp,
+.highlight .bn,
+.highlight .ow {
+  color: #005cc5;
+  font-weight: inherit;
+}
+.highlight .c1 {
+  color: #6a737d;
+}
+
+/* Footer */
+footer, footer a, footer a:visited {
+    color: white !important;
+  }
+footer div {
+    color: grey;  /* Reset */
+}
+
+.rst-content code {
+    color: #000000;
+}
+
+
+html {
+    /* Decrease font size for overall webpage
+       Down from 137.5% which is the Material default */
+    font-size: 145%;
+}
+
+/* Highlight functions, classes etc. type signatures. Really helps to make clear where
+   one item ends and another begins. */
+
+   [data-md-color-scheme="default"] {
+    --doc-heading-color: #DDD;
+    --doc-heading-border-color: #CCC;
+    --doc-heading-color-alt: #F0F0F0;
+}
+[data-md-color-scheme="slate"] {
+    --doc-heading-color: rgb(25,25,33);
+    --doc-heading-border-color: rgb(25,25,33);
+    --doc-heading-color-alt: rgb(33,33,44);
+    --md-code-bg-color: rgb(38,38,50);
+}

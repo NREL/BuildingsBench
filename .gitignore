@@ -1,0 +1,10 @@
+wandb/
+checkpoints/
+results/
+site/
+*.egg-info/
+scripts/creating_buildings_bench/
+*/__pycache__/
+*/*/__pycache__/
+build/
+dist/
