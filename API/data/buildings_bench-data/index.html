@@ -1,0 +1,2711 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The documentation for the BuildingsBench platform.">
+      
+      
+        <meta name="author" content="Patrick Emami">
+      
+      
+        <link rel="canonical" href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/">
+      
+      
+        <link rel="prev" href="../../../tutorials/">
+      
+      
+        <link rel="next" href="../../models/buildings_bench-models/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.15">
+    
+    
+      
+        <title>buildings_bench.data - BuildingsBench</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.26e3688c.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+      <link rel="stylesheet" href="../../../css/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#buildings_benchdata" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="BuildingsBench" class="md-header__button md-logo" aria-label="BuildingsBench" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            BuildingsBench
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              buildings_bench.data
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/NREL/BuildingsBench/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    NREL/BuildingsBench
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="BuildingsBench" class="md-nav__button md-logo" aria-label="BuildingsBench" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    BuildingsBench
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/NREL/BuildingsBench/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    NREL/BuildingsBench
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../running/" class="md-nav__link">
+        Running The Benchmark
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../tutorials/" class="md-nav__link">
+        Tutorials
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+          API
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          API
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+          Data
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_4_1">
+          <span class="md-nav__icon md-icon"></span>
+          Data
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          buildings_bench.data
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        buildings_bench.data
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#loading-benchmark-datasets" class="md-nav__link">
+    Loading benchmark datasets
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#buildings_bench.data" class="md-nav__link">
+    data
+  </a>
+  
+    <nav class="md-nav" aria-label="data">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.load_pretraining" class="md-nav__link">
+    load_pretraining()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.load_torch_dataset" class="md-nav__link">
+    load_torch_dataset()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.load_pandas_dataset" class="md-nav__link">
+    load_pandas_dataset()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#buildings-900k-pytorch-dataset" class="md-nav__link">
+    Buildings-900K PyTorch Dataset
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#buildings_bench.data.buildings900K" class="md-nav__link">
+    buildings900K
+  </a>
+  
+    <nav class="md-nav" aria-label="buildings900K">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.buildings900K.Buildings900K" class="md-nav__link">
+    Buildings900K
+  </a>
+  
+    <nav class="md-nav" aria-label="Buildings900K">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.buildings900K.Buildings900K.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.buildings900K.Buildings900K.init_fp" class="md-nav__link">
+    init_fp()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.buildings900K.Buildings900K.__read_index_file" class="md-nav__link">
+    __read_index_file()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#generators-and-datasets" class="md-nav__link">
+    Generators and Datasets
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#buildings_bench.data.datasets" class="md-nav__link">
+    datasets
+  </a>
+  
+    <nav class="md-nav" aria-label="datasets">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.datasets.TorchBuildingDataset" class="md-nav__link">
+    TorchBuildingDataset
+  </a>
+  
+    <nav class="md-nav" aria-label="TorchBuildingDataset">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.datasets.TorchBuildingDataset.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.datasets.TorchBuildingDatasetFromParquet" class="md-nav__link">
+    TorchBuildingDatasetFromParquet
+  </a>
+  
+    <nav class="md-nav" aria-label="TorchBuildingDatasetFromParquet">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.datasets.TorchBuildingDatasetFromParquet.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.datasets.TorchBuildingDatasetFromParquet.__iter__" class="md-nav__link">
+    __iter__()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV" class="md-nav__link">
+    TorchBuildingDatasetsFromCSV
+  </a>
+  
+    <nav class="md-nav" aria-label="TorchBuildingDatasetsFromCSV">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV.__iter__" class="md-nav__link">
+    __iter__()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV" class="md-nav__link">
+    PandasBuildingDatasetsFromCSV
+  </a>
+  
+    <nav class="md-nav" aria-label="PandasBuildingDatasetsFromCSV">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV.__iter__" class="md-nav__link">
+    __iter__()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.datasets.PandasTransformerDataset" class="md-nav__link">
+    PandasTransformerDataset
+  </a>
+  
+    <nav class="md-nav" aria-label="PandasTransformerDataset">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.datasets.PandasTransformerDataset.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#buildings_bench.data.datasets.keep_buildings" class="md-nav__link">
+    keep_buildings()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+          Models
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4_2">
+          <span class="md-nav__icon md-icon"></span>
+          Models
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../models/buildings_bench-models/" class="md-nav__link">
+        buildings_bench.models
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="0">
+          Utilities
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4_3">
+          <span class="md-nav__icon md-icon"></span>
+          Utilities
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../utilities/buildings_bench-evaluation/" class="md-nav__link">
+        buildings_bench.evaluation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../utilities/buildings_bench-tokenizer/" class="md-nav__link">
+        buildings_bench.tokenizer
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../utilities/buildings_bench-transforms/" class="md-nav__link">
+        buildings_bench.transforms
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../utilities/buildings_bench-utils/" class="md-nav__link">
+        buildings_bench.utils
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="buildings_benchdata">buildings_bench.data</h1>
+<h2 id="loading-benchmark-datasets">Loading benchmark datasets</h2>
+<p>Function definitions for loading Torch and Pandas datasets.</p>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="buildings_bench.data" class="doc doc-heading">
+          <code>buildings_bench.data</code>
+
+
+</h2>
+
+  <div class="doc doc-contents first">
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="buildings_bench.data.load_pretraining" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">load_pretraining</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">num_buildings_ablation</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">24</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Pre-training datasets: buildings-900k-train, buildings-900k-val</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Name of the dataset to load.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>num_buildings_ablation</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Number of buildings to use for pre-training.
+                            If -1, use all buildings.</p>
+            </div>
+          </td>
+          <td>
+                <code>-1</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>apply_scaler_transform</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If not using quantized load or unscaled loads,
+                     applies a {boxcox,standard} scaling transform to the load. Default: ''.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>scaler_transform_path</code></td>
+          <td>
+                <code><span title="pathlib.Path">Path</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Path to data for transform, e.g., pickled data for BoxCox transform.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>context_len</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Length of the context. Defaults to 168.</p>
+            </div>
+          </td>
+          <td>
+                <code>168</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>pred_len</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Length of the prediction horizon. Defaults to 24.</p>
+            </div>
+          </td>
+          <td>
+                <code>24</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code>torch.<span title="torch.utils">utils</span>.<span title="torch.utils.data">data</span>.<span title="torch.utils.data.Dataset">Dataset</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>torch.utils.data.Dataset: Dataset for pretraining.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="buildings_bench.data.load_torch_dataset" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">load_torch_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dataset_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">24</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">TorchBuildingDatasetsFromCSV</span><span class="p">,</span> <span class="n">TorchBuildingDatasetFromParquet</span><span class="p">]</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Load datasets by name.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Name of the dataset to load.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>dataset_path</code></td>
+          <td>
+                <code><span title="pathlib.Path">Path</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Path to the benchmark data. Optional.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>apply_scaler_transform</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If not using quantized load or unscaled loads,
+                     applies a {boxcox,standard} scaling transform to the load. Default: ''.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>scaler_transform_path</code></td>
+          <td>
+                <code><span title="pathlib.Path">Path</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Path to data for transform, e.g., pickled data for BoxCox transform.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>context_len</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Length of the context. Defaults to 168.</p>
+            </div>
+          </td>
+          <td>
+                <code>168</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>pred_len</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Length of the prediction horizon. Defaults to 24.</p>
+            </div>
+          </td>
+          <td>
+                <code>24</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="typing.Union">Union</span>[<a class="autorefs autorefs-internal" title="buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV" href="#buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV">TorchBuildingDatasetsFromCSV</a>, <a class="autorefs autorefs-internal" title="buildings_bench.data.datasets.TorchBuildingDatasetFromParquet" href="#buildings_bench.data.datasets.TorchBuildingDatasetFromParquet">TorchBuildingDatasetFromParquet</a>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Union[TorchBuildingDatasetsFromCSV, TorchBuildingDatasetFromParquet]: Dataset for benchmarking.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="buildings_bench.data.load_pandas_dataset" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">load_pandas_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dataset_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">feature_set</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;engineered&#39;</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PandasBuildingDatasetsFromCSV</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Load datasets by name.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Name of the dataset to load.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>dataset_path</code></td>
+          <td>
+                <code><span title="pathlib.Path">Path</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Path to the benchmark data. Optional.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>feature_set</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Feature set to use. Default: 'engineered'.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;engineered&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>apply_scaler_transform</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>If not using quantized load or unscaled loads,
+                        applies a {boxcox,standard} scaling transform to the load. Default: ''. </p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>scaler_transform_path</code></td>
+          <td>
+                <code><span title="pathlib.Path">Path</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Path to data for transform, e.g., pickled data for BoxCox transform.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>PandasBuildingDatasetsFromCSV</code></td>          <td>
+                <code><a class="autorefs autorefs-internal" title="buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV" href="#buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV">PandasBuildingDatasetsFromCSV</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Generator of Pandas datasets for benchmarking.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div><hr />
+<h2 id="buildings-900k-pytorch-dataset">Buildings-900K PyTorch Dataset</h2>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="buildings_bench.data.buildings900K" class="doc doc-heading">
+          <code>buildings_bench.data.buildings900K</code>
+
+
+</h2>
+
+  <div class="doc doc-contents first">
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="buildings_bench.data.buildings900K.Buildings900K" class="doc doc-heading">
+        <code>Buildings900K</code>
+
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code>torch.<span title="torch.utils">utils</span>.<span title="torch.utils.data">data</span>.<span title="torch.utils.data.Dataset">Dataset</span></code></p>
+
+  
+      <p>This is an indexed dataset for the Buildings-900K dataset.
+It uses an index file to quickly load a sub-sequence from a time series in a multi-building
+Parquet file. The index file is a tab separated file with the following columns:</p>
+<ol>
+<li>Building-type-and-year (e.g., comstock_tmy3_release_1)</li>
+<li>Census region (e.g., by_puma_midwest)</li>
+<li>PUMA ID</li>
+<li>Building ID</li>
+<li>Hour of year pointer (e.g., 0070)</li>
+</ol>
+<p>The sequence pointer is used to extract the slice
+[pointer - context length : pointer + pred length] for a given building ID.</p>
+<p>The time series are not stored chronologically and must be sorted by timestamp after loading.</p>
+<p>Each dataloader worker has its own file pointer to the index file. This is to avoid
+weird multiprocessing errors from sharing a file pointer. We 'seek' to the correct
+line in the index file for random access.</p>
+<p>With 4 workers, data loading with an indexed dataset requires about 30GB of RAM.</p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="buildings_bench.data.buildings900K.Buildings900K.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">dataset_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">index_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span></code>
+
+</h4>
+
+
+  <div class="doc doc-contents ">
+  
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>dataset_path</code></td>
+          <td>
+                <code><span title="pathlib.Path">Path</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Path to the pretraining dataset.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>index_file</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Name of the index file</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>context_len</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Length of the context. Defaults to 168. 
+The index file has to be generated with the same context length.</p>
+            </div>
+          </td>
+          <td>
+                <code>168</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>pred_len</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Length of the prediction horizon. Defaults to 24.
+The index file has to be generated with the same pred length.</p>
+            </div>
+          </td>
+          <td>
+                <code>24</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>apply_scaler_transform</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Apply a scaler transform to the load. Defaults to ''.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>scaler_transform_path</code></td>
+          <td>
+                <code><span title="pathlib.Path">Path</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Path to the scaler transform. Defaults to None.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="buildings_bench.data.buildings900K.Buildings900K.init_fp" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">init_fp</span><span class="p">()</span></code>
+
+</h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Each worker needs to open its own file pointer to avoid 
+weird multiprocessing errors from sharing a file pointer.</p>
+<p>This is not called in the main process.
+This is called in the DataLoader worker_init_fn.
+The file is opened in binary mode which lets us disable buffering.</p>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="buildings_bench.data.buildings900K.Buildings900K.__read_index_file" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">__read_index_file</span><span class="p">(</span><span class="n">index_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
+
+</h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Extract metadata from index file.</p>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+  </div>
+
+  </div>
+
+</div><hr />
+<h2 id="generators-and-datasets">Generators and Datasets</h2>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="buildings_bench.data.datasets" class="doc doc-heading">
+          <code>buildings_bench.data.datasets</code>
+
+
+</h2>
+
+  <div class="doc doc-contents first">
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="buildings_bench.data.datasets.TorchBuildingDataset" class="doc doc-heading">
+        <code>TorchBuildingDataset</code>
+
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code>torch.<span title="torch.utils">utils</span>.<span title="torch.utils.data">data</span>.<span title="torch.utils.data.Dataset">Dataset</span></code></p>
+
+  
+      <p>PyTorch Dataset for a single building's Pandas Dataframe with a timestamp index and a 'power' column.</p>
+<p>Used to iterate over mini-batches of 192-hour subsequences.</p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="buildings_bench.data.datasets.TorchBuildingDataset.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">dataframe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">building_latlon</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">building_type</span><span class="p">:</span> <span class="n">BuildingTypes</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">sliding_window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">is_leap_year</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span></code>
+
+</h4>
+
+
+  <div class="doc doc-contents ">
+  
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>dataframe</code></td>
+          <td>
+                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Pandas DataFrame with a timestamp index and a 'power' column.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>building_latlon</code></td>
+          <td>
+                <code><span title="typing.List">List</span>[float]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Latitude and longitude of the building.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>building_type</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="buildings_bench.BuildingTypes" href="../../utilities/buildings_bench-evaluation/#buildings_bench.evaluation.managers.BuildingTypes">BuildingTypes</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Building type for the dataset.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>context_len</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Length of context. Defaults to 168.</p>
+            </div>
+          </td>
+          <td>
+                <code>168</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>pred_len</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Length of prediction. Defaults to 24.</p>
+            </div>
+          </td>
+          <td>
+                <code>24</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>sliding_window</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Stride for sliding window to split timeseries into test samples. Defaults to 24.</p>
+            </div>
+          </td>
+          <td>
+                <code>24</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>apply_scaler_transform</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Apply scaler transform {boxcox,standard} to the load. Defaults to ''.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>scaler_transform_path</code></td>
+          <td>
+                <code><span title="pathlib.Path">Path</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Path to the pickled data for BoxCox transform. Defaults to None.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>is_leap_year</code></td>
+          <td>
+                <code>bool</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Is the year a leap year? Defaults to False.</p>
+            </div>
+          </td>
+          <td>
+                <code>False</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="buildings_bench.data.datasets.TorchBuildingDatasetFromParquet" class="doc doc-heading">
+        <code>TorchBuildingDatasetFromParquet</code>
+
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>Generate PyTorch Datasets out of Parquet files.</p>
+<p>Each file has multiple buildings (with same Lat/Lon and building type) and
+each building is a column. All time series are for the same year.     </p>
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>building_datasets</code></td>
+          <td>
+                <code>dict</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Maps unique building ids to a TorchBuildingDataset.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="buildings_bench.data.datasets.TorchBuildingDatasetFromParquet.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">parquet_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">building_latlons</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">building_types</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">BuildingTypes</span><span class="p">],</span> <span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">sliding_window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">leap_years</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span></code>
+
+</h4>
+
+
+  <div class="doc doc-contents ">
+  
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>parquet_datasets</code></td>
+          <td>
+                <code><span title="typing.List">List</span>[str]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>List of paths to a parquet file, each has a timestamp index and multiple columns, one per building.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>building_latlons</code></td>
+          <td>
+                <code><span title="typing.List">List</span>[<span title="typing.List">List</span>[float]]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>List of latlons for each parquet file.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>building_types</code></td>
+          <td>
+                <code><span title="typing.List">List</span>[<a class="autorefs autorefs-internal" title="buildings_bench.BuildingTypes" href="../../utilities/buildings_bench-evaluation/#buildings_bench.evaluation.managers.BuildingTypes">BuildingTypes</a>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>List of building types for each parquet file.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>context_len</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Length of context. Defaults to 168.</p>
+            </div>
+          </td>
+          <td>
+                <code>168</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>pred_len</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Length of prediction. Defaults to 24.</p>
+            </div>
+          </td>
+          <td>
+                <code>24</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>sliding_window</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Stride for sliding window to split timeseries into test samples. Defaults to 24.</p>
+            </div>
+          </td>
+          <td>
+                <code>24</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>apply_scaler_transform</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Apply scaler transform {boxcox,standard} to the load. Defaults to ''.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>scaler_transform_path</code></td>
+          <td>
+                <code><span title="pathlib.Path">Path</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Path to the pickled data for BoxCox transform. Defaults to None.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>leap_years</code></td>
+          <td>
+                <code><span title="typing.List">List</span>[int]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>List of leap years. Defaults to None.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="buildings_bench.data.datasets.TorchBuildingDatasetFromParquet.__iter__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__iter__</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TorchBuildingDataset</span><span class="p">]]</span></code>
+
+</h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Generator to iterate over the building datasets.</p>
+
+  <p><strong>Yields:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="typing.Iterator">Iterator</span>[<span title="typing.Tuple">Tuple</span>[str, <a class="autorefs autorefs-internal" title="buildings_bench.data.datasets.TorchBuildingDataset" href="#buildings_bench.data.datasets.TorchBuildingDataset">TorchBuildingDataset</a>]]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A pair of building id, TorchBuildingDataset objects.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV" class="doc doc-heading">
+        <code>TorchBuildingDatasetsFromCSV</code>
+
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>Generate PyTorch Datasets from a list of CSV files.</p>
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>building_datasets</code></td>
+          <td>
+                <code>dict</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Maps unique building ids to a list of tuples (year, TorchBuildingDataset).</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">data_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">building_year_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">building_latlon</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">building_type</span><span class="p">:</span> <span class="n">BuildingTypes</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">sliding_window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">leap_years</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span></code>
+
+</h4>
+
+
+  <div class="doc doc-contents ">
+  
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>data_path</code></td>
+          <td>
+                <code><span title="pathlib.Path">Path</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Path to the dataset</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>building_year_files</code></td>
+          <td>
+                <code><span title="typing.List">List</span>[str]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>List of paths to a csv file, each has a timestamp index and multiple columns, one per building.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>building_type</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="buildings_bench.BuildingTypes" href="../../utilities/buildings_bench-evaluation/#buildings_bench.evaluation.managers.BuildingTypes">BuildingTypes</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Building type for the dataset.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>context_len</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Length of context. Defaults to 168.</p>
+            </div>
+          </td>
+          <td>
+                <code>168</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>pred_len</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Length of prediction sequence for the forecasting model. Defaults to 24.</p>
+            </div>
+          </td>
+          <td>
+                <code>24</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>sliding_window</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Stride for sliding window to split timeseries into test samples. Defaults to 24.</p>
+            </div>
+          </td>
+          <td>
+                <code>24</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>apply_scaler_transform</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Apply scaler transform {boxcox,standard} to the load. Defaults to ''.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>scaler_transform_path</code></td>
+          <td>
+                <code><span title="pathlib.Path">Path</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Path to the pickled data for BoxCox transform. Defaults to None.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>leap_years</code></td>
+          <td>
+                <code><span title="typing.List">List</span>[int]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>List of leap years. Defaults to None.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV.__iter__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__iter__</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ConcatDataset</span><span class="p">]]</span></code>
+
+</h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>A Generator for TorchBuildingDataset objects.</p>
+
+  <p><strong>Yields:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="typing.Iterator">Iterator</span>[<span title="typing.Tuple">Tuple</span>[str, torch.<span title="torch.utils">utils</span>.<span title="torch.utils.data">data</span>.<span title="torch.utils.data.ConcatDataset">ConcatDataset</span>]]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A tuple of the building id and a ConcatDataset of the TorchBuildingDataset objects for all years.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV" class="doc doc-heading">
+        <code>PandasBuildingDatasetsFromCSV</code>
+
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+
+  
+      <p>Generate Pandas Dataframes from a list of CSV files.</p>
+<p>Create a dictionary of building datasets from a list of csv files.
+Used as a generator to iterate over Pandas Dataframes for each building.
+The Pandas Dataframe contain all of the years of data for the building.</p>
+
+  <p><strong>Attributes:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>building_datasets</code></td>
+          <td>
+                <code>dict</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Maps unique building ids to a list of tuples (year, Dataframe).</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">data_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">building_year_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">building_latlon</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">building_type</span><span class="p">:</span> <span class="n">BuildingTypes</span><span class="p">,</span> <span class="n">features</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;transformer&#39;</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">leap_years</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[])</span></code>
+
+</h4>
+
+
+  <div class="doc doc-contents ">
+  
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>data_path</code></td>
+          <td>
+                <code><span title="pathlib.Path">Path</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Path to the dataset</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>building_year_files</code></td>
+          <td>
+                <code><span title="typing.List">List</span>[str]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>List of paths to a csv file, each has a timestamp index and multiple columns, one per building.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>building_type</code></td>
+          <td>
+                <code><a class="autorefs autorefs-internal" title="buildings_bench.BuildingTypes" href="../../utilities/buildings_bench-evaluation/#buildings_bench.evaluation.managers.BuildingTypes">BuildingTypes</a></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Building type for the dataset.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>features</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Type of features to use. Defaults to 'transformer'. {'transformer','engineered'}
+'transformer' features: load, latitude, longitude, hour of day, day of week, day of year, building type
+'engineered' features are an expansive list of mainly calendar-based features, useful for traditional ML models.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;transformer&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>apply_scaler_transform</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Apply scaler transform {boxcox,standard} to the load. Defaults to ''.</p>
+            </div>
+          </td>
+          <td>
+                <code>&#39;&#39;</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>scaler_transform_path</code></td>
+          <td>
+                <code><span title="pathlib.Path">Path</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Path to the pickled data for BoxCox transform. Defaults to None.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>leap_years</code></td>
+          <td>
+                <code><span title="typing.List">List</span>[int]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>List of leap years. Defaults to None.</p>
+            </div>
+          </td>
+          <td>
+                <code>[]</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV.__iter__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__iter__</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]]</span></code>
+
+</h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Generator for iterating over the dataset.</p>
+
+  <p><strong>Yields:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="typing.Iterator">Iterator</span>[<span title="typing.Tuple">Tuple</span>[str, <span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span>]]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A pair of building id and Pandas dataframe. 
+The dataframe has all years concatenated.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="buildings_bench.data.datasets.PandasTransformerDataset" class="doc doc-heading">
+        <code>PandasTransformerDataset</code>
+
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+      <p class="doc doc-class-bases">
+        Bases: <code>torch.<span title="torch.utils">utils</span>.<span title="torch.utils.data">data</span>.<span title="torch.utils.data.Dataset">Dataset</span></code></p>
+
+  
+      <p>Create a Torch Dataset out of a Pandas DataFrame.</p>
+<p>Used to iterate over mini-batches of 192-hour sub-sequences.</p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="buildings_bench.data.datasets.PandasTransformerDataset.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">sliding_window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">)</span></code>
+
+</h4>
+
+
+  <div class="doc doc-contents ">
+  
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>df</code></td>
+          <td>
+                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Pandas DataFrame with columns: load, latitude, longitude, hour of day, day of week, day of year, building type</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>context_len</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Length of context.. Defaults to 168.</p>
+            </div>
+          </td>
+          <td>
+                <code>168</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>pred_len</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Length of prediction sequence for the forecasting model. Defaults to 24.</p>
+            </div>
+          </td>
+          <td>
+                <code>24</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>sliding_window</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Stride for sliding window to split timeseries into test samples. Defaults to 24.</p>
+            </div>
+          </td>
+          <td>
+                <code>24</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="buildings_bench.data.datasets.keep_buildings" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">keep_buildings</span><span class="p">(</span><span class="n">dataset_generator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">TorchBuildingDatasetsFromCSV</span><span class="p">,</span> <span class="n">TorchBuildingDatasetFromParquet</span><span class="p">],</span> <span class="n">building_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">TorchBuildingDatasetsFromCSV</span><span class="p">,</span> <span class="n">TorchBuildingDatasetFromParquet</span><span class="p">]</span></code>
+
+</h3>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Remove all buildings <em>not</em> listed in building_ids from the building_datasets dictionary from the generator class.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>dataset_generator</code></td>
+          <td>
+                <code><span title="typing.Union">Union</span>[<a class="autorefs autorefs-internal" title="buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV" href="#buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV">TorchBuildingDatasetsFromCSV</a>, <a class="autorefs autorefs-internal" title="buildings_bench.data.datasets.TorchBuildingDatasetFromParquet" href="#buildings_bench.data.datasets.TorchBuildingDatasetFromParquet">TorchBuildingDatasetFromParquet</a>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Dataset generator class.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>building_ids</code></td>
+          <td>
+                <code><span title="typing.List">List</span>[str]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>List of building ids to keep.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>dataset_generator</code></td>          <td>
+                <code><span title="typing.Union">Union</span>[<a class="autorefs autorefs-internal" title="buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV" href="#buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV">TorchBuildingDatasetsFromCSV</a>, <a class="autorefs autorefs-internal" title="buildings_bench.data.datasets.TorchBuildingDatasetFromParquet" href="#buildings_bench.data.datasets.TorchBuildingDatasetFromParquet">TorchBuildingDatasetFromParquet</a>]</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Dataset generator 
+class with only the buildings listed in building_ids.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.sections", "toc.integrate", "header.autohide"], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.b4d07000.min.js"></script>
+      
+    
+  </body>
+</html>
