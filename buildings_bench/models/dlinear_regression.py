@@ -70,8 +70,8 @@ class DLinearRegression(BaseModel):
     def loss(self, x, y):
         return torch.nn.functional.mse_loss(x,y)
     
-    def predict(dlr_model, x):
-        return dlr_model(x), None
+    def predict(self, x):
+        return self.forward(x), None
 
     def unfreeze_and_get_parameters_for_finetuning(self):
         for p in self.parameters():

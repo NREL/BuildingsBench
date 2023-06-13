@@ -24,8 +24,8 @@ class LinearRegression(BaseModel):
     def loss(self, x, y):
         return torch.nn.functional.mse_loss(x, y)
     
-    def predict(lr_model, x):
-        out = lr_model(x)
+    def predict(self, x):
+        out = self.forward(x)
         return out, None
 
     def unfreeze_and_get_parameters_for_finetuning(self):

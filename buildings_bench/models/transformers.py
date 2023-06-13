@@ -199,9 +199,8 @@ class LoadForecastingTransformer(BaseModel):
         outs = self.transformer.decoder(tgt_series_embed, memory, tgt_mask=self.tgt_mask)
         return self.logits(outs)
 
-    @staticmethod
-    def predict(model: nn.Module, x: Dict) -> Tuple[torch.Tensor, torch.Tensor]:
-        return model.generate_sample(x, greedy=True)
+    def predict(x: Dict) -> Tuple[torch.Tensor, torch.Tensor]:
+        return self.generate_sample(x, greedy=True)
     
     def loss(self, x, y):
         if self.continuous_loads and self.continuous_head == 'mse':
