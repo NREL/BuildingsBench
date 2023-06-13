@@ -53,7 +53,7 @@ def validation(model, val_dataloader, args, loss, load_transform, transform, inv
             preds = model(batch)
             targets = batch['load'][:, model.module.context_len:]
             batch_loss = loss(preds, targets)
-            predictions, distribution_params = predict(model.module, batch)
+            predictions, distribution_params = predict(batch)
 
         predictions = inverse_transform(predictions)
 

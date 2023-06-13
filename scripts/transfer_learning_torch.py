@@ -113,7 +113,7 @@ def transfer_learning(args, model_args, results_path: Path):
     device = args.device
 
     # load and configure the model for transfer learning
-    model, loss, predict = model_factory(args.config, model_args)
+    model, loss, _ = model_factory(args.config, model_args)
     model = model.to(args.device)
     transform_path = Path(os.environ.get('BUILDINGS_BENCH', '')) / 'metadata' / 'transforms'
 
@@ -242,9 +242,9 @@ def transfer_learning(args, model_args, results_path: Path):
 
                     if args.device == 'cuda':
                         with torch.cuda.amp.autocast():
-                            predictions, distribution_params = predict(tuned_model, batch)
+                            predictions, distribution_params = tuned_model.predict(batch)
                     else:
-                        predictions, distribution_params = predict(tuned_model, batch)
+                        predictions, distribution_params = tuned_model.predict(batch)
 
                     predictions = inverse_transform(predictions)
 
