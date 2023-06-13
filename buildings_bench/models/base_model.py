@@ -40,13 +40,11 @@ class BaseModel(nn.Module, metaclass=abc.ABCMeta):
         """A function for computing the loss."""
         raise NotImplementedError()
 
-    
-    @staticmethod
-    def predict(model: nn.Module, x: Dict) -> Tuple[torch.Tensor, torch.Tensor]:
+    @abc.abstractmethod 
+    def predict(self, x: Dict) -> Tuple[torch.Tensor, torch.Tensor]:
         """A function for making a forecast on x with the model.
 
         Args:
-            model (nn.Module): model
             x (Dict): dictionary of input tensors
         Returns:
             predictions (torch.Tensor): of shape (batch_size, pred_len, 1)

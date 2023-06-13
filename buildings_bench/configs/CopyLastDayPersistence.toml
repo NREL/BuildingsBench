@@ -1,6 +1,6 @@
 [model]
 context_len = 168
-pred_len = 168
+pred_len = 24 
 continuous_loads = true
 
 [zero_shot]

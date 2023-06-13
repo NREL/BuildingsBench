@@ -145,7 +145,7 @@ def load_torch_dataset(
                 building_types += [BuildingTypes.RESIDENTIAL]
             elif 'com' in pf:
                 building_types += [BuildingTypes.COMMERCIAL]
-        dataset_generator = TorchBuildingDatasetFromParquet(dataset_path,
+        dataset_generator = TorchBuildingDatasetFromParquet(
                                                          puma_files,
                                                          [spatial_lookup.undo_transform( # pass unnormalized lat lon coords
                                                             spatial_lookup.transform(pid)) for pid in puma_ids],

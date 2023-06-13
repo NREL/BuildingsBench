@@ -23,9 +23,9 @@ class AveragePersistence(BaseModel):
     
     def loss(self, x, y):
         return x, y
-    
-    def predict(persistence_model, x):
-        out = persistence_model(x)
+   
+    def predict(self, x):
+        out = self.forward(x)
         return out[:,:,0].unsqueeze(-1), out
 
     def unfreeze_and_get_parameters_for_finetuning(self):
@@ -51,8 +51,8 @@ class CopyLastDayPersistence(BaseModel):
     def loss(self, x, y):
         return x, y
     
-    def predict(persistence_model, x):
-        return persistence_model(x), None
+    def predict(self, x):
+        return self.forward(x), None
 
     def unfreeze_and_get_parameters_for_finetuning(self):
         return None
@@ -77,8 +77,8 @@ class CopyLastWeekPersistence(BaseModel):
     def loss(self, x, y):
         return x, y
     
-    def predict(persistence_model, x):
-        return persistence_model(x), None
+    def predict(self, x):
+        return self.forward(x), None
     
     def unfreeze_and_get_parameters_for_finetuning(self):
         return None

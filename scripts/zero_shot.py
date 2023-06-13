@@ -100,9 +100,9 @@ def zero_shot_learning(args, model_args, results_path: Path):
 
                 if args.device == 'cuda':
                     with torch.cuda.amp.autocast():
-                        predictions, distribution_params = predict(model, batch)
+                        predictions, distribution_params = predict(batch)
                 else:
-                    predictions, distribution_params = predict(model, batch)
+                    predictions, distribution_params = predict(batch)
                     
                 predictions = inverse_transform(predictions)
 
@@ -127,7 +127,7 @@ def zero_shot_learning(args, model_args, results_path: Path):
                         if args.tokenizer_without_merge else load_transform.merged_centroids
                 else:
                     bin_values = None
-
+                
                 metrics_manager(
                     dataset_name,
                     building_name,
