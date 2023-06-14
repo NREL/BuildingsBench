@@ -8,6 +8,13 @@ import torch.nn as nn
 class BaseModel(nn.Module, metaclass=abc.ABCMeta):
     """Base class for all models."""
     def __init__(self, context_len, pred_len, continuous_loads):
+        """Init method for BaseModel.
+
+        Args:
+            context_len (int): length of context window
+            pred_len (int): length of prediction window
+            continuous_loads (bool): whether to use continuous load values
+        """
         super().__init__()
         self.context_len = context_len
         self.pred_len = pred_len
@@ -19,13 +26,13 @@ class BaseModel(nn.Module, metaclass=abc.ABCMeta):
         
         Expected keys in x:
 
-            - 'load': torch.Tensor of shape [batch_size, seq_len, 1]
-            - 'building_type': torch.LongTensor of shape (batch_size, 1)
-            - 'day_of_year': torch.FloatTensor of shape (batch_size, 1)
-            - 'hour_of_day': torch.FloatTensor of shape (batch_size, 1)
-            - 'day_of_week': torch.FloatTensor of shape (batch_size, 1)
-            - 'latitude': torch.FloatTensor of shape (batch_size, 1)
-            - 'longitude': torch.FloatTensor of shape (batch_size, 1)
+            - 'load': torch.Tensor of shape (batch_size, seq_len, 1)
+            - 'building_type': torch.LongTensor of shape (batch_size, seq_len, 1)
+            - 'day_of_year': torch.FloatTensor of shape (batch_size, seq_len, 1)
+            - 'hour_of_day': torch.FloatTensor of shape (batch_size, seq_len, 1)
+            - 'day_of_week': torch.FloatTensor of shape (batch_size, seq_len, 1)
+            - 'latitude': torch.FloatTensor of shape (batch_size, seq_len, 1)
+            - 'longitude': torch.FloatTensor of shape (batch_size, seq_len, 1)
 
         Args:
             x (Dict): dictionary of input tensors

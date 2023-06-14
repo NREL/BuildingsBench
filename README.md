@@ -90,11 +90,14 @@ If using `wandb`, set the following:
 - `WANDB_PROJECT`: the name of your wandb project for this benchmark
 
 
-## Download the datasets
+## Download the datasets and metadata
 
 Download the tar files to disk and untar, which will create a directory called `BuildingsBench` with the datasets.
 
 The files are accessible for download [here](https://data.openei.org/submissions/5859).
+
+The benchmark datasets are < 1GB in size in total, but the pretraining dataset is ~110GB in size.
+The file `metadata.tar.gz` has files that are necessary for running pretraining (such as index files for the Buildings-900K PyTorch Dataset) and the benchmark tasks.
 
 
 ## Run tests
@@ -107,19 +110,19 @@ python -m unittest
 
 ## Usage
 
-We provide scripts in the `./scripts` directory for pretraining and to run the benchmark tasks (zero-shot STLF and transfer learning), either with our provided baselines or your own model.
+We provide scripts in the `./scripts` directory for pretraining and to run the benchmark tasks (zero-shot STLF and transfer learning), either with [our provided baselines](https://nrel.github.io/BuildingsBench/API/models/buildings_bench-models/) or your own model.
 
 Our benchmark assumes each model takes as input a dictionary of torch tensors with the following keys:
 
 ```python
 {
-    'load': torch.Tensor,  # (batch_size, seq_len, 1)
-    'building_type': torch.LongTensor,  # (batch_size, 1)
-    'day_of_year': torch.FloatTensor,  # (batch_size, 1)
-    'hour_of_day': torch.FloatTensor,  # (batch_size, 1)
-    'day_of_week': torch.FloatTensor,  # (batch_size, 1)
-    'latitude': torch.FloatTensor,  # (batch_size, 1)
-    'longitude': torch.FloatTensor,  # (batch_size, 1)
+    'load': torch.Tensor,               # (batch_size, seq_len, 1)
+    'building_type': torch.LongTensor,  # (batch_size, seq_len, 1)
+    'day_of_year': torch.FloatTensor,   # (batch_size, seq_len, 1)
+    'hour_of_day': torch.FloatTensor,   # (batch_size, seq_len, 1)
+    'day_of_week': torch.FloatTensor,   # (batch_size, seq_len, 1)
+    'latitude': torch.FloatTensor,      # (batch_size, seq_len, 1)
+    'longitude': torch.FloatTensor,     # (batch_size, seq_len, 1)
 }
 ```
 
@@ -131,7 +134,7 @@ Make sure to have installed the benchmark in editable mode: `pip install -e .`
 
 1. Create a file called `your_model.py` with your model's implementation, and make your model a subclass of the base model in `./buildings_bench/models/base_model.py`. Make sure to implement the abstract methods: `forward`, `loss`, `load_from_checkpoint`, `predict`, `unfreeze_and_get_parameters_for_finetuning`.
 2. Place this file under `./buildings_bench/models/your_model.py.`
-3. Import your model class and add your model's name to the `model_registry` dictionary in `BuildingsBench/buildings_bench/models/__init__.py`.
+3. Import your model class and add your model's name to the `model_registry` dictionary in `./buildings_bench/models/__init__.py`.
 4. Create a TOML config file under `./configs/your_model.toml` with each keyword argument your model expects in its constructor (i.e., the hyperparameters for your model) and any additional args for the script you want to run.
 
 The TOML config file should look something like this:
@@ -164,3 +167,42 @@ This script is implemented with PyTorch `DistributedDataParallel`, so it can be 
 ### Transfer Learning for STLF
 
 `python3 scripts/transfer_learning_torch.py --config your_model.toml --checkpoint /path/to/checkpoint.pt`  
+
+## BuildingsBench Leaderboard
+
+### Zero-shot STLF
+
+Eval over all real buildings for all available years. Lower is better.
+
+| Model | Commercial NRMSE (%) |  Commercial RPS | Residential NRMSE (%) | Residential RPS | 
+| --- | --- | --- | --- | --- |
+| [Transformer-L (Gaussian)]() | 13.86 | 5.15 | 83.87 | 0.082 | 
+| [Transformer-M (Gaussian)]() | 14.01 | 4.90| 83.17 | 0.085 |
+| [Transformer-S (Gaussian)]() | 22.07 | 8.09 | 83.97 | 0.078|
+| [Transformer-L (Tokens)]() | 14.82 | 4.81 | 101.7 | 0.072 |
+| [Transformer-M (Tokens)]() | 14.54 | 4.67 | 102.1 | 0.071 |
+| [Transformer-S (Tokens)]() | 14.88 | 5.17 | 103.2  |0.071 |
+| Persistence Ensemble | 17.17 | 5.39 | 80.11 | 0.067 |
+| Previous Day Persistence | 17.41 | - | 102.44 | - |
+| Previous Week Persistence | 19.96 | - | 103.51 | - |
+
+### Transfer Learning for STLF
+
+Results are over a sub-sample of 100 residential and 100 commercial buildings--see the list of buildings in the datasets metadata directory: `BuildingsBench/metadata/transfer_learning_residential_buildings.csv` and `BuildingsBench/metadata/transfer_learning_commercial_buildings.csv`.
+Models are provided with the first 6 months of consumption data for fine-tuning and tested with a 24-hour sliding window on the next 6 months.
+
+| Model | Commercial NRMSE (%) |  Commercial RPS | Residential NRMSE (%) | Residential RPS |
+| --- | --- | --- | --- | --- |
+| **Pretrained + Fine-tuned** | | | | |
+| Transformer (Gaussian) | 13.36 | 3.50 | 82.17 | 0.061 |
+| Transformer (Tokens) |  13.86 | 3.73 | 95.55 | 0.060 |
+| **Fine-tuned from scratch** | | | | |
+| Transformer (Gaussian) | 39.26 |13.24 | 94.25 | 0.080 |
+| Transformer (Tokens) |  44.62 | 27.18 | 108.61 | 5.76 |
+| LightGBM | 16.63 | - | 83.97 | - |
+| DLinear | 39.22 | - | 98.56 | - | 
+| Linear Regression | 47.43 | - | 102.17 | - |
+| **Persistence** | | | | |
+| Persistence Ensemble | 17.41 | 5.16 | 80.13 | 0.058 |
+| Previous Day Persistence | 16.98 | - | 101.78 | - |
+| Previous Week Persistence | 18.93 | - | 104.38 | - |

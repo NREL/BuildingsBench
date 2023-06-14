@@ -238,9 +238,7 @@ class LoadForecastingTransformer(BaseModel):
                  x,
                  temperature=1.0,
                  greedy=False,
-                 num_samples=1,
-                 top_k=0,
-                 top_p=1.0):
+                 num_samples=1):
         """Sample from the conditional distribution.
 
         Use output of decoder at each prediction step as input to the next decoder step.
@@ -253,8 +251,6 @@ class LoadForecastingTransformer(BaseModel):
             temperature (float): temperature for sampling
             greedy (bool): whether to use greedy decoding
             num_samples (int): number of samples to generate
-            top_k (int): top k sampling (DEPRECATED)
-            top_p (float): nucleus sampling (DEPRECATED)
         
         Returns:
             predictions (torch.Tensor): of shape [batch_size, pred_len, 1] or shape [batch_size, num_samples, pred_len] if num_samples > 1.
@@ -303,13 +299,6 @@ class LoadForecastingTransformer(BaseModel):
                         all_preds += [outputs]    
 
             elif not greedy:
-                # outputs are [batch_size, vocab_size]
-                if top_k > 0 or top_p < 1.0:
-                    raise NotImplementedError("Top-k and nucleus sampling are not supported")
-                    # Apply top-k and/or nucleus filtering
-                    outputs = beam_search.top_k_top_p_filtering(
-                        outputs, top_k=top_k, top_p=top_p
-                    )
                 # Sample from a Categorical distribution with logits outputs
                 all_preds += [torch.multinomial(torch.nn.functional.softmax(outputs/temperature, dim=1), 1)]
                 # change outputs to the predicted load tokens
@@ -348,141 +337,3 @@ class LoadForecastingTransformer(BaseModel):
         else:
             # [batch_size, num_samples, pred_len]
             return torch.stack(all_preds,1).reshape(-1, num_samples, self.pred_len)
-
-
-    # @torch.no_grad()
-    # def beam_search(
-    #     self,
-    #     x: torch.Tensor,
-    #     num_beams: int,
-    #     num_return_sequences: int
-    # ):
-    #     r"""
-    #     Generates sequences for models with a language modeling head using beam search decoding.
-
-    #     Parameters:
-
-    #         x (:obj:`torch.FloatTensor` of shape :obj:`(batch_size, sequence_length)`, `optional`):
-    #             The sequence used as a prompt for the generation. If :obj:`None` the method initializes it as an empty
-    #             :obj:`torch.LongTensor` of shape :obj:`(1,)`.
-    #         beam_scorer (:obj:`BeamScorer`):
-    #             An derived instance of :class:`~transformers.BeamScorer` that defines how beam hypotheses are
-    #             constructed, stored and sorted during generation. For more information, the documentation of
-    #             :class:`~transformers.BeamScorer` should be read.
-
-    #     Return:
-    #         :obj:`torch.LongTensor` of shape :obj:`(batch_size * num_return_sequences, sequence_length)`: The generated
-    #         sequences. The second dimension (sequence_length) is either equal to :obj:`max_length` or shorter if all
-    #         batches finished early due to the :obj:`eos_token_id`.
-    #     """
-    #     beam_scorer = beam_search.BeamSearchScorer(
-    #         batch_size=x['latitude'].shape[0],
-    #         max_length=self.pred_len,
-    #         num_beams=num_beams,
-    #         device=x['latitude'].device,
-    #         length_penalty=1.0,
-    #         do_early_stopping=False,
-    #         num_beam_hyps_to_keep=num_return_sequences,
-    #     )
-
-    #     time_series_embed = torch.cat([
-    #         self.lat_embedding(x['latitude']),
-    #         self.lon_embedding(x['longitude']),
-    #         self.building_embedding(x['building_type']).squeeze(2),
-    #         self.day_of_year_encoding(x['day_of_year']),
-    #         self.day_of_week_encoding(x['day_of_week']),
-    #         self.hour_of_day_encoding(x['hour_of_day']),
-    #         self.power_embedding(x['load']).squeeze(2),
-    #     ], dim=2)
-    #     # [batch_size, context_len, emb_size]
-    #     src_series_inputs = time_series_embed[:, :self.context_len, :]
-    #     tgt_series_inputs = time_series_embed[:, self.context_len-1 : -1, :]
-    #     src_series_embed = self.positional_encoding(src_series_inputs)
-
-    #     encoder_output = self.transformer.encoder(src_series_embed)
-    #     decoder_input = tgt_series_inputs[:, 0, :].unsqueeze(1)
-
-    #     batch_size = len(beam_scorer._beam_hyps)
-    #     num_beams = beam_scorer.num_beams
-
-    #     if num_beams > 1:
-    #         # [batch_size, 1, d_model] --> [batch_size * num_beams, 1, d_model]
-    #         decoder_input = decoder_input.repeat_interleave(num_beams, dim=0)
-    #         encoder_output = encoder_output.repeat_interleave(num_beams, dim=0)
-
-    #     batch_beam_size, cur_len, _ = decoder_input.shape
-
-    #     assert cur_len == 1, \
-    #            f"expected `decoder_input` to have 1 tokens, but has {cur_len}"
-    #     assert (
-    #         num_beams * batch_size == batch_beam_size
-    #     ), "Batch dimension of `input_ids` should be {num_beams * batch_size}, but is {batch_beam_size}."
-
-    #     beam_scores = torch.zeros((batch_size, num_beams), dtype=torch.float, device=decoder_input.device)
-    #     beam_scores[:, 1:] = -1e9
-    #     beam_scores = beam_scores.view((batch_size * num_beams,))
-    #     decoded_tokens = []
-    #     while cur_len < self.pred_len+1:
-    #         decoder_embed = self.positional_encoding(decoder_input)
-    #         tgt_mask = self.transformer.generate_square_subsequent_mask(cur_len)
-    #         decoder_output = self.transformer.decoder(decoder_embed, encoder_output, tgt_mask.to(encoder_output.device))
-    #         # [batch_size * num_beams, vocab_size] 
-    #         next_token_logits = self.logits(decoder_output[:, -1, :])
-    #         next_token_scores = torch.nn.functional.log_softmax(next_token_logits, dim=-1)  # (batch_size * num_beams, vocab_size)
-
-    #         next_token_scores = next_token_scores + beam_scores[:, None].expand_as(next_token_scores)
-    #         # reshape for beam search
-    #         vocab_size = next_token_scores.shape[-1]
-    #         next_token_scores = next_token_scores.view(batch_size, num_beams * vocab_size)
-
-    #         next_token_scores, next_tokens = torch.topk(
-    #             next_token_scores, 2 * num_beams, dim=1, largest=True, sorted=True
-    #         )
-
-    #         next_indices = next_tokens // vocab_size
-    #         next_tokens = next_tokens % vocab_size
-
-    #         # stateless
-    #         beam_outputs = beam_scorer.process(
-    #             decoder_input,
-    #             next_token_scores,
-    #             next_tokens,
-    #             next_indices
-    #         )
-    #         beam_scores = beam_outputs["next_beam_scores"]
-    #         beam_next_tokens = beam_outputs["next_beam_tokens"]
-    #         beam_idx = beam_outputs["next_beam_indices"]
-    #         decoded_tokens += [beam_next_tokens]
-                       
-    #         if cur_len < self.pred_len:
-    #             # [batch_size * num_beams, cur_len, embd_sz]
-    #             decoder_input = decoder_input[beam_idx, :]
-    #             # [batch_size * num_beams, embd_sz]
-    #             beam_next_token_embeddings = self.power_embedding(beam_next_tokens)                  
-    #             # covariates for next step
-    #             next_step_covariates = tgt_series_inputs[:, cur_len]
-    #             if num_beams > 1:
-    #                 next_step_covariates = next_step_covariates.repeat_interleave(num_beams, dim=0)
-    #             next_decoder_input = torch.cat([ next_step_covariates[:, :-beam_next_token_embeddings.shape[-1]], beam_next_token_embeddings ], dim=1)
-    #             # Append the next decoder input to the decoder input
-    #             decoder_input = torch.cat([decoder_input, next_decoder_input.unsqueeze(1)], dim=1)
-            
-    #         cur_len = cur_len + 1
-
-    #         # model_kwargs = self._update_model_kwargs_for_generation(
-    #         #     outputs, model_kwargs, is_encoder_decoder=self.config.is_encoder_decoder
-    #         # )
-    #         # if model_kwargs["past"] is not None:
-    #         #     model_kwargs["past"] = self._reorder_cache(model_kwargs["past"], beam_idx)
-
-    #         if beam_scorer.is_done:
-    #             break
-        
-    #     # [batch_size * num_beams, pred_len]
-    #     decoded_tokens = torch.stack(decoded_tokens,1)
-    #     decoded_tokens = beam_scorer.finalize(
-    #         decoded_tokens, beam_scores
-    #     )
-
-    #     # [batch_size, pred_len]
-    #     return decoded_tokens
