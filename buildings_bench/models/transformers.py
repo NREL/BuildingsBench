@@ -213,11 +213,11 @@ class LoadForecastingTransformer(BaseModel):
                                              y.long().reshape(-1))
                     
     def unfreeze_and_get_parameters_for_finetuning(self):
-        for p in self.parameters():
-            p.requires_grad_(False)
-        self.logits.requires_grad_(True)
-        return self.logits.parameters()
-        #return self.parameters()
+        # for p in self.parameters():
+        #     p.requires_grad_(False)
+        # self.logits.requires_grad_(True)
+        # return self.logits.parameters()
+        return self.parameters()
 
     def load_from_checkpoint(self, checkpoint_path):
         stored_ckpt = torch.load(checkpoint_path)

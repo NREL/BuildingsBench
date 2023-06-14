@@ -9,3 +9,4 @@ scripts/creating_buildings_bench/
 build/
 dist/
 hpc/
+.DS_Store

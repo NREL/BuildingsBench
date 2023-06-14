@@ -41,7 +41,6 @@ for building_name, building_dataset in buildings_datasets_generator:
 from buildings_bench.evaluation.managers import DatasetMetricsManager
 from buildings_bench.evaluation import scoring_rule_factory
 
-# By default, the DatasetMetricsManager also keeps track of NRMSE, NMAE, and NMBE
 metrics_manager = DatasetMetricsManager(scoring_rule = scoring_rule_factory('crps'))
 
 # Iterate over the dataset
@@ -64,10 +63,11 @@ for building_name, building_dataset in buildings_datasets_generator:
         building_types_mask,    # a boolean tensor indicating building type
         y_categories=targets,   # for scoring rules, the ground truth (discrete categories if using tokenization)
         y_distribution_params=distribution_params, # for scoring rules, the distribution parameters
-        bin_values=bin_values   # for scoring rules with categorical variables, the bin values
+        centroids=centroids   # for scoring rules with categorical variables, the centroid values
     )
 ```
 
+---
 
 ::: buildings_bench.evaluation
     options:

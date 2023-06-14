@@ -2,10 +2,12 @@
 
 # Welcome to BuildingsBench!
 
+![U.S. Commercial Building Stock](./assets/commercial_forecast.gif)
+
 ## Overview 
 
 BuildingsBench is a platform for
-- Large-scale pretraining with the synthetic Buildings-900K dataset for short-term load forecasting (STLF).
+- Large-scale pretraining with the synthetic Buildings-900K dataset for short-term load forecasting (STLF). Buildings-900K is statistically representative of the entire U.S. building stock.
 - Benchmarking on two tasks evaluating generalization: zero-shot STLF and transfer learning for STLF.
 
 We provide an index-based PyTorch Dataset for large-scale pretraining, easy-to-use PyTorch and Pandas dataloaders for multiple real building energy consumption datasets, simple (persistence) to advanced (transformer) baselines, metrics management, and more.
@@ -85,7 +87,6 @@ If using `wandb`, set the following:
 
 - `WANDB_ENTITY`: your wandb username
 - `WANDB_PROJECT`: the name of your wandb project for this benchmark
-
 
 
 ## Download the datasets

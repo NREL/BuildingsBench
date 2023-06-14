@@ -12,6 +12,7 @@ Available PyTorch Datasets:
 - `TorchBuildingsDataset` (used for benchmark tasks)
 - `PandasTransformerDataset` (used for benchmark tasks)
 
+---
 
 ## Loading benchmark datasets
 

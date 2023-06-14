@@ -37,7 +37,14 @@ class BaseModel(nn.Module, metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def loss(self, x: torch.Tensor, y: torch.Tensor) -> torch.Tensor:
-        """A function for computing the loss."""
+        """A function for computing the loss.
+        
+        Args:
+            x (torch.Tensor): preds of shape (batch_size, seq_len, 1)
+            y (torch.Tensor): targets of shape (batch_size, seq_len, 1)
+        Returns:
+            loss (torch.Tensor): scalar loss
+        """
         raise NotImplementedError()
 
     @abc.abstractmethod 
@@ -48,7 +55,7 @@ class BaseModel(nn.Module, metaclass=abc.ABCMeta):
             x (Dict): dictionary of input tensors
         Returns:
             predictions (torch.Tensor): of shape (batch_size, pred_len, 1)
-            distribution parameters (torch.Tensor]): of shape (batch_size, pred_len, -1)
+            distribution_parameters (torch.Tensor): of shape (batch_size, pred_len, -1)
         """
         raise NotImplementedError()
 
