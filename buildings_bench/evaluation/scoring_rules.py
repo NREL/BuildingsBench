@@ -31,7 +31,7 @@ class RankedProbabilityScore(ScoringRule):
     def __init__(self):
         super().__init__(name='rps')
 
-    def rps(self, y_true, y_pred_logits, bin_values) -> None:
+    def rps(self, y_true, y_pred_logits, centroids) -> None:
         """A PyTorch method that calculates the ranked probability score metric
            for categorical distributions.
 
@@ -45,13 +45,13 @@ class RankedProbabilityScore(ScoringRule):
         Args:
             y_true (torch.Tensor): of shape [batch_size, seq_len, 1] categorical labels
             y_pred_logits (torch.Tensor): of shape [batch_size, seq_len, vocab_size] logits
-            bin_values (torch.Tensor): of shape [vocab_size]
+            centroids (torch.Tensor): of shape [vocab_size]
         """
         # Convert class labels y_true to one hot vectors [batch_size, seq_len, vocab_size]
         y_true = torch.nn.functional.one_hot(y_true.squeeze(2).long(),
-                                             num_classes=bin_values.shape[0]).to(y_pred_logits.device)
+                                             num_classes=centroids.shape[0]).to(y_pred_logits.device)
         # Sort the values, logits, and y_true
-        bin_values, indices = torch.sort(bin_values, dim=-1)
+        centroids, indices = torch.sort(centroids, dim=-1)
         y_pred_logits = y_pred_logits[:, :, indices]
         y_true = y_true[:, :, indices]
 
@@ -63,24 +63,18 @@ class RankedProbabilityScore(ScoringRule):
         # Calculate the difference between the CDF and the true values
         square = torch.square(cdf - y_true_cdf)
         
-        # Calculate the widths of the bins
-        # To calculate the width of the bin when bin_values
-        # is the centroid of a bin, we need to calculate
+        # Calculate the widths of the bins:
+        # we need to calculate
         # half the distance to the right centroid and left centroid.
-        centroid_dist = bin_values[1:] - bin_values[:-1]
+        centroid_dist = centroids[1:] - centroids[:-1]
         half_dists = centroid_dist / 2
         widths = torch.unsqueeze(half_dists[1:] + half_dists[:-1], dim=0)
         widths = torch.cat([
-            bin_values[0].view(1, 1) + half_dists[0].view(1, 1),
+            centroids[0].view(1, 1) + half_dists[0].view(1, 1),
             widths,
             half_dists[-1].view(1, 1)
         ],dim=1)
         
-        #widths = torch.unsqueeze(bin_values[1:] - bin_values[:-1], dim=0)
-        #widths = torch.cat([
-        #    bin_values[0].view(1, 1),
-        #    widths
-        #],dim=1)
         # Calculate the RPS    
         rps = torch.mean(torch.sum(square * widths, dim=-1), dim=0)  # [seq_len]
         if self.value is None:
@@ -88,8 +82,8 @@ class RankedProbabilityScore(ScoringRule):
         else:
             self.value += [rps]
 
-    def __call__(self, true_continuous, y_true, y_pred_logits, bin_values):
-        self.rps(y_true, y_pred_logits, bin_values)
+    def __call__(self, true_continuous, y_true, y_pred_logits, centroids):
+        self.rps(y_true, y_pred_logits, centroids)
 
 
 class ContinuousRankedProbabilityScore(ScoringRule):
@@ -125,5 +119,5 @@ class ContinuousRankedProbabilityScore(ScoringRule):
         else:
             self.value += [crps]
 
-    def __call__(self, true_continuous, y_true, y_pred_distribution_params, bin_values):
+    def __call__(self, true_continuous, y_true, y_pred_distribution_params, centroids):
         self.crps(true_continuous, y_pred_distribution_params)

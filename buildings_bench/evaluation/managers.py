@@ -106,7 +106,7 @@ class MetricsManager:
             self._compute_scoring_rule(y_true,
                                       kwargs['y_categories'],
                                       kwargs['y_distribution_params'],
-                                      kwargs['bin_values'],
+                                      kwargs['centroids'],
                                       building_types_mask)
 
 
@@ -114,7 +114,7 @@ class MetricsManager:
                             true_continuous,
                             true_categories,
                             y_distribution_params,
-                            bin_values,
+                            centroids,
                             building_types_mask) -> None:
         """Compute the scoring rule.
         
@@ -124,7 +124,7 @@ class MetricsManager:
             true_categories (torch.Tensor): The true quantized load values.
             y_distribution_params are [bsz_sz, pred_len, vocab_size] if logits,
              or are [bsz_sz, pred_len, 2] if Gaussian
-            bin_values (torch.Tensor): The bin values for the quantized distribution.
+            centroids (torch.Tensor): The bin values for the quantized distribution.
             building_types_mask (torch.Tensor): 
         """
         if y_distribution_params is None:
@@ -139,7 +139,7 @@ class MetricsManager:
                     true_continuous_by_type,
                     true_categories[~building_types_mask],
                     y_distribution_params[~building_types_mask],
-                    bin_values)
+                    centroids)
             elif building_type == BuildingTypes.COMMERCIAL:
                 true_continuous_by_type = true_continuous[building_types_mask]
                 if true_continuous_by_type.shape[0] == 0:
@@ -148,7 +148,7 @@ class MetricsManager:
                     true_continuous_by_type,
                     true_categories[building_types_mask],
                     y_distribution_params[building_types_mask],
-                    bin_values)
+                    centroids)
 
     def _update_loss(self, loss, sample_size):
         """Updates the accumulated loss and total samples."""
@@ -218,7 +218,7 @@ class MetricsManager:
         Keyword args:
             y_categories (torch.Tensor): The true load values. (quantized)
             y_distribution_params (torch.Tensor): logits, Gaussian params, etc.
-            bin_values (torch.Tensor): The bin values for the quantized load.
+            centroids (torch.Tensor): The bin values for the quantized load.
             loss (torch.Tensor): The loss for the batch.
         """
         if building_types_mask is None:
@@ -282,12 +282,13 @@ class DatasetMetricsManager:
                 summarize all datasets.
         Returns:
             A Pandas dataframe with the following columns:
-                dataset: The name of the dataset.
-                building_id: The unique ID of the building.
-                building_type: The type of the building.
-                metric: The name of the metric.
-                metric_type: The type of the metric. (scalar or hour_of_day)
-                value: The value of the metric.
+
+                - dataset: The name of the dataset.
+                - building_id: The unique ID of the building.
+                - building_type: The type of the building.
+                - metric: The name of the metric.
+                - metric_type: The type of the metric. (scalar or hour_of_day)
+                - value: The value of the metric.
         """
         summary = {}
         if dataset_name is None: # summarize all datasets
@@ -353,26 +354,35 @@ class DatasetMetricsManager:
                  building_id: str,
                  y_true: torch.Tensor, 
                  y_pred: torch.Tensor,
-                 building_types_mask: torch.Tensor,
+                 building_types_mask: torch.Tensor = None,
+                 building_type: int = BuildingTypes.COMMERCIAL_INT,
                  **kwargs) -> None:
         """Compute metrics for a batch of predictions for a single building in a dataset.
 
         Args:
+            dataset_name (str): The name of the dataset.
+            building_id (str): The unique building identifier.
             y_true (torch.Tensor): The true (unscaled) load values. (continuous)
                 shape is [batch_size, pred_len, 1]
             y_pred (torch.Tensor): The predicted (unscaled) load values. (continuous)
                 shape is [batch_size, pred_len, 1]
             building_types_mask (torch.Tensor): 
                 A boolean mask indicating the building type of each building.
-                True if commercial.
+                True (1) if commercial, False (0). Shape is [batch_size]. Default is None.
+            building_type (int): The building type of the batch. Can be provided 
+                instead of building_types_mask if all buildings are of the same type.
 
         Keyword args:
             y_categories (torch.Tensor): The true load values. (quantized)
             y_distribution_params (torch.Tensor): logits, Gaussian params, etc.
-            bin_values (torch.Tensor): The bin values for the quantized load.
+            centroids (torch.Tensor): The bin values for the quantized load.
             loss (torch.Tensor): The loss for the batch.        
         """
         self.add_building_to_dataset_if_missing(dataset_name, building_id)
+        
+        if building_types_mask is None:
+            building_types_mask = (building_type == BuildingTypes.COMMERCIAL_INT) * \
+                                   torch.ones(y_true.shape[0], dtype=torch.bool, device=y_true.device)
         self._metrics[dataset_name][building_id](y_true, y_pred, building_types_mask, **kwargs)
 
     

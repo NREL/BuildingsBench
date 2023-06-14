@@ -1,4 +1,18 @@
 # buildings_bench.models
+
+Available models:
+
+- Encoder-decoder time series transformer
+- Persistence Ensemble (`AveragePersistence`)
+- Previous Day Persistence (`CopyLastDayPersistence`)
+- Previous Week Persistence (`CopyLastWeekPersistence`)
+- Linear regression
+- DLinear
+
+Main entry point for loading a BuildingsBench model is `model_factory()`.
+
+---
+
 ::: buildings_bench.models
     options:
         show_source: false

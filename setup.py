@@ -28,7 +28,7 @@ def find_version(*file_paths):
 setup(
       name='buildings_bench',
       version=find_version('buildings_bench', '__init__.py'),
-      description='BuildingsBench, large-scale pretraining and a benchmark for short-term load forecasting.',
+      description='Large-scale pretraining and benchmarking for short-term load forecasting.',
       author='Patrick Emami',
       author_email='Patrick.Emami@nrel.gov',
       url="https://nrel.github.io/BuildingsBench/",

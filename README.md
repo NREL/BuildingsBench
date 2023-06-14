@@ -5,10 +5,10 @@
 ## Overview 
 
 BuildingsBench is a platform for
-- Large-scale pretraining with the simulated Buildings-900K dataset for short-term load forecasting (STLF).
+- Large-scale pretraining with the synthetic Buildings-900K dataset for short-term load forecasting (STLF).
 - Benchmarking on two tasks evaluating generalization: zero-shot STLF and transfer learning for STLF.
 
-We provide an index-based PyTorch Dataset for large-scale pretraining, easy-to-use PyTorch and Pandas dataloaders for multiple real building energy consumption datasets, simple to advanced (transformer) baselines, metrics management, and more.
+We provide an index-based PyTorch Dataset for large-scale pretraining, easy-to-use PyTorch and Pandas dataloaders for multiple real building energy consumption datasets, simple (persistence) to advanced (transformer) baselines, metrics management, and more.
 
 
 Read more about BuildingsBench in our [documentation](https://nrel.github.io/BuildingsBench/).
@@ -87,13 +87,6 @@ If using `wandb`, set the following:
 - `WANDB_PROJECT`: the name of your wandb project for this benchmark
 
 
-### Run tests
-
-Verify your installation by running unit tests:
-
-```bash
-python -m unittest
-```
 
 ## Download the datasets
 
@@ -101,6 +94,14 @@ Download the tar files to disk and untar, which will create a directory called `
 
 The files are accessible for download [here](https://data.openei.org/submissions/5859).
 
+
+## Run tests
+
+Verify your installation by running unit tests:
+
+```bash
+python -m unittest
+```
 
 ## Usage
 

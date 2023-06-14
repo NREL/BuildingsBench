@@ -12,7 +12,7 @@ continuous_loads = true
 ignore_spatial = false
 continuous_head = 'gaussian_nll'
 
-[training]
+[pretrain]
 batch_size = 256
 init_scale = 0.02
 warmup_steps = 10000

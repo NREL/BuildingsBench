@@ -4,12 +4,11 @@
 
 BuildingsBench is a platform for:
 
-- Large-scale pretraining with the simulated [Buildings-900K dataset]() for short-term load forecasting (STLF).
+- Large-scale pretraining with the synthetic Buildings-900K dataset for short-term load forecasting (STLF).
 - Benchmarking on two tasks evaluating generalization: zero-shot STLF and transfer learning for STLF.
 
-We provide an index-based PyTorch [Dataset]() for large-scale pretraining, easy-to-use PyTorch and Pandas [dataloaders]() for multiple real building energy consumption datasets, from [persistence]() (simple) to [transformers]() (advanced) baselines, [metrics management](), a [tokenizer]() based on KMeans for load time series, and more.
+We provide an index-based PyTorch [Dataset](https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#buildings-900k-pytorch-dataset) for large-scale pretraining, easy data loading for multiple real building energy consumption datasets as [PyTorch Tensors](https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV) or [Pandas DataFrames](https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV), from simple ([persistence](https://nrel.github.io/BuildingsBench/API/models/buildings_bench-models/#buildings_bench.models.persistence)) to advanced ([transformers](https://nrel.github.io/BuildingsBench/API/models/buildings_bench-models/#buildings_bench.models.transformers)) baselines, [metrics management](https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-evaluation/), a [tokenizer](https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-tokenizer/) based on KMeans for load time series, and more.
 
-Read more about BuildingsBench in our [paper]() or check out our [Github](https://github.com/NREL/BuildingsBench).
 
 ### Load a benchmark dataset
 
@@ -49,7 +48,7 @@ Then, install the package in editable mode with
 ```bash
 git clone https://github.com/NREL/BuildingsBench.git
 cd BuildingsBench
-pip install -e .
+pip install -e ".[benchmark]"
 ```
 
 ### Installing faiss-gpu
@@ -85,6 +84,13 @@ If using `wandb`, set the following:
 - `WANDB_PROJECT`: the name of your wandb project for this benchmark
 
 
+### Download the datasets
+
+Download the tar files to disk and untar, which will create a directory called `BuildingsBench` with the data.
+
+The files will be available for download [here](https://data.openei.org/submissions/5859).
+
+
 ### Run tests
 
 Verify your installation by running unit tests:
@@ -92,11 +98,3 @@ Verify your installation by running unit tests:
 ```bash
 python -m unittest
 ```
-
-
-### Download the datasets
-
-Download the tar files to disk and untar, which will create a directory called `BuildingsBench` with the datasets.
-
-The files are accessible for download [here](https://data.openei.org/submissions/5859).
-

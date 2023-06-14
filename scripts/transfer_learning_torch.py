@@ -181,7 +181,7 @@ def transfer_learning(args, model_args, results_path: Path):
             print(f'dataset {dataset} building {building_name}')
             
             metrics_manager.add_building_to_dataset_if_missing(
-                 dataset, f'{building_name}',
+                 dataset, building_name,
             )
 
             # Split into fine-tuning and evaluation set by date
@@ -250,6 +250,7 @@ def transfer_learning(args, model_args, results_path: Path):
 
                     if args.apply_scaler_transform != '':
                         continuous_targets = inverse_transform(continuous_targets)
+                        targets = inverse_transform(targets)
                         if args.apply_scaler_transform == 'standard':
                             mu = inverse_transform(distribution_params[:,:,0])
                             sigma = load_transform.undo_transform_std(distribution_params[:,:,1])
@@ -265,20 +266,20 @@ def transfer_learning(args, model_args, results_path: Path):
                             distribution_params = torch.cat([mu.unsqueeze(-1), sigma.unsqueeze(-1)],-1)
 
                     if not model.continuous_loads:
-                        bin_values = load_transform.kmeans.centroids.squeeze() \
+                        centroids = load_transform.kmeans.centroids.squeeze() \
                             if args.tokenizer_without_merge else load_transform.merged_centroids
                     else:
-                        bin_values = None
+                        centroids = None
 
                     metrics_manager(
                         dataset,
-                        f'{building_name}',
+                        building_name,
                         continuous_targets,
                         predictions,
                         building_types_mask,
                         y_categories=targets,
                         y_distribution_params=distribution_params,
-                        bin_values=bin_values
+                        centroids=centroids
                     )
 
     print('Generating summaries...')
@@ -344,31 +345,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     utils.set_seed(args.seed)
     
-
-    # # Load model configuration from Wandb or TOML
-    # new_args = {}
-
-    # if args.wandb_run_id != '':
-    #     import wandb
-
-    #     wandb_project = os.environ.get('WANDB_PROJECT', '')
-    #     if wandb_project == '':
-    #         raise ValueError('WANDB_PROJECT environment variable not set')
-    #     wandb_entity = os.environ.get('WANDB_ENTITY', '')
-    #     if wandb_entity == '':
-    #         raise ValueError('WANDB_ENTITY environment variable not set')
-    #     # TODO: Implement loading checkpoint from Wandb    
-    #     api = wandb.Api()
-    #     run = api.run(f"{wandb_entity}/{wandb_project}/{args.wandb_run_id}")
-    #     run = utils.update_wandb_config(run)       
-
-    #     new_args = run.config
-    #     # update args with new_args
-    #     for k,v in new_args.items():
-    #         if k in args:
-    #             continue
-    #         setattr(args, k, v)
-
     config_path = SCRIPT_PATH  / '..' / 'buildings_bench' / 'configs'
     if (config_path / f'{args.config}.toml').exists():
             toml_args = tomli.load(( config_path / f'{args.config}.toml').open('rb'))

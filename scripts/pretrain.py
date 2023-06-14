@@ -48,10 +48,10 @@ def validation(model, val_dataloader, args, loss, load_transform, transform, inv
 
         # Transform if needed
         batch['load'] = transform(batch['load'])
+        targets = batch['load'][:, model.module.context_len:]
 
         with torch.cuda.amp.autocast():
             preds = model(batch)
-            targets = batch['load'][:, model.module.context_len:]
             batch_loss = loss(preds, targets)
             predictions, distribution_params = predict(batch)
 
@@ -59,6 +59,8 @@ def validation(model, val_dataloader, args, loss, load_transform, transform, inv
 
         if args.apply_scaler_transform != '':
             continuous_targets = inverse_transform(continuous_targets)
+            # unscale for crps
+            targets = inverse_transform(targets)
             if args.apply_scaler_transform == 'standard':
                 mu = inverse_transform(distribution_params[:,:,0])
                 sigma = load_transform.undo_transform_std(distribution_params[:,:,1])
@@ -74,10 +76,10 @@ def validation(model, val_dataloader, args, loss, load_transform, transform, inv
                 distribution_params = torch.cat([mu.unsqueeze(-1), sigma.unsqueeze(-1)],-1)
         
         if not model.module.continuous_loads:
-            bin_values = load_transform.kmeans.centroids.squeeze() \
+            centroids = load_transform.kmeans.centroids.squeeze() \
                 if args.tokenizer_without_merge else load_transform.merged_centroids
         else:
-            bin_values = None
+            centroids = None
         
         metrics_manager(
             continuous_targets,
@@ -86,7 +88,7 @@ def validation(model, val_dataloader, args, loss, load_transform, transform, inv
             loss=batch_loss,
             y_categories=targets,
             y_distribution_params=distribution_params,
-            bin_values=bin_values
+            centroids=centroids
         )
                     
         step += 1
@@ -251,7 +253,7 @@ def main(args, model_args):
     if args.resume_from_checkpoint != '':
         model, optimizer, scheduler, step = utils.load_model_checkpoint(
             checkpoint_dir / args.resume_from_checkpoint, model, optimizer, scheduler, local_rank)
-        seen_tokens = step * global_batch_size  * args.pred_len
+        seen_tokens = step * global_batch_size  * model.module.pred_len
         if args.override_lr > 0.0:
              # set the lr for every param group to the override value
              for group in optimizer.param_groups:
@@ -273,7 +275,7 @@ def main(args, model_args):
 
     start_epoch = step // (len(train_dataset) // global_batch_size)
     # Save a checkpoint every 1B seen tokens
-    save_every = 1000000000 // (global_batch_size * args.pred_len )
+    save_every = 1000000000 // (global_batch_size * model.module.pred_len )
     # steps per epoch
     steps_per_epoch = len(train_dataset) // global_batch_size
     print(f'rank {args.rank} step {step} start_epoch {start_epoch} save_every = {save_every}', flush=True)
@@ -444,7 +446,7 @@ if __name__ == '__main__':
         if 'pretrain' in toml_args:
             for k,v in toml_args['pretrain'].items():
                 if hasattr(args, k):
-                    print(f'Overriding argparse default for {k}, {args[k]}, with {v}')
+                    print(f'Overriding argparse default for {k} with {v}')
                 setattr(args, k, v)
         if not model_args['continuous_loads'] or 'apply_scaler_transform' not in args:
             setattr(args, 'apply_scaler_transform', '')

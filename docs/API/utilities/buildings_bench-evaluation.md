@@ -8,12 +8,13 @@ The `buildings_bench.evaluation.managers.DatasetMetricsManager` class is the mai
 ## Simple usage
 
 ```python
+from buildings_bench import BuildingTypes
 from buildings_bench.evaluation.managers import DatasetMetricsManager
 
-# By default, the DatasetMetricsManager also keeps track of NRMSE, NMAE, and NMBE
+# By default, the DatasetMetricsManager keeps track of NRMSE, NMAE, and NMBE
 metrics_manager = DatasetMetricsManager()
 
-# Iterate over the dataset
+# Iterate over the dataset using our building dataset generator
 for building_name, building_dataset in buildings_datasets_generator:
 
     # Register a new building with the manager
@@ -26,11 +27,11 @@ for building_name, building_dataset in buildings_datasets_generator:
 
     # Register the predictions with the manager
     metrics_manager(
-        dataset_name,           # the name of the dataset, e.g., electricity
-        building_name,          # the name of the building, e.g., MT_001
-        continuous_targets,     # the ground truth 24 hour targets
-        predictions,            # the model's 24 hour predictions
-        building_types_mask,    # a boolean tensor indicating building type
+        dataset_name,           	  # the name of the dataset, e.g., electricity
+        building_name,          	  # the name of the building, e.g., MT_001
+        continuous_targets,      	  # the ground truth 24 hour targets
+        predictions,           		  # the model's 24 hour predictions
+        BuildingTypes.RESIDENTIAL_INT,    # an int indicating the building type
     )
 ```
 

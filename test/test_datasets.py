@@ -115,7 +115,7 @@ class TestLoadDatasets(unittest.TestCase):
 
     
     def test_load_pandas_datasets_direct(self):
-        dataset_path = Path(os.environ['BUILDINGS_BENCH_BENCHMARK'])
+        dataset_path = Path(os.environ['BUILDINGS_BENCH'])
         
         building_files = ['BDG-2/Bear_clean=2016', 'BDG-2/Bear_clean=2017']
 
