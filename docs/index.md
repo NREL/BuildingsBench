@@ -14,6 +14,7 @@ We provide an index-based PyTorch [Dataset](https://nrel.github.io/BuildingsBenc
 
 
 ```python
+import torch
 from buildings_bench import load_torch_dataset
 
 # Load a dataset generator for a dataset of buildings

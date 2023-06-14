@@ -2,7 +2,7 @@
 
 # Welcome to BuildingsBench!
 
-![U.S. Commercial Building Stock](./assets/commercial_forecast.gif)
+![A .gif of a load forecast for CONUS](./assets/commercial_forecast.gif)
 
 ## Overview 
 
@@ -10,7 +10,7 @@ BuildingsBench is a platform for
 - Large-scale pretraining with the synthetic Buildings-900K dataset for short-term load forecasting (STLF). Buildings-900K is statistically representative of the entire U.S. building stock.
 - Benchmarking on two tasks evaluating generalization: zero-shot STLF and transfer learning for STLF.
 
-We provide an index-based PyTorch Dataset for large-scale pretraining, easy-to-use PyTorch and Pandas dataloaders for multiple real building energy consumption datasets, simple (persistence) to advanced (transformer) baselines, metrics management, and more.
+We provide an index-based PyTorch Dataset for large-scale pretraining, easy data loading for multiple real building energy consumption datasets as PyTorch Tensors or Pandas DataFrames, simple (persistence) to advanced (transformer) baselines, metrics management, and more.
 
 
 Read more about BuildingsBench in our [documentation](https://nrel.github.io/BuildingsBench/).
@@ -19,6 +19,7 @@ Read more about BuildingsBench in our [documentation](https://nrel.github.io/Bui
 
 
 ```python
+import torch
 from buildings_bench import load_torch_dataset
 
 # Load a dataset generator for a dataset of buildings
