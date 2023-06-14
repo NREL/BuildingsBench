@@ -838,6 +838,17 @@
 
 
 <h1 id="buildings_benchmodels">buildings_bench.models</h1>
+<p>Available models:</p>
+<ul>
+<li>Encoder-decoder time series transformer</li>
+<li>Persistence Ensemble (<code>AveragePersistence</code>)</li>
+<li>Previous Day Persistence (<code>CopyLastDayPersistence</code>)</li>
+<li>Previous Week Persistence (<code>CopyLastWeekPersistence</code>)</li>
+<li>Linear regression</li>
+<li>DLinear</li>
+</ul>
+<p>Main entry point for loading a BuildingsBench model is <code>model_factory()</code>.</p>
+<hr />
 
 
 <div class="doc doc-object doc-module">
@@ -1137,6 +1148,70 @@ the distribution parameters may be, e.g., logits, or mean and variance.</p>
   
       <p>A function for computing the loss.</p>
 
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>x</code></td>
+          <td>
+                <code>torch.<span title="torch.Tensor">Tensor</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>preds of shape (batch_size, seq_len, 1)</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>y</code></td>
+          <td>
+                <code>torch.<span title="torch.Tensor">Tensor</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>targets of shape (batch_size, seq_len, 1)</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+<th>Name</th>        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+<td><code>loss</code></td>          <td>
+                <code>torch.<span title="torch.Tensor">Tensor</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>scalar loss</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
   </div>
 
 </div>
@@ -1146,10 +1221,10 @@ the distribution parameters may be, e.g., logits, or mean and variance.</p>
 
 
 <h4 id="buildings_bench.models.base_model.BaseModel.predict" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">predict</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span></code>
+<code class="highlight language-python"><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span></code>
   
   <span class="doc doc-labels">
-      <small class="doc doc-label doc-label-staticmethod"><code>staticmethod</code></small>
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
   </span>
 
 </h4>
@@ -1170,20 +1245,6 @@ the distribution parameters may be, e.g., logits, or mean and variance.</p>
       </tr>
     </thead>
     <tbody>
-        <tr>
-          <td><code>model</code></td>
-          <td>
-                <code><span title="torch.nn">nn</span>.<span title="torch.nn.Module">Module</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>model</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
         <tr>
           <td><code>x</code></td>
           <td>
@@ -1221,12 +1282,12 @@ the distribution parameters may be, e.g., logits, or mean and variance.</p>
           </td>
         </tr>
         <tr>
-<td></td>          <td>
+<td><code>distribution_parameters</code></td>          <td>
                 <code>torch.<span title="torch.Tensor">Tensor</span></code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>distribution parameters (torch.Tensor]): of shape (batch_size, pred_len, -1)</p>
+              <p>of shape (batch_size, pred_len, -1)</p>
             </div>
           </td>
         </tr>

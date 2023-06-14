@@ -2,47 +2,47 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://nrel.github.io/BuildingsBench/</loc>
-         <lastmod>2023-06-12</lastmod>
+         <lastmod>2023-06-14</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://nrel.github.io/BuildingsBench/running/</loc>
-         <lastmod>2023-06-12</lastmod>
+         <lastmod>2023-06-14</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://nrel.github.io/BuildingsBench/tutorials/</loc>
-         <lastmod>2023-06-12</lastmod>
+         <lastmod>2023-06-14</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/</loc>
-         <lastmod>2023-06-12</lastmod>
+         <lastmod>2023-06-14</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://nrel.github.io/BuildingsBench/API/models/buildings_bench-models/</loc>
-         <lastmod>2023-06-12</lastmod>
+         <lastmod>2023-06-14</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-evaluation/</loc>
-         <lastmod>2023-06-12</lastmod>
+         <lastmod>2023-06-14</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-tokenizer/</loc>
-         <lastmod>2023-06-12</lastmod>
+         <lastmod>2023-06-14</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-transforms/</loc>
-         <lastmod>2023-06-12</lastmod>
+         <lastmod>2023-06-14</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-utils/</loc>
-         <lastmod>2023-06-12</lastmod>
+         <lastmod>2023-06-14</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>

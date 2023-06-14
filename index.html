@@ -299,15 +299,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#run-tests" class="md-nav__link">
-    Run tests
+  <a href="#download-the-datasets" class="md-nav__link">
+    Download the datasets
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#download-the-datasets" class="md-nav__link">
-    Download the datasets
+  <a href="#run-tests" class="md-nav__link">
+    Run tests
   </a>
   
 </li>
@@ -600,11 +600,10 @@
 <h2 id="overview">Overview</h2>
 <p>BuildingsBench is a platform for:</p>
 <ul>
-<li>Large-scale pretraining with the simulated <a href="">Buildings-900K dataset</a> for short-term load forecasting (STLF).</li>
+<li>Large-scale pretraining with the synthetic Buildings-900K dataset for short-term load forecasting (STLF). Buildings-900K is statistically representative of the entire U.S. building stock.</li>
 <li>Benchmarking on two tasks evaluating generalization: zero-shot STLF and transfer learning for STLF.</li>
 </ul>
-<p>We provide an index-based PyTorch <a href="">Dataset</a> for large-scale pretraining, easy-to-use PyTorch and Pandas <a href="">dataloaders</a> for multiple real building energy consumption datasets, from <a href="">persistence</a> (simple) to <a href="">transformers</a> (advanced) baselines, <a href="">metrics management</a>, a <a href="">tokenizer</a> based on KMeans for load time series, and more.</p>
-<p>Read more about BuildingsBench in our <a href="">paper</a> or check out our <a href="https://github.com/NREL/BuildingsBench">Github</a>.</p>
+<p>We provide an index-based PyTorch <a href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#buildings-900k-pytorch-dataset">Dataset</a> for large-scale pretraining, easy data loading for multiple real building energy consumption datasets as <a href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV">PyTorch Tensors</a> or <a href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV">Pandas DataFrames</a>, from simple (<a href="https://nrel.github.io/BuildingsBench/API/models/buildings_bench-models/#buildings_bench.models.persistence">persistence</a>) to advanced (<a href="https://nrel.github.io/BuildingsBench/API/models/buildings_bench-models/#buildings_bench.models.transformers">transformers</a>) baselines, <a href="https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-evaluation/">metrics management</a>, a <a href="https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-tokenizer/">tokenizer</a> based on KMeans for load time series, and more.</p>
 <h3 id="load-a-benchmark-dataset">Load a benchmark dataset</h3>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">buildings_bench</span> <span class="kn">import</span> <span class="n">load_torch_dataset</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
@@ -632,7 +631,7 @@
 <p>Then, install the package in editable mode with
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/NREL/BuildingsBench.git
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">cd</span><span class="w"> </span>BuildingsBench
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[benchmark]&quot;</span>
 </span></code></pre></div></p>
 <h3 id="installing-faiss-gpu">Installing faiss-gpu</h3>
 <p>Due to a PyPI limitation, we have to install <code>faiss-gpu</code> (for KMeans) by directly downloading the wheel from <a href="https://github.com/kyamagu/faiss-wheels/releases/">https://github.com/kyamagu/faiss-wheels/releases/</a>.
@@ -655,13 +654,13 @@ Then, <code>pip install skforecast</code>.</p>
 <li><code>WANDB_ENTITY</code>: your wandb username</li>
 <li><code>WANDB_PROJECT</code>: the name of your wandb project for this benchmark</li>
 </ul>
+<h3 id="download-the-datasets">Download the datasets</h3>
+<p>Download the tar files to disk and untar, which will create a directory called <code>BuildingsBench</code> with the data.</p>
+<p>The files will be available for download <a href="https://data.openei.org/submissions/5859">here</a>.</p>
 <h3 id="run-tests">Run tests</h3>
 <p>Verify your installation by running unit tests:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>python<span class="w"> </span>-m<span class="w"> </span>unittest
 </span></code></pre></div>
-<h3 id="download-the-datasets">Download the datasets</h3>
-<p>Download the tar files to disk and untar, which will create a directory called <code>BuildingsBench</code> with the datasets.</p>
-<p>The files are accessible for download <a href="https://data.openei.org/submissions/5859">here</a>.</p>
 
 
 
