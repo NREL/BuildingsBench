@@ -441,6 +441,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#buildings_bench.models.base_model.BaseModel.__init__" class="md-nav__link">
+    __init__()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#buildings_bench.models.base_model.BaseModel.forward" class="md-nav__link">
     forward()
   </a>
@@ -1050,6 +1057,80 @@ the distribution parameters may be, e.g., logits, or mean and variance.</p>
 
 
 
+<h4 id="buildings_bench.models.base_model.BaseModel.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">context_len</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">,</span> <span class="n">continuous_loads</span><span class="p">)</span></code>
+
+</h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Init method for BaseModel.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>context_len</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>length of context window</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>pred_len</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>length of prediction window</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>continuous_loads</code></td>
+          <td>
+                <code>bool</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>whether to use continuous load values</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
 <h4 id="buildings_bench.models.base_model.BaseModel.forward" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">forward</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span></code>
   
@@ -1067,13 +1148,13 @@ the distribution parameters may be, e.g., logits, or mean and variance.</p>
 <details class="expected-keys-in-x" open>
   <summary>Expected keys in x</summary>
   <ul>
-<li>'load': torch.Tensor of shape [batch_size, seq_len, 1]</li>
-<li>'building_type': torch.LongTensor of shape (batch_size, 1)</li>
-<li>'day_of_year': torch.FloatTensor of shape (batch_size, 1)</li>
-<li>'hour_of_day': torch.FloatTensor of shape (batch_size, 1)</li>
-<li>'day_of_week': torch.FloatTensor of shape (batch_size, 1)</li>
-<li>'latitude': torch.FloatTensor of shape (batch_size, 1)</li>
-<li>'longitude': torch.FloatTensor of shape (batch_size, 1)</li>
+<li>'load': torch.Tensor of shape (batch_size, seq_len, 1)</li>
+<li>'building_type': torch.LongTensor of shape (batch_size, seq_len, 1)</li>
+<li>'day_of_year': torch.FloatTensor of shape (batch_size, seq_len, 1)</li>
+<li>'hour_of_day': torch.FloatTensor of shape (batch_size, seq_len, 1)</li>
+<li>'day_of_week': torch.FloatTensor of shape (batch_size, seq_len, 1)</li>
+<li>'latitude': torch.FloatTensor of shape (batch_size, seq_len, 1)</li>
+<li>'longitude': torch.FloatTensor of shape (batch_size, seq_len, 1)</li>
 </ul>
 </details>
   <p><strong>Parameters:</strong></p>
@@ -2064,7 +2145,7 @@ introduce a notion of order within a time-series.</p>
 
 
 <h4 id="buildings_bench.models.transformers.LoadForecastingTransformer.generate_sample" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">generate_sample</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">temperature</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">greedy</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">num_samples</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">top_k</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">top_p</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">generate_sample</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">temperature</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">greedy</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">num_samples</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span></code>
 
 </h4>
 
@@ -2141,34 +2222,6 @@ Implements greedy decoding and random temperature-controlled sampling.</p>
           </td>
           <td>
                 <code>1</code>
-          </td>
-        </tr>
-        <tr>
-          <td><code>top_k</code></td>
-          <td>
-                <code>int</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>top k sampling (DEPRECATED)</p>
-            </div>
-          </td>
-          <td>
-                <code>0</code>
-          </td>
-        </tr>
-        <tr>
-          <td><code>top_p</code></td>
-          <td>
-                <code>float</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>nucleus sampling (DEPRECATED)</p>
-            </div>
-          </td>
-          <td>
-                <code>1.0</code>
           </td>
         </tr>
     </tbody>
