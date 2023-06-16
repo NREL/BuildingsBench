@@ -21,13 +21,12 @@ plugins:
             selection:
                 inherited_members: true  # Allow looking up inherited methods
             rendering:
-                show_root_heading: false  # actually display anything at all...
+                show_root_heading: true  # actually display anything at all...
                 show_root_full_path: true  # display "diffrax.asdf" not just "asdf"
                 show_signature_annotations: true
                 show_source: false  # don't include source code
                 members_order: source  # order methods according to their order of definition in the source code, not alphabetical order
-                heading_level: 2
-
+                
 
 nav: 
   - Home: index.md
@@ -46,6 +45,7 @@ nav:
 
 extra_css:
     - css/extra.css
+    - css/github-permalink-style.css
 
 markdown_extensions:
   - pymdownx.highlight:
@@ -55,3 +55,6 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
+  - toc:
+      permalink: ''
+      toc_depth: 1-2

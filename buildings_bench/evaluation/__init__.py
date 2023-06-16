@@ -29,10 +29,10 @@ def metrics_factory(name: str,
     By default, will return a scalar metric.
 
     Args:
-        name: The name of the metric.
-        types: The types of the metric. List[MetricTypes]
+        name (str): The name of the metric.
+        types (List[MetricTypes]): The types of the metric.         
     Returns:
-        A list of metrics. List[Metric]
+        metrics_list (List[Metric]): A list of metrics. 
     """
     assert name.lower() in metrics_registry, f'Invalid metric name: {name}'
 
@@ -56,9 +56,9 @@ def scoring_rule_factory(name: str) -> ScoringRule:
     """Create a scoring rule from a name.
 
     Args:
-        name: The name of the scoring rule.
+        name (str): The name of the scoring rule.
     Returns:
-        A scoring rule.
+        sr (ScoringRule): A scoring rule.
     """
     assert name.lower() in scoring_rule_registry, f'Invalid scoring rule name: {name}'
     
@@ -72,7 +72,7 @@ def all_metrics_list() -> List[Metric]:
     """Returns all registered metrics.
     
     Returns:
-        A list of metrics. List[Metric]
+        metrics_list (List[Metric]): A list of metrics.
     """
     metrics_list = []
     for metric in metrics_registry:

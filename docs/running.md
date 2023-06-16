@@ -16,7 +16,7 @@ Our benchmark assumes each model takes as input a dictionary of torch tensors wi
 }
 ```
 
-To use these scripts with your model you'll need to register your model with our platform.
+To use these scripts with your model you'll need to register your model with our platform. Please see the tutorial on [registering your model](https://github.com/NREL/BuildingsBench/blob/main/tutorials/1_register_your_model.ipynb) for a Jupyter Notebook version of the following instructions.
 
 ### Registering your model
 

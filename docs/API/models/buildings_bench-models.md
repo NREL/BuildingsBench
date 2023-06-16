@@ -13,48 +13,106 @@ Main entry point for loading a BuildingsBench model is `model_factory()`.
 
 ---
 
-::: buildings_bench.models
+## model_factory
+
+::: buildings_bench.models.model_factory
     options:
         show_source: false
-        heading_level: 2
+        heading_level: 3
         show_root_heading: true
 
 ---
 
-::: buildings_bench.models.base_model
+## BaseModel
+
+::: buildings_bench.models.base_model.BaseModel
     options:
         show_source: false
-        heading_level: 2
-        show_root_heading: true
+        heading_level: 3
+        
 
 ---
 
-::: buildings_bench.models.transformers
+## Time Series Transformer
+
+::: buildings_bench.models.transformers.LoadForecastingTransformer
     options:
         show_source: false
-        heading_level: 2
+        heading_level: 3
+        
+
+## TokenEmbedding
+
+::: buildings_bench.models.transformers.TokenEmbedding
+    options:
+        show_source: false
+        heading_level: 3
         show_root_heading: true
+        
+## PositionalEncoding
+
+::: buildings_bench.models.transformers.PositionalEncoding
+    options:
+        show_source: false
+        heading_level: 3
+        
+## TimeSeriesSinusoidalPeriodicEmbedding
+
+::: buildings_bench.models.transformers.TimeSeriesSinusoidalPeriodicEmbedding
+    options:
+        show_source: false
+        heading_level: 3
+        
+## ZeroEmbedding
+
+::: buildings_bench.models.transformers.ZeroEmbedding
+    options:
+        show_source: false
+        heading_level: 3
+        
+        
+---
+
+## Persistence Ensemble
+
+::: buildings_bench.models.persistence.AveragePersistence
+    options:
+        show_source: false
+        heading_level: 3
+        
+
+## Previous Day Persistence
+
+::: buildings_bench.models.persistence.CopyLastDayPersistence
+    options:
+        show_source: false
+        heading_level: 3
+        
+
+## Previous Week Persistence
+
+::: buildings_bench.models.persistence.CopyLastWeekPersistence
+    options:
+        show_source: false
+        heading_level: 3
+        
 
 ---
 
-::: buildings_bench.models.persistence
+## Linear Regression 
+
+::: buildings_bench.models.linear_regression.LinearRegression
     options:
         show_source: false
-        heading_level: 2
-        show_root_heading: true
+        heading_level: 3
+        
 
 ---
 
-::: buildings_bench.models.linear_regression
+## DLinear
+
+::: buildings_bench.models.dlinear_regression.DLinearRegression
     options:
         show_source: false
-        heading_level: 2
-        show_root_heading: true
-
----
-
-::: buildings_bench.models.dlinear_regression
-    options:
-        show_source: false
-        heading_level: 2
-        show_root_heading: true
+        heading_level: 3
+        

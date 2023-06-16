@@ -120,7 +120,7 @@ def load_torch_dataset(
         pred_len (int): Length of the prediction horizon. Defaults to 24.
     
     Returns:
-        Union[TorchBuildingDatasetsFromCSV, TorchBuildingDatasetFromParquet]: Dataset for benchmarking.
+        dataset (Union[TorchBuildingDatasetsFromCSV, TorchBuildingDatasetFromParquet]): Dataset for benchmarking.
     """
     if not dataset_path:
         dataset_path = Path(os.environ.get('BUILDINGS_BENCH', ''))
@@ -207,7 +207,7 @@ def load_pandas_dataset(
         scaler_transform_path (Path): Path to data for transform, e.g., pickled data for BoxCox transform.
 
     Returns:
-        PandasBuildingDatasetsFromCSV: Generator of Pandas datasets for benchmarking.
+        dataset (PandasBuildingDatasetsFromCSV): Generator of Pandas datasets for benchmarking.
     """
     if not dataset_path:
         dataset_path = Path(os.environ.get('BUILDINGS_BENCH', ''))

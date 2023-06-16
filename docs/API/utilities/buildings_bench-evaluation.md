@@ -69,41 +69,143 @@ for building_name, building_dataset in buildings_datasets_generator:
 
 ---
 
-::: buildings_bench.evaluation
+## metrics_factory
+
+::: buildings_bench.evaluation.metrics_factory
     options:
         show_source: false
-        heading_level: 2
+        heading_level: 3
+        show_root_heading: true
+
+## scoring_rule_factory
+
+::: buildings_bench.evaluation.scoring_rule_factory
+    options:
+        show_source: false
+        heading_level: 3
+        show_root_heading: true
+
+## all_metrics_list
+
+::: buildings_bench.evaluation.all_metrics_list
+    options:
+        show_source: false
+        heading_level: 3
         show_root_heading: true
 
 ---
 
-::: buildings_bench.evaluation.managers
+## BuildingTypes
+
+::: buildings_bench.evaluation.managers.BuildingTypes
     options:
         show_source: false
-        heading_level: 2
+        heading_level: 3
+        show_root_heading: true
+
+
+## DatasetMetricsManager
+
+::: buildings_bench.evaluation.managers.DatasetMetricsManager
+    options:
+        show_source: false
+        heading_level: 3
+        show_root_heading: true
+
+## MetricsManager
+
+::: buildings_bench.evaluation.managers.MetricsManager
+    options:
+        show_source: false
+        heading_level: 3
+        show_root_heading: true
+
+
+---
+
+## MetricType
+
+::: buildings_bench.evaluation.metrics.MetricType
+    options:
+        show_source: false
+        heading_level: 3
+        show_root_heading: true
+
+
+## BuildingsBenchMetric
+
+::: buildings_bench.evaluation.metrics.BuildingsBenchMetric
+    options:
+        show_source: false
+        heading_level: 3
+        show_root_heading: true
+
+## Metric
+
+::: buildings_bench.evaluation.metrics.Metric
+    options:
+        show_source: false
+        heading_level: 3
+        show_root_heading: true
+
+## absolute_error
+
+::: buildings_bench.evaluation.metrics.absolute_error
+    options:
+        show_source: false
+        heading_level: 3
+        show_root_heading: true
+
+## squared_error
+
+::: buildings_bench.evaluation.metrics.squared_error
+    options:
+        show_source: false
+        heading_level: 3
+        show_root_heading: true
+
+## bias_error
+
+::: buildings_bench.evaluation.metrics.bias_error
+    options:
+        show_source: false
+        heading_level: 3
         show_root_heading: true
 
 ---
 
-::: buildings_bench.evaluation.metrics
+## ScoringRule
+
+::: buildings_bench.evaluation.scoring_rules.ScoringRule
     options:
         show_source: false
-        heading_level: 2
+        heading_level: 3
+        show_root_heading: true
+
+
+## RankedProbabilityScore
+
+::: buildings_bench.evaluation.scoring_rules.RankedProbabilityScore
+    options:
+        show_source: false
+        heading_level: 3
+        show_root_heading: true
+
+## ContinuousRankedProbabilityScore
+
+::: buildings_bench.evaluation.scoring_rules.ContinuousRankedProbabilityScore
+    options:
+        show_source: false
+        heading_level: 3
         show_root_heading: true
 
 ---
 
-::: buildings_bench.evaluation.scoring_rules
+## aggregate
+
+::: buildings_bench.evaluation.aggregate.return_aggregate_median
     options:
         show_source: false
-        heading_level: 2
-        show_root_heading: true
-
----
-
-::: buildings_bench.evaluation.aggregate
-    options:
-        show_source: false
-        heading_level: 2
+        heading_level: 3
         show_root_heading: true
 

@@ -173,6 +173,15 @@ class LoadForecastingTransformer(BaseModel):
         return super().to(device)
 
     def forward(self, x):
+        r"""Forward pass of the time series transformer. 
+
+        Args:
+            x (Dict): dictionary of input tensors.
+        Returns:
+            logits (torch.Tensor): [batch_size, pred_len, vocab_size] if not continuous_loads,
+                                   [batch_size, pred_len, 1] if continuous_loads and continuous_head == 'mse', 
+                                   [batch_size, pred_len, 2] if continuous_loads and continuous_head == 'gaussian_nll'.
+        """
         # [batch_size, seq_len, d_model]
         time_series_embed = torch.cat([
             self.lat_embedding(x['latitude']),

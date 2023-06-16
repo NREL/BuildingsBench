@@ -159,7 +159,9 @@ class TorchBuildingDatasetFromParquet:
 
 
 class TorchBuildingDatasetsFromCSV:
-    """Generate PyTorch Datasets from a list of CSV files.
+    """TorchBuildingDatasetsFromCSV
+    
+    Generate PyTorch Datasets from a list of CSV files.
 
     Attributes:
         building_datasets (dict): Maps unique building ids to a list of tuples (year, TorchBuildingDataset). 

@@ -1,6 +1,8 @@
 # buildings_bench.data
 
-Main entry point for loading PyTorch and Pandas datasets:
+Functions and class definitions for loading Torch and Pandas datasets.
+
+Main entry points for loading PyTorch and Pandas datasets:
 
 - `load_pretraining()` (used for pretraining)
 - `load_torch_dataset()` (used for benchmark tasks)
@@ -14,32 +16,79 @@ Available PyTorch Datasets:
 
 ---
 
-## Loading benchmark datasets
+## load_pretraining
 
-Function definitions for loading Torch and Pandas datasets.
-
-::: buildings_bench.data
+::: buildings_bench.data.load_pretraining
     options:
         show_source: false
-        heading_level: 2
+        heading_level: 3
+        show_root_heading: true
+
+## load_torch_dataset
+
+::: buildings_bench.data.load_torch_dataset
+    options:
+        show_source: false
+        heading_level: 3
+        show_root_heading: true
+
+
+## load_pandas_dataset
+
+::: buildings_bench.data.load_pandas_dataset
+    options:
+        show_source: false
+        heading_level: 3
         show_root_heading: true
 
 ---
 
-## Buildings-900K PyTorch Dataset
+## The Buildings-900K PyTorch Dataset
 
-::: buildings_bench.data.buildings900K
+::: buildings_bench.data.buildings900K.Buildings900K
     options:
         show_source: false
-        heading_level: 2
+        heading_level: 3
         show_root_heading: true
 
 ---
 
-## Generators and Datasets
+## TorchBuildingDataset
 
-::: buildings_bench.data.datasets
+::: buildings_bench.data.datasets.TorchBuildingDataset
     options:
         show_source: false
-        heading_level: 2
+        heading_level: 3
+        show_root_heading: true
+
+## PandasTransformerDataset
+
+::: buildings_bench.data.datasets.PandasTransformerDataset
+    options:
+        show_source: false
+        heading_level: 3
+        show_root_heading: true
+
+## TorchBuildingDatasetFromParquet
+
+::: buildings_bench.data.datasets.TorchBuildingDatasetFromParquet
+    options:
+        show_source: false
+        heading_level: 3
+        show_root_heading: true
+
+## TorchBuildingDatasetFromCSV
+
+::: buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV
+    options:
+        show_source: false
+        heading_level: 3
+        show_root_heading: true
+
+## PandasBuildingDatasetsFromCSV
+
+::: buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV
+    options:
+        show_source: false
+        heading_level: 3
         show_root_heading: true
