@@ -49,6 +49,8 @@
     
       <link rel="stylesheet" href="../../../css/extra.css">
     
+      <link rel="stylesheet" href="../../../css/github-permalink-style.css">
+    
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -357,245 +359,65 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#loading-benchmark-datasets" class="md-nav__link">
-    Loading benchmark datasets
+  <a href="#load_pretraining" class="md-nav__link">
+    load_pretraining
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#buildings_bench.data" class="md-nav__link">
-    data
-  </a>
-  
-    <nav class="md-nav" aria-label="data">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.load_pretraining" class="md-nav__link">
-    load_pretraining()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.load_torch_dataset" class="md-nav__link">
-    load_torch_dataset()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.load_pandas_dataset" class="md-nav__link">
-    load_pandas_dataset()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#buildings-900k-pytorch-dataset" class="md-nav__link">
-    Buildings-900K PyTorch Dataset
+  <a href="#load_torch_dataset" class="md-nav__link">
+    load_torch_dataset
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#buildings_bench.data.buildings900K" class="md-nav__link">
-    buildings900K
-  </a>
-  
-    <nav class="md-nav" aria-label="buildings900K">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.buildings900K.Buildings900K" class="md-nav__link">
-    Buildings900K
-  </a>
-  
-    <nav class="md-nav" aria-label="Buildings900K">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.buildings900K.Buildings900K.__init__" class="md-nav__link">
-    __init__()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.buildings900K.Buildings900K.init_fp" class="md-nav__link">
-    init_fp()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.buildings900K.Buildings900K.__read_index_file" class="md-nav__link">
-    __read_index_file()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#generators-and-datasets" class="md-nav__link">
-    Generators and Datasets
+  <a href="#load_pandas_dataset" class="md-nav__link">
+    load_pandas_dataset
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#buildings_bench.data.datasets" class="md-nav__link">
-    datasets
+  <a href="#the-buildings-900k-pytorch-dataset" class="md-nav__link">
+    The Buildings-900K PyTorch Dataset
   </a>
   
-    <nav class="md-nav" aria-label="datasets">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.datasets.TorchBuildingDataset" class="md-nav__link">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#torchbuildingdataset" class="md-nav__link">
     TorchBuildingDataset
   </a>
   
-    <nav class="md-nav" aria-label="TorchBuildingDataset">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.datasets.TorchBuildingDataset.__init__" class="md-nav__link">
-    __init__()
-  </a>
-  
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.datasets.TorchBuildingDatasetFromParquet" class="md-nav__link">
-    TorchBuildingDatasetFromParquet
-  </a>
-  
-    <nav class="md-nav" aria-label="TorchBuildingDatasetFromParquet">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.datasets.TorchBuildingDatasetFromParquet.__init__" class="md-nav__link">
-    __init__()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.datasets.TorchBuildingDatasetFromParquet.__iter__" class="md-nav__link">
-    __iter__()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV" class="md-nav__link">
-    TorchBuildingDatasetsFromCSV
-  </a>
-  
-    <nav class="md-nav" aria-label="TorchBuildingDatasetsFromCSV">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV.__init__" class="md-nav__link">
-    __init__()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV.__iter__" class="md-nav__link">
-    __iter__()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV" class="md-nav__link">
-    PandasBuildingDatasetsFromCSV
-  </a>
-  
-    <nav class="md-nav" aria-label="PandasBuildingDatasetsFromCSV">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV.__init__" class="md-nav__link">
-    __init__()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV.__iter__" class="md-nav__link">
-    __iter__()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.datasets.PandasTransformerDataset" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#pandastransformerdataset" class="md-nav__link">
     PandasTransformerDataset
   </a>
   
-    <nav class="md-nav" aria-label="PandasTransformerDataset">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.datasets.PandasTransformerDataset.__init__" class="md-nav__link">
-    __init__()
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#torchbuildingdatasetfromparquet" class="md-nav__link">
+    TorchBuildingDatasetFromParquet
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.data.datasets.keep_buildings" class="md-nav__link">
-    keep_buildings()
+      
+        <li class="md-nav__item">
+  <a href="#torchbuildingdatasetfromcsv" class="md-nav__link">
+    TorchBuildingDatasetFromCSV
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#pandasbuildingdatasetsfromcsv" class="md-nav__link">
+    PandasBuildingDatasetsFromCSV
+  </a>
   
 </li>
       
@@ -777,8 +599,9 @@
   
 
 
-<h1 id="buildings_benchdata">buildings_bench.data</h1>
-<p>Main entry point for loading PyTorch and Pandas datasets:</p>
+<h1 id="buildings_benchdata">buildings_bench.data<a class="headerlink" href="#buildings_benchdata" title="Permanent link"></a></h1>
+<p>Functions and class definitions for loading Torch and Pandas datasets.</p>
+<p>Main entry points for loading PyTorch and Pandas datasets:</p>
 <ul>
 <li><code>load_pretraining()</code> (used for pretraining)</li>
 <li><code>load_torch_dataset()</code> (used for benchmark tasks)</li>
@@ -791,32 +614,7 @@
 <li><code>PandasTransformerDataset</code> (used for benchmark tasks)</li>
 </ul>
 <hr />
-<h2 id="loading-benchmark-datasets">Loading benchmark datasets</h2>
-<p>Function definitions for loading Torch and Pandas datasets.</p>
-
-
-<div class="doc doc-object doc-module">
-
-
-
-<h2 id="buildings_bench.data" class="doc doc-heading">
-          <code>buildings_bench.data</code>
-
-
-</h2>
-
-  <div class="doc doc-contents first">
-
-  
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
+<h2 id="load_pretraining">load_pretraining<a class="headerlink" href="#load_pretraining" title="Permanent link"></a></h2>
 
 
 <div class="doc doc-object doc-function">
@@ -824,12 +622,12 @@
 
 
 <h3 id="buildings_bench.data.load_pretraining" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">load_pretraining</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">num_buildings_ablation</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">24</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span></code>
+<code class="highlight language-python"><span class="n">buildings_bench</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load_pretraining</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">num_buildings_ablation</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">24</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
   
       <p>Pre-training datasets: buildings-900k-train, buildings-900k-val</p>
 
@@ -957,19 +755,20 @@
 
   </div>
 
-</div>
+</div><h2 id="load_torch_dataset">load_torch_dataset<a class="headerlink" href="#load_torch_dataset" title="Permanent link"></a></h2>
+
 
 <div class="doc doc-object doc-function">
 
 
 
 <h3 id="buildings_bench.data.load_torch_dataset" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">load_torch_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dataset_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">24</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">TorchBuildingDatasetsFromCSV</span><span class="p">,</span> <span class="n">TorchBuildingDatasetFromParquet</span><span class="p">]</span></code>
+<code class="highlight language-python"><span class="n">buildings_bench</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load_torch_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dataset_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">24</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">TorchBuildingDatasetsFromCSV</span><span class="p">,</span> <span class="n">TorchBuildingDatasetFromParquet</span><span class="p">]</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
   
       <p>Load datasets by name.</p>
 
@@ -1076,18 +875,18 @@
   <table>
     <thead>
       <tr>
-        <th>Type</th>
+<th>Name</th>        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-          <td>
+<td><code>dataset</code></td>          <td>
                 <code><span title="typing.Union">Union</span>[<a class="autorefs autorefs-internal" title="buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV" href="#buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV">TorchBuildingDatasetsFromCSV</a>, <a class="autorefs autorefs-internal" title="buildings_bench.data.datasets.TorchBuildingDatasetFromParquet" href="#buildings_bench.data.datasets.TorchBuildingDatasetFromParquet">TorchBuildingDatasetFromParquet</a>]</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>Union[TorchBuildingDatasetsFromCSV, TorchBuildingDatasetFromParquet]: Dataset for benchmarking.</p>
+              <p>Dataset for benchmarking.</p>
             </div>
           </td>
         </tr>
@@ -1096,19 +895,20 @@
 
   </div>
 
-</div>
+</div><h2 id="load_pandas_dataset">load_pandas_dataset<a class="headerlink" href="#load_pandas_dataset" title="Permanent link"></a></h2>
+
 
 <div class="doc doc-object doc-function">
 
 
 
 <h3 id="buildings_bench.data.load_pandas_dataset" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">load_pandas_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dataset_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">feature_set</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;engineered&#39;</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PandasBuildingDatasetsFromCSV</span></code>
+<code class="highlight language-python"><span class="n">buildings_bench</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load_pandas_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dataset_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">feature_set</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;engineered&#39;</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PandasBuildingDatasetsFromCSV</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
   
       <p>Load datasets by name.</p>
 
@@ -1207,7 +1007,7 @@
     </thead>
     <tbody>
         <tr>
-<td><code>PandasBuildingDatasetsFromCSV</code></td>          <td>
+<td><code>dataset</code></td>          <td>
                 <code><a class="autorefs autorefs-internal" title="buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV" href="#buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV">PandasBuildingDatasetsFromCSV</a></code>
           </td>
           <td>
@@ -1221,39 +1021,8 @@
 
   </div>
 
-</div>
-
-
-
-  </div>
-
-  </div>
-
 </div><hr />
-<h2 id="buildings-900k-pytorch-dataset">Buildings-900K PyTorch Dataset</h2>
-
-
-<div class="doc doc-object doc-module">
-
-
-
-<h2 id="buildings_bench.data.buildings900K" class="doc doc-heading">
-          <code>buildings_bench.data.buildings900K</code>
-
-
-</h2>
-
-  <div class="doc doc-contents first">
-
-  
-
-  <div class="doc doc-children">
-
-
-
-
-
-
+<h2 id="the-buildings-900k-pytorch-dataset">The Buildings-900K PyTorch Dataset<a class="headerlink" href="#the-buildings-900k-pytorch-dataset" title="Permanent link"></a></h2>
 
 
 <div class="doc doc-object doc-class">
@@ -1261,13 +1030,13 @@
 
 
 <h3 id="buildings_bench.data.buildings900K.Buildings900K" class="doc doc-heading">
-        <code>Buildings900K</code>
+        <code>buildings_bench.data.buildings900K.Buildings900K</code>
 
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code>torch.<span title="torch.utils">utils</span>.<span title="torch.utils.data">data</span>.<span title="torch.utils.data.Dataset">Dataset</span></code></p>
 
@@ -1467,40 +1236,8 @@ The file is opened in binary mode which lets us disable buffering.</p>
 
   </div>
 
-</div>
-
-
-
-
-  </div>
-
-  </div>
-
 </div><hr />
-<h2 id="generators-and-datasets">Generators and Datasets</h2>
-
-
-<div class="doc doc-object doc-module">
-
-
-
-<h2 id="buildings_bench.data.datasets" class="doc doc-heading">
-          <code>buildings_bench.data.datasets</code>
-
-
-</h2>
-
-  <div class="doc doc-contents first">
-
-  
-
-  <div class="doc doc-children">
-
-
-
-
-
-
+<h2 id="torchbuildingdataset">TorchBuildingDataset<a class="headerlink" href="#torchbuildingdataset" title="Permanent link"></a></h2>
 
 
 <div class="doc doc-object doc-class">
@@ -1508,13 +1245,13 @@ The file is opened in binary mode which lets us disable buffering.</p>
 
 
 <h3 id="buildings_bench.data.datasets.TorchBuildingDataset" class="doc doc-heading">
-        <code>TorchBuildingDataset</code>
+        <code>buildings_bench.data.datasets.TorchBuildingDataset</code>
 
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code>torch.<span title="torch.utils">utils</span>.<span title="torch.utils.data">data</span>.<span title="torch.utils.data.Dataset">Dataset</span></code></p>
 
@@ -1699,20 +1436,150 @@ The file is opened in binary mode which lets us disable buffering.</p>
 
   </div>
 
+</div><h2 id="pandastransformerdataset">PandasTransformerDataset<a class="headerlink" href="#pandastransformerdataset" title="Permanent link"></a></h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="buildings_bench.data.datasets.PandasTransformerDataset" class="doc doc-heading">
+        <code>buildings_bench.data.datasets.PandasTransformerDataset</code>
+
+
+</h3>
+
+
+  <div class="doc doc-contents first">
+      <p class="doc doc-class-bases">
+        Bases: <code>torch.<span title="torch.utils">utils</span>.<span title="torch.utils.data">data</span>.<span title="torch.utils.data.Dataset">Dataset</span></code></p>
+
+  
+      <p>Create a Torch Dataset out of a Pandas DataFrame.</p>
+<p>Used to iterate over mini-batches of 192-hour sub-sequences.</p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="buildings_bench.data.datasets.PandasTransformerDataset.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">sliding_window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">)</span></code>
+
+</h4>
+
+
+  <div class="doc doc-contents ">
+  
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>df</code></td>
+          <td>
+                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Pandas DataFrame with columns: load, latitude, longitude, hour of day, day of week, day of year, building type</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>context_len</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Length of context.. Defaults to 168.</p>
+            </div>
+          </td>
+          <td>
+                <code>168</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>pred_len</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Length of prediction sequence for the forecasting model. Defaults to 24.</p>
+            </div>
+          </td>
+          <td>
+                <code>24</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>sliding_window</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Stride for sliding window to split timeseries into test samples. Defaults to 24.</p>
+            </div>
+          </td>
+          <td>
+                <code>24</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
 </div>
+
+
+
+  </div>
+
+  </div>
+
+</div><h2 id="torchbuildingdatasetfromparquet">TorchBuildingDatasetFromParquet<a class="headerlink" href="#torchbuildingdatasetfromparquet" title="Permanent link"></a></h2>
+
 
 <div class="doc doc-object doc-class">
 
 
 
 <h3 id="buildings_bench.data.datasets.TorchBuildingDatasetFromParquet" class="doc doc-heading">
-        <code>TorchBuildingDatasetFromParquet</code>
+        <code>buildings_bench.data.datasets.TorchBuildingDatasetFromParquet</code>
 
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
 
   
       <p>Generate PyTorch Datasets out of Parquet files.</p>
@@ -1960,23 +1827,25 @@ each building is a column. All time series are for the same year.     </p>
 
   </div>
 
-</div>
+</div><h2 id="torchbuildingdatasetfromcsv">TorchBuildingDatasetFromCSV<a class="headerlink" href="#torchbuildingdatasetfromcsv" title="Permanent link"></a></h2>
+
 
 <div class="doc doc-object doc-class">
 
 
 
 <h3 id="buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV" class="doc doc-heading">
-        <code>TorchBuildingDatasetsFromCSV</code>
+        <code>buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV</code>
 
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
 
   
-      <p>Generate PyTorch Datasets from a list of CSV files.</p>
+      <p>TorchBuildingDatasetsFromCSV</p>
+<p>Generate PyTorch Datasets from a list of CSV files.</p>
 
   <p><strong>Attributes:</strong></p>
   <table>
@@ -2219,20 +2088,21 @@ each building is a column. All time series are for the same year.     </p>
 
   </div>
 
-</div>
+</div><h2 id="pandasbuildingdatasetsfromcsv">PandasBuildingDatasetsFromCSV<a class="headerlink" href="#pandasbuildingdatasetsfromcsv" title="Permanent link"></a></h2>
+
 
 <div class="doc doc-object doc-class">
 
 
 
 <h3 id="buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV" class="doc doc-heading">
-        <code>PandasBuildingDatasetsFromCSV</code>
+        <code>buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV</code>
 
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
 
   
       <p>Generate Pandas Dataframes from a list of CSV files.</p>
@@ -2440,226 +2310,6 @@ The Pandas Dataframe contain all of the years of data for the building.</p>
             <div class="doc-md-description">
               <p>A pair of building id and Pandas dataframe. 
 The dataframe has all years concatenated.</p>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  </div>
-
-</div>
-
-
-
-  </div>
-
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-class">
-
-
-
-<h3 id="buildings_bench.data.datasets.PandasTransformerDataset" class="doc doc-heading">
-        <code>PandasTransformerDataset</code>
-
-
-</h3>
-
-
-  <div class="doc doc-contents ">
-      <p class="doc doc-class-bases">
-        Bases: <code>torch.<span title="torch.utils">utils</span>.<span title="torch.utils.data">data</span>.<span title="torch.utils.data.Dataset">Dataset</span></code></p>
-
-  
-      <p>Create a Torch Dataset out of a Pandas DataFrame.</p>
-<p>Used to iterate over mini-batches of 192-hour sub-sequences.</p>
-
-
-
-  
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-
-<h4 id="buildings_bench.data.datasets.PandasTransformerDataset.__init__" class="doc doc-heading">
-<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">sliding_window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">)</span></code>
-
-</h4>
-
-
-  <div class="doc doc-contents ">
-  
-
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>df</code></td>
-          <td>
-                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Pandas DataFrame with columns: load, latitude, longitude, hour of day, day of week, day of year, building type</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>context_len</code></td>
-          <td>
-                <code>int</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Length of context.. Defaults to 168.</p>
-            </div>
-          </td>
-          <td>
-                <code>168</code>
-          </td>
-        </tr>
-        <tr>
-          <td><code>pred_len</code></td>
-          <td>
-                <code>int</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Length of prediction sequence for the forecasting model. Defaults to 24.</p>
-            </div>
-          </td>
-          <td>
-                <code>24</code>
-          </td>
-        </tr>
-        <tr>
-          <td><code>sliding_window</code></td>
-          <td>
-                <code>int</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Stride for sliding window to split timeseries into test samples. Defaults to 24.</p>
-            </div>
-          </td>
-          <td>
-                <code>24</code>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  </div>
-
-</div>
-
-
-
-  </div>
-
-  </div>
-
-</div>
-
-
-<div class="doc doc-object doc-function">
-
-
-
-<h3 id="buildings_bench.data.datasets.keep_buildings" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">keep_buildings</span><span class="p">(</span><span class="n">dataset_generator</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">TorchBuildingDatasetsFromCSV</span><span class="p">,</span> <span class="n">TorchBuildingDatasetFromParquet</span><span class="p">],</span> <span class="n">building_ids</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">TorchBuildingDatasetsFromCSV</span><span class="p">,</span> <span class="n">TorchBuildingDatasetFromParquet</span><span class="p">]</span></code>
-
-</h3>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>Remove all buildings <em>not</em> listed in building_ids from the building_datasets dictionary from the generator class.</p>
-
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>dataset_generator</code></td>
-          <td>
-                <code><span title="typing.Union">Union</span>[<a class="autorefs autorefs-internal" title="buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV" href="#buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV">TorchBuildingDatasetsFromCSV</a>, <a class="autorefs autorefs-internal" title="buildings_bench.data.datasets.TorchBuildingDatasetFromParquet" href="#buildings_bench.data.datasets.TorchBuildingDatasetFromParquet">TorchBuildingDatasetFromParquet</a>]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Dataset generator class.</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>building_ids</code></td>
-          <td>
-                <code><span title="typing.List">List</span>[str]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>List of building ids to keep.</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-<th>Name</th>        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-<td><code>dataset_generator</code></td>          <td>
-                <code><span title="typing.Union">Union</span>[<a class="autorefs autorefs-internal" title="buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV" href="#buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV">TorchBuildingDatasetsFromCSV</a>, <a class="autorefs autorefs-internal" title="buildings_bench.data.datasets.TorchBuildingDatasetFromParquet" href="#buildings_bench.data.datasets.TorchBuildingDatasetFromParquet">TorchBuildingDatasetFromParquet</a>]</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>Dataset generator 
-class with only the buildings listed in building_ids.</p>
             </div>
           </td>
         </tr>

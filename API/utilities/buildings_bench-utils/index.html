@@ -47,6 +47,8 @@
     
       <link rel="stylesheet" href="../../../css/extra.css">
     
+      <link rel="stylesheet" href="../../../css/github-permalink-style.css">
+    
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -493,50 +495,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#buildings_bench.utils" class="md-nav__link">
-    utils
+  <a href="#common-utilities" class="md-nav__link">
+    Common Utilities
   </a>
-  
-    <nav class="md-nav" aria-label="utils">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.utils.set_seed" class="md-nav__link">
-    set_seed()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.utils.save_model_checkpoint" class="md-nav__link">
-    save_model_checkpoint()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.utils.load_model_checkpoint" class="md-nav__link">
-    load_model_checkpoint()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.utils.worker_init_fn_eulp" class="md-nav__link">
-    worker_init_fn_eulp()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.utils.time_features_to_datetime" class="md-nav__link">
-    time_features_to_datetime()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -580,18 +541,19 @@
   
 
 
-<h1 id="buildings_benchutils">buildings_bench.utils</h1>
+<h1 id="buildings_benchutils">buildings_bench.utils<a class="headerlink" href="#buildings_benchutils" title="Permanent link"></a></h1>
+<h2 id="common-utilities">Common Utilities<a class="headerlink" href="#common-utilities" title="Permanent link"></a></h2>
 
 
 <div class="doc doc-object doc-module">
 
 
 
-<h2 id="buildings_bench.utils" class="doc doc-heading">
+<h3 id="buildings_bench.utils" class="doc doc-heading">
           <code>buildings_bench.utils</code>
 
 
-</h2>
+</h3>
 
   <div class="doc doc-contents first">
 
@@ -611,10 +573,10 @@
 
 
 
-<h3 id="buildings_bench.utils.set_seed" class="doc doc-heading">
+<h4 id="buildings_bench.utils.set_seed" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">set_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
 
-</h3>
+</h4>
 
 
   <div class="doc doc-contents ">
@@ -629,10 +591,10 @@
 
 
 
-<h3 id="buildings_bench.utils.save_model_checkpoint" class="doc doc-heading">
+<h4 id="buildings_bench.utils.save_model_checkpoint" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">save_model_checkpoint</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span></code>
 
-</h3>
+</h4>
 
 
   <div class="doc doc-contents ">
@@ -647,10 +609,10 @@
 
 
 
-<h3 id="buildings_bench.utils.load_model_checkpoint" class="doc doc-heading">
+<h4 id="buildings_bench.utils.load_model_checkpoint" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">load_model_checkpoint</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">,</span> <span class="n">scheduler</span><span class="p">,</span> <span class="n">local_rank</span><span class="p">)</span></code>
 
-</h3>
+</h4>
 
 
   <div class="doc doc-contents ">
@@ -665,10 +627,10 @@
 
 
 
-<h3 id="buildings_bench.utils.worker_init_fn_eulp" class="doc doc-heading">
+<h4 id="buildings_bench.utils.worker_init_fn_eulp" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">worker_init_fn_eulp</span><span class="p">(</span><span class="n">worker_id</span><span class="p">)</span></code>
 
-</h3>
+</h4>
 
 
   <div class="doc doc-contents ">
@@ -712,10 +674,10 @@ for Buildings-900K dataset workers.</p>
 
 
 
-<h3 id="buildings_bench.utils.time_features_to_datetime" class="doc doc-heading">
+<h4 id="buildings_bench.utils.time_features_to_datetime" class="doc doc-heading">
 <code class="highlight language-python"><span class="n">time_features_to_datetime</span><span class="p">(</span><span class="n">time_features</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">year</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span></code>
 
-</h3>
+</h4>
 
 
   <div class="doc doc-contents ">

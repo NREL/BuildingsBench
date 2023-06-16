@@ -49,6 +49,8 @@
     
       <link rel="stylesheet" href="../../../css/extra.css">
     
+      <link rel="stylesheet" href="../../../css/github-permalink-style.css">
+    
     <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -467,293 +469,114 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation" class="md-nav__link">
-    evaluation
+  <a href="#metrics_factory" class="md-nav__link">
+    metrics_factory
   </a>
-  
-    <nav class="md-nav" aria-label="evaluation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.metrics_factory" class="md-nav__link">
-    metrics_factory()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.scoring_rule_factory" class="md-nav__link">
-    scoring_rule_factory()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.all_metrics_list" class="md-nav__link">
-    all_metrics_list()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.managers" class="md-nav__link">
-    managers
+  <a href="#scoring_rule_factory" class="md-nav__link">
+    scoring_rule_factory
   </a>
   
-    <nav class="md-nav" aria-label="managers">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.managers.BuildingTypes" class="md-nav__link">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#all_metrics_list" class="md-nav__link">
+    all_metrics_list
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#buildingtypes" class="md-nav__link">
     BuildingTypes
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.managers.MetricsManager" class="md-nav__link">
-    MetricsManager
-  </a>
-  
-    <nav class="md-nav" aria-label="MetricsManager">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.managers.MetricsManager.__init__" class="md-nav__link">
-    __init__()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.managers.MetricsManager.get_ppl" class="md-nav__link">
-    get_ppl()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.managers.MetricsManager.summary" class="md-nav__link">
-    summary()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.managers.MetricsManager.reset" class="md-nav__link">
-    reset()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.managers.MetricsManager.__call__" class="md-nav__link">
-    __call__()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.managers.DatasetMetricsManager" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#datasetmetricsmanager" class="md-nav__link">
     DatasetMetricsManager
   </a>
-  
-    <nav class="md-nav" aria-label="DatasetMetricsManager">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.managers.DatasetMetricsManager.summary" class="md-nav__link">
-    summary()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.managers.DatasetMetricsManager.__call__" class="md-nav__link">
-    __call__()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.metrics" class="md-nav__link">
-    metrics
+  <a href="#metricsmanager" class="md-nav__link">
+    MetricsManager
   </a>
   
-    <nav class="md-nav" aria-label="metrics">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.metrics.MetricType" class="md-nav__link">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#metrictype" class="md-nav__link">
     MetricType
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.metrics.BuildingsBenchMetric" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#buildingsbenchmetric" class="md-nav__link">
     BuildingsBenchMetric
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.metrics.Metric" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#metric" class="md-nav__link">
     Metric
   </a>
-  
-    <nav class="md-nav" aria-label="Metric">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.metrics.Metric.__call__" class="md-nav__link">
-    __call__()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.metrics.Metric.reset" class="md-nav__link">
-    reset()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.metrics.Metric.mean" class="md-nav__link">
-    mean()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.metrics.absolute_error" class="md-nav__link">
-    absolute_error()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.metrics.squared_error" class="md-nav__link">
-    squared_error()
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.metrics.bias_error" class="md-nav__link">
-    bias_error()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.scoring_rules" class="md-nav__link">
-    scoring_rules
+  <a href="#absolute_error" class="md-nav__link">
+    absolute_error
   </a>
   
-    <nav class="md-nav" aria-label="scoring_rules">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.scoring_rules.ScoringRule" class="md-nav__link">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#squared_error" class="md-nav__link">
+    squared_error
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bias_error" class="md-nav__link">
+    bias_error
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scoringrule" class="md-nav__link">
     ScoringRule
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.scoring_rules.RankedProbabilityScore" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#rankedprobabilityscore" class="md-nav__link">
     RankedProbabilityScore
   </a>
-  
-    <nav class="md-nav" aria-label="RankedProbabilityScore">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.scoring_rules.RankedProbabilityScore.rps" class="md-nav__link">
-    rps()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.scoring_rules.ContinuousRankedProbabilityScore" class="md-nav__link">
-    ContinuousRankedProbabilityScore
-  </a>
-  
-    <nav class="md-nav" aria-label="ContinuousRankedProbabilityScore">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.scoring_rules.ContinuousRankedProbabilityScore.crps" class="md-nav__link">
-    crps()
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.aggregate" class="md-nav__link">
-    aggregate
-  </a>
-  
-    <nav class="md-nav" aria-label="aggregate">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#buildings_bench.evaluation.aggregate.return_aggregate_median" class="md-nav__link">
-    return_aggregate_median()
+  <a href="#continuousrankedprobabilityscore" class="md-nav__link">
+    ContinuousRankedProbabilityScore
   </a>
   
 </li>
-        
-      </ul>
-    </nav>
+      
+        <li class="md-nav__item">
+  <a href="#aggregate" class="md-nav__link">
+    aggregate
+  </a>
   
 </li>
       
@@ -839,11 +662,11 @@
   
 
 
-<h1 id="buildings_benchevaluation">buildings_bench.evaluation</h1>
+<h1 id="buildings_benchevaluation">buildings_bench.evaluation<a class="headerlink" href="#buildings_benchevaluation" title="Permanent link"></a></h1>
 <p>The <code>buildings_bench.evaluation</code> module contains the main functionality for evaluting a model
 on the benchmark tasks.</p>
 <p>The <code>buildings_bench.evaluation.managers.DatasetMetricsManager</code> class is the main entry point.</p>
-<h2 id="simple-usage">Simple usage</h2>
+<h2 id="simple-usage">Simple usage<a class="headerlink" href="#simple-usage" title="Permanent link"></a></h2>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">buildings_bench</span> <span class="kn">import</span> <span class="n">BuildingTypes</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span> <span class="nn">buildings_bench.evaluation.managers</span> <span class="kn">import</span> <span class="n">DatasetMetricsManager</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
@@ -870,7 +693,7 @@ on the benchmark tasks.</p>
 </span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>        <span class="n">BuildingTypes</span><span class="o">.</span><span class="n">RESIDENTIAL_INT</span><span class="p">,</span>    <span class="c1"># an int indicating the building type</span>
 </span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    <span class="p">)</span>
 </span></code></pre></div>
-<h2 id="advanced-usage-with-scoring-rule">Advanced usage (with scoring rule)</h2>
+<h2 id="advanced-usage-with-scoring-rule">Advanced usage (with scoring rule)<a class="headerlink" href="#advanced-usage-with-scoring-rule" title="Permanent link"></a></h2>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span> <span class="nn">buildings_bench.evaluation.managers</span> <span class="kn">import</span> <span class="n">DatasetMetricsManager</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span> <span class="nn">buildings_bench.evaluation</span> <span class="kn">import</span> <span class="n">scoring_rule_factory</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
@@ -900,30 +723,7 @@ on the benchmark tasks.</p>
 </span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>    <span class="p">)</span>
 </span></code></pre></div>
 <hr />
-
-
-<div class="doc doc-object doc-module">
-
-
-
-<h2 id="buildings_bench.evaluation" class="doc doc-heading">
-          <code>buildings_bench.evaluation</code>
-
-
-</h2>
-
-  <div class="doc doc-contents first">
-
-  
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
+<h2 id="metrics_factory">metrics_factory<a class="headerlink" href="#metrics_factory" title="Permanent link"></a></h2>
 
 
 <div class="doc doc-object doc-function">
@@ -931,12 +731,12 @@ on the benchmark tasks.</p>
 
 
 <h3 id="buildings_bench.evaluation.metrics_factory" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">metrics_factory</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">types</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">MetricType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">MetricType</span><span class="o">.</span><span class="n">SCALAR</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Metric</span><span class="p">]</span></code>
+<code class="highlight language-python"><span class="n">buildings_bench</span><span class="o">.</span><span class="n">evaluation</span><span class="o">.</span><span class="n">metrics_factory</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">types</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">MetricType</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">MetricType</span><span class="o">.</span><span class="n">SCALAR</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Metric</span><span class="p">]</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
   
       <p>Create a metric from a name.
 By default, will return a scalar metric.</p>
@@ -969,11 +769,11 @@ By default, will return a scalar metric.</p>
         <tr>
           <td><code>types</code></td>
           <td>
-                <code><span title="typing.List">List</span>[<a class="autorefs autorefs-internal" title="buildings_bench.evaluation.metrics.MetricType" href="#buildings_bench.evaluation.metrics.MetricType">MetricType</a>]</code>
+                <code><span title="typing.List">List</span>[MetricTypes]</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>The types of the metric. List[MetricTypes]</p>
+              <p>The types of the metric.         </p>
             </div>
           </td>
           <td>
@@ -987,18 +787,18 @@ By default, will return a scalar metric.</p>
   <table>
     <thead>
       <tr>
-        <th>Type</th>
+<th>Name</th>        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-          <td>
+<td><code>metrics_list</code></td>          <td>
                 <code><span title="typing.List">List</span>[<a class="autorefs autorefs-internal" title="buildings_bench.evaluation.metrics.Metric" href="#buildings_bench.evaluation.metrics.Metric">Metric</a>]</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>A list of metrics. List[Metric]</p>
+              <p>A list of metrics.</p>
             </div>
           </td>
         </tr>
@@ -1007,19 +807,20 @@ By default, will return a scalar metric.</p>
 
   </div>
 
-</div>
+</div><h2 id="scoring_rule_factory">scoring_rule_factory<a class="headerlink" href="#scoring_rule_factory" title="Permanent link"></a></h2>
+
 
 <div class="doc doc-object doc-function">
 
 
 
 <h3 id="buildings_bench.evaluation.scoring_rule_factory" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">scoring_rule_factory</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ScoringRule</span></code>
+<code class="highlight language-python"><span class="n">buildings_bench</span><span class="o">.</span><span class="n">evaluation</span><span class="o">.</span><span class="n">scoring_rule_factory</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ScoringRule</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
   
       <p>Create a scoring rule from a name.</p>
 
@@ -1055,13 +856,13 @@ By default, will return a scalar metric.</p>
   <table>
     <thead>
       <tr>
-        <th>Type</th>
+<th>Name</th>        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-          <td>
+<td><code>sr</code></td>          <td>
                 <code><a class="autorefs autorefs-internal" title="buildings_bench.evaluation.scoring_rules.ScoringRule" href="#buildings_bench.evaluation.scoring_rules.ScoringRule">ScoringRule</a></code>
           </td>
           <td>
@@ -1075,19 +876,20 @@ By default, will return a scalar metric.</p>
 
   </div>
 
-</div>
+</div><h2 id="all_metrics_list">all_metrics_list<a class="headerlink" href="#all_metrics_list" title="Permanent link"></a></h2>
+
 
 <div class="doc doc-object doc-function">
 
 
 
 <h3 id="buildings_bench.evaluation.all_metrics_list" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">all_metrics_list</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Metric</span><span class="p">]</span></code>
+<code class="highlight language-python"><span class="n">buildings_bench</span><span class="o">.</span><span class="n">evaluation</span><span class="o">.</span><span class="n">all_metrics_list</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Metric</span><span class="p">]</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
   
       <p>Returns all registered metrics.</p>
 
@@ -1095,18 +897,18 @@ By default, will return a scalar metric.</p>
   <table>
     <thead>
       <tr>
-        <th>Type</th>
+<th>Name</th>        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-          <td>
+<td><code>metrics_list</code></td>          <td>
                 <code><span title="typing.List">List</span>[<a class="autorefs autorefs-internal" title="buildings_bench.evaluation.metrics.Metric" href="#buildings_bench.evaluation.metrics.Metric">Metric</a>]</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>A list of metrics. List[Metric]</p>
+              <p>A list of metrics.</p>
             </div>
           </td>
         </tr>
@@ -1115,38 +917,8 @@ By default, will return a scalar metric.</p>
 
   </div>
 
-</div>
-
-
-
-  </div>
-
-  </div>
-
 </div><hr />
-
-
-<div class="doc doc-object doc-module">
-
-
-
-<h2 id="buildings_bench.evaluation.managers" class="doc doc-heading">
-          <code>buildings_bench.evaluation.managers</code>
-
-
-</h2>
-
-  <div class="doc doc-contents first">
-
-  
-
-  <div class="doc doc-children">
-
-
-
-
-
-
+<h2 id="buildingtypes">BuildingTypes<a class="headerlink" href="#buildingtypes" title="Permanent link"></a></h2>
 
 
 <div class="doc doc-object doc-class">
@@ -1154,13 +926,13 @@ By default, will return a scalar metric.</p>
 
 
 <h3 id="buildings_bench.evaluation.managers.BuildingTypes" class="doc doc-heading">
-        <code>BuildingTypes</code>
+        <code>buildings_bench.evaluation.managers.BuildingTypes</code>
 
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
 
   
       <p>Enum for supported types of buildings.</p>
@@ -1242,20 +1014,319 @@ By default, will return a scalar metric.</p>
 
   </div>
 
+</div><h2 id="datasetmetricsmanager">DatasetMetricsManager<a class="headerlink" href="#datasetmetricsmanager" title="Permanent link"></a></h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="buildings_bench.evaluation.managers.DatasetMetricsManager" class="doc doc-heading">
+        <code>buildings_bench.evaluation.managers.DatasetMetricsManager</code>
+
+
+</h3>
+
+
+  <div class="doc doc-contents first">
+
+  
+      <p>A class that manages a MetricsManager for each building
+in one or more benchmark datasets. 
+One DatasetMetricsManager can be used to keep track of all metrics
+when evaluating a model on all of the benchmark's datasets.</p>
+<p>This class wil create a Pandas Dataframe summary containing the metrics for each building.</p>
+<p>Default metrics are NRMSE (CVRMSE), NMAE, NMBE.</p>
+
+
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="buildings_bench.evaluation.managers.DatasetMetricsManager.summary" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">summary</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></code>
+
+</h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Return a summary of the metrics for the dataset.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>dataset_name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name of the dataset to summarize. If None,
+summarize all datasets.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A Pandas dataframe with the following columns:</p>
+<ul>
+<li>dataset: The name of the dataset.</li>
+<li>building_id: The unique ID of the building.</li>
+<li>building_type: The type of the building.</li>
+<li>metric: The name of the metric.</li>
+<li>metric_type: The type of the metric. (scalar or hour_of_day)</li>
+<li>value: The value of the metric.</li>
+</ul>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
 </div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h4 id="buildings_bench.evaluation.managers.DatasetMetricsManager.__call__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__call__</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">building_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">y_true</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">building_types_mask</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">building_type</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">BuildingTypes</span><span class="o">.</span><span class="n">COMMERCIAL_INT</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
+
+</h4>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Compute metrics for a batch of predictions for a single building in a dataset.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>dataset_name</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The name of the dataset.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>building_id</code></td>
+          <td>
+                <code>str</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The unique building identifier.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>y_true</code></td>
+          <td>
+                <code>torch.<span title="torch.Tensor">Tensor</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The true (unscaled) load values. (continuous)
+shape is [batch_size, pred_len, 1]</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>y_pred</code></td>
+          <td>
+                <code>torch.<span title="torch.Tensor">Tensor</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The predicted (unscaled) load values. (continuous)
+shape is [batch_size, pred_len, 1]</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>building_types_mask</code></td>
+          <td>
+                <code>torch.<span title="torch.Tensor">Tensor</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>A boolean mask indicating the building type of each building.
+True (1) if commercial, False (0). Shape is [batch_size]. Default is None.</p>
+            </div>
+          </td>
+          <td>
+                <code>None</code>
+          </td>
+        </tr>
+        <tr>
+          <td><code>building_type</code></td>
+          <td>
+                <code>int</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The building type of the batch. Can be provided 
+instead of building_types_mask if all buildings are of the same type.</p>
+            </div>
+          </td>
+          <td>
+                <code>BuildingTypes.COMMERCIAL_INT</code>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Other Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>y_categories</code></td>
+          <td>
+                <code>torch.<span title="torch.Tensor">Tensor</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The true load values. (quantized)</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>y_distribution_params</code></td>
+          <td>
+                <code>torch.<span title="torch.Tensor">Tensor</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>logits, Gaussian params, etc.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>centroids</code></td>
+          <td>
+                <code>torch.<span title="torch.Tensor">Tensor</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The bin values for the quantized load.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><code>loss</code></td>
+          <td>
+                <code>torch.<span title="torch.Tensor">Tensor</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The loss for the batch.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+</div><h2 id="metricsmanager">MetricsManager<a class="headerlink" href="#metricsmanager" title="Permanent link"></a></h2>
+
 
 <div class="doc doc-object doc-class">
 
 
 
 <h3 id="buildings_bench.evaluation.managers.MetricsManager" class="doc doc-heading">
-        <code>MetricsManager</code>
+        <code>buildings_bench.evaluation.managers.MetricsManager</code>
 
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
 
   
       <p>A class that keeps track of all metrics (and a scoring rule)for one or more buildings.</p>
@@ -1566,336 +1637,8 @@ instead of building_types_mask if all buildings are of the same type.</p>
 
   </div>
 
-</div>
-
-<div class="doc doc-object doc-class">
-
-
-
-<h3 id="buildings_bench.evaluation.managers.DatasetMetricsManager" class="doc doc-heading">
-        <code>DatasetMetricsManager</code>
-
-
-</h3>
-
-
-  <div class="doc doc-contents ">
-
-  
-      <p>A class that manages a MetricsManager for each building
-in one or more benchmark datasets. 
-One DatasetMetricsManager can be used to keep track of all metrics
-when evaluating a model on all of the benchmark's datasets.</p>
-<p>This class wil create a Pandas Dataframe summary containing the metrics for each building.</p>
-<p>Default metrics are NRMSE (CVRMSE), NMAE, NMBE.</p>
-
-
-
-  
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
-
-
-<div class="doc doc-object doc-function">
-
-
-
-<h4 id="buildings_bench.evaluation.managers.DatasetMetricsManager.summary" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">summary</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></code>
-
-</h4>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>Return a summary of the metrics for the dataset.</p>
-
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>dataset_name</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The name of the dataset to summarize. If None,
-summarize all datasets.</p>
-            </div>
-          </td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  <p><strong>Returns:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td>
-                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>A Pandas dataframe with the following columns:</p>
-<ul>
-<li>dataset: The name of the dataset.</li>
-<li>building_id: The unique ID of the building.</li>
-<li>building_type: The type of the building.</li>
-<li>metric: The name of the metric.</li>
-<li>metric_type: The type of the metric. (scalar or hour_of_day)</li>
-<li>value: The value of the metric.</li>
-</ul>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  </div>
-
-</div>
-
-<div class="doc doc-object doc-function">
-
-
-
-<h4 id="buildings_bench.evaluation.managers.DatasetMetricsManager.__call__" class="doc doc-heading">
-<code class="highlight language-python"><span class="fm">__call__</span><span class="p">(</span><span class="n">dataset_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">building_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">y_true</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">building_types_mask</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">building_type</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">BuildingTypes</span><span class="o">.</span><span class="n">COMMERCIAL_INT</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
-
-</h4>
-
-
-  <div class="doc doc-contents ">
-  
-      <p>Compute metrics for a batch of predictions for a single building in a dataset.</p>
-
-  <p><strong>Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-        <th>Default</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>dataset_name</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The name of the dataset.</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>building_id</code></td>
-          <td>
-                <code>str</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The unique building identifier.</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>y_true</code></td>
-          <td>
-                <code>torch.<span title="torch.Tensor">Tensor</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The true (unscaled) load values. (continuous)
-shape is [batch_size, pred_len, 1]</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>y_pred</code></td>
-          <td>
-                <code>torch.<span title="torch.Tensor">Tensor</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The predicted (unscaled) load values. (continuous)
-shape is [batch_size, pred_len, 1]</p>
-            </div>
-          </td>
-          <td>
-              <em>required</em>
-          </td>
-        </tr>
-        <tr>
-          <td><code>building_types_mask</code></td>
-          <td>
-                <code>torch.<span title="torch.Tensor">Tensor</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>A boolean mask indicating the building type of each building.
-True (1) if commercial, False (0). Shape is [batch_size]. Default is None.</p>
-            </div>
-          </td>
-          <td>
-                <code>None</code>
-          </td>
-        </tr>
-        <tr>
-          <td><code>building_type</code></td>
-          <td>
-                <code>int</code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The building type of the batch. Can be provided 
-instead of building_types_mask if all buildings are of the same type.</p>
-            </div>
-          </td>
-          <td>
-                <code>BuildingTypes.COMMERCIAL_INT</code>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  <p><strong>Other Parameters:</strong></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-        <tr>
-          <td><code>y_categories</code></td>
-          <td>
-                <code>torch.<span title="torch.Tensor">Tensor</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The true load values. (quantized)</p>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td><code>y_distribution_params</code></td>
-          <td>
-                <code>torch.<span title="torch.Tensor">Tensor</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>logits, Gaussian params, etc.</p>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td><code>centroids</code></td>
-          <td>
-                <code>torch.<span title="torch.Tensor">Tensor</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The bin values for the quantized load.</p>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <td><code>loss</code></td>
-          <td>
-                <code>torch.<span title="torch.Tensor">Tensor</span></code>
-          </td>
-          <td>
-            <div class="doc-md-description">
-              <p>The loss for the batch.</p>
-            </div>
-          </td>
-        </tr>
-    </tbody>
-  </table>
-
-  </div>
-
-</div>
-
-
-
-  </div>
-
-  </div>
-
-</div>
-
-
-
-
-  </div>
-
-  </div>
-
 </div><hr />
-
-
-<div class="doc doc-object doc-module">
-
-
-
-<h2 id="buildings_bench.evaluation.metrics" class="doc doc-heading">
-          <code>buildings_bench.evaluation.metrics</code>
-
-
-</h2>
-
-  <div class="doc doc-contents first">
-
-  
-
-  <div class="doc doc-children">
-
-
-
-
-
-
+<h2 id="metrictype">MetricType<a class="headerlink" href="#metrictype" title="Permanent link"></a></h2>
 
 
 <div class="doc doc-object doc-class">
@@ -1903,13 +1646,13 @@ instead of building_types_mask if all buildings are of the same type.</p>
 
 
 <h3 id="buildings_bench.evaluation.metrics.MetricType" class="doc doc-heading">
-        <code>MetricType</code>
+        <code>buildings_bench.evaluation.metrics.MetricType</code>
 
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
 
   
       <p>Enum class for metric types.</p>
@@ -1969,20 +1712,21 @@ instead of building_types_mask if all buildings are of the same type.</p>
 
   </div>
 
-</div>
+</div><h2 id="buildingsbenchmetric">BuildingsBenchMetric<a class="headerlink" href="#buildingsbenchmetric" title="Permanent link"></a></h2>
+
 
 <div class="doc doc-object doc-class">
 
 
 
 <h3 id="buildings_bench.evaluation.metrics.BuildingsBenchMetric" class="doc doc-heading">
-        <code>BuildingsBenchMetric</code>
+        <code>buildings_bench.evaluation.metrics.BuildingsBenchMetric</code>
 
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
 
   
       <p>An abstract class for all metrics.</p>
@@ -2057,20 +1801,21 @@ will calculate the mean of the errors, populating the <code>.value</code> attrib
 
   </div>
 
-</div>
+</div><h2 id="metric">Metric<a class="headerlink" href="#metric" title="Permanent link"></a></h2>
+
 
 <div class="doc doc-object doc-class">
 
 
 
 <h3 id="buildings_bench.evaluation.metrics.Metric" class="doc doc-heading">
-        <code>Metric</code>
+        <code>buildings_bench.evaluation.metrics.Metric</code>
 
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code><a class="autorefs autorefs-internal" title="buildings_bench.evaluation.metrics.BuildingsBenchMetric" href="#buildings_bench.evaluation.metrics.BuildingsBenchMetric">BuildingsBenchMetric</a></code></p>
 
@@ -2159,7 +1904,7 @@ y_pred (torch.Tensor): shape [batch_size, pred_len]</p>
 
   </div>
 
-</div>
+</div><h2 id="absolute_error">absolute_error<a class="headerlink" href="#absolute_error" title="Permanent link"></a></h2>
 
 
 <div class="doc doc-object doc-function">
@@ -2167,12 +1912,12 @@ y_pred (torch.Tensor): shape [batch_size, pred_len]</p>
 
 
 <h3 id="buildings_bench.evaluation.metrics.absolute_error" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></code>
+<code class="highlight language-python"><span class="n">buildings_bench</span><span class="o">.</span><span class="n">evaluation</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">absolute_error</span><span class="p">(</span><span class="n">y_true</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
   
       <p>A PyTorch method that calculates the absolute error (AE) metric.</p>
 
@@ -2242,19 +1987,20 @@ y_pred (torch.Tensor): shape [batch_size, pred_len]</p>
 
   </div>
 
-</div>
+</div><h2 id="squared_error">squared_error<a class="headerlink" href="#squared_error" title="Permanent link"></a></h2>
+
 
 <div class="doc doc-object doc-function">
 
 
 
 <h3 id="buildings_bench.evaluation.metrics.squared_error" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">squared_error</span><span class="p">(</span><span class="n">y_true</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></code>
+<code class="highlight language-python"><span class="n">buildings_bench</span><span class="o">.</span><span class="n">evaluation</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">squared_error</span><span class="p">(</span><span class="n">y_true</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
   
       <p>A PyTorch method that calculates the squared error (SE) metric.</p>
 
@@ -2324,19 +2070,20 @@ y_pred (torch.Tensor): shape [batch_size, pred_len]</p>
 
   </div>
 
-</div>
+</div><h2 id="bias_error">bias_error<a class="headerlink" href="#bias_error" title="Permanent link"></a></h2>
+
 
 <div class="doc doc-object doc-function">
 
 
 
 <h3 id="buildings_bench.evaluation.metrics.bias_error" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">bias_error</span><span class="p">(</span><span class="n">y_true</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></code>
+<code class="highlight language-python"><span class="n">buildings_bench</span><span class="o">.</span><span class="n">evaluation</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">bias_error</span><span class="p">(</span><span class="n">y_true</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
   
       <p>A PyTorch method that calculates the bias error (BE) metric.</p>
 
@@ -2406,38 +2153,8 @@ y_pred (torch.Tensor): shape [batch_size, pred_len]</p>
 
   </div>
 
-</div>
-
-
-
-  </div>
-
-  </div>
-
 </div><hr />
-
-
-<div class="doc doc-object doc-module">
-
-
-
-<h2 id="buildings_bench.evaluation.scoring_rules" class="doc doc-heading">
-          <code>buildings_bench.evaluation.scoring_rules</code>
-
-
-</h2>
-
-  <div class="doc doc-contents first">
-
-  
-
-  <div class="doc doc-children">
-
-
-
-
-
-
+<h2 id="scoringrule">ScoringRule<a class="headerlink" href="#scoringrule" title="Permanent link"></a></h2>
 
 
 <div class="doc doc-object doc-class">
@@ -2445,13 +2162,13 @@ y_pred (torch.Tensor): shape [batch_size, pred_len]</p>
 
 
 <h3 id="buildings_bench.evaluation.scoring_rules.ScoringRule" class="doc doc-heading">
-        <code>ScoringRule</code>
+        <code>buildings_bench.evaluation.scoring_rules.ScoringRule</code>
 
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code><a class="autorefs autorefs-internal" title="buildings_bench.evaluation.metrics.BuildingsBenchMetric" href="#buildings_bench.evaluation.metrics.BuildingsBenchMetric">BuildingsBenchMetric</a></code></p>
 
@@ -2478,20 +2195,21 @@ y_pred (torch.Tensor): shape [batch_size, pred_len]</p>
 
   </div>
 
-</div>
+</div><h2 id="rankedprobabilityscore">RankedProbabilityScore<a class="headerlink" href="#rankedprobabilityscore" title="Permanent link"></a></h2>
+
 
 <div class="doc doc-object doc-class">
 
 
 
 <h3 id="buildings_bench.evaluation.scoring_rules.RankedProbabilityScore" class="doc doc-heading">
-        <code>RankedProbabilityScore</code>
+        <code>buildings_bench.evaluation.scoring_rules.RankedProbabilityScore</code>
 
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code><a class="autorefs autorefs-internal" title="buildings_bench.evaluation.scoring_rules.ScoringRule" href="#buildings_bench.evaluation.scoring_rules.ScoringRule">ScoringRule</a></code></p>
 
@@ -2600,20 +2318,21 @@ for categorical distributions.</p>
 
   </div>
 
-</div>
+</div><h2 id="continuousrankedprobabilityscore">ContinuousRankedProbabilityScore<a class="headerlink" href="#continuousrankedprobabilityscore" title="Permanent link"></a></h2>
+
 
 <div class="doc doc-object doc-class">
 
 
 
 <h3 id="buildings_bench.evaluation.scoring_rules.ContinuousRankedProbabilityScore" class="doc doc-heading">
-        <code>ContinuousRankedProbabilityScore</code>
+        <code>buildings_bench.evaluation.scoring_rules.ContinuousRankedProbabilityScore</code>
 
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code><a class="autorefs autorefs-internal" title="buildings_bench.evaluation.scoring_rules.ScoringRule" href="#buildings_bench.evaluation.scoring_rules.ScoringRule">ScoringRule</a></code></p>
 
@@ -2700,40 +2419,8 @@ for categorical distributions.</p>
 
   </div>
 
-</div>
-
-
-
-
-  </div>
-
-  </div>
-
 </div><hr />
-
-
-<div class="doc doc-object doc-module">
-
-
-
-<h2 id="buildings_bench.evaluation.aggregate" class="doc doc-heading">
-          <code>buildings_bench.evaluation.aggregate</code>
-
-
-</h2>
-
-  <div class="doc doc-contents first">
-
-  
-
-  <div class="doc doc-children">
-
-
-
-
-
-
-
+<h2 id="aggregate">aggregate<a class="headerlink" href="#aggregate" title="Permanent link"></a></h2>
 
 
 <div class="doc doc-object doc-function">
@@ -2741,12 +2428,12 @@ for categorical distributions.</p>
 
 
 <h3 id="buildings_bench.evaluation.aggregate.return_aggregate_median" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">return_aggregate_median</span><span class="p">(</span><span class="n">model_list</span><span class="p">,</span> <span class="n">results_dir</span><span class="p">,</span> <span class="n">experiment</span> <span class="o">=</span> <span class="s1">&#39;zero_shot&#39;</span><span class="p">,</span> <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cvrmse&#39;</span><span class="p">],</span> <span class="n">exclude_simulated</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">only_simulated</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">oov_list</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">reps</span> <span class="o">=</span> <span class="mi">50000</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">buildings_bench</span><span class="o">.</span><span class="n">evaluation</span><span class="o">.</span><span class="n">aggregate</span><span class="o">.</span><span class="n">return_aggregate_median</span><span class="p">(</span><span class="n">model_list</span><span class="p">,</span> <span class="n">results_dir</span><span class="p">,</span> <span class="n">experiment</span> <span class="o">=</span> <span class="s1">&#39;zero_shot&#39;</span><span class="p">,</span> <span class="n">metrics</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;cvrmse&#39;</span><span class="p">],</span> <span class="n">exclude_simulated</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">only_simulated</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">oov_list</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">reps</span> <span class="o">=</span> <span class="mi">50000</span><span class="p">)</span></code>
 
 </h3>
 
 
-  <div class="doc doc-contents ">
+  <div class="doc doc-contents first">
   
       <p>Compute the aggregate median for a list of models and metrics over all buildings.
 Also returns the stratified 95% boostrap CIs for the aggregate median.</p>
@@ -2899,14 +2586,6 @@ Options: 'zero_shot', 'transfer_learning'.</p>
         </tr>
     </tbody>
   </table>
-
-  </div>
-
-</div>
-
-
-
-  </div>
 
   </div>
 

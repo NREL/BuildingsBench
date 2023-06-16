@@ -47,6 +47,8 @@
     
       <link rel="stylesheet" href="css/extra.css">
     
+      <link rel="stylesheet" href="css/github-permalink-style.css">
+    
     <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
@@ -254,66 +256,12 @@
     Overview
   </a>
   
-    <nav class="md-nav" aria-label="Overview">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#load-a-benchmark-dataset" class="md-nav__link">
-    Load a benchmark dataset
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
   <a href="#installation" class="md-nav__link">
     Installation
   </a>
-  
-    <nav class="md-nav" aria-label="Installation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#installing-faiss-gpu" class="md-nav__link">
-    Installing faiss-gpu
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#optional-lightgbm" class="md-nav__link">
-    [Optional] LightGBM
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#environment-variables" class="md-nav__link">
-    Environment variables
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#download-the-datasets" class="md-nav__link">
-    Download the datasets
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#run-tests" class="md-nav__link">
-    Run tests
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -596,15 +544,15 @@
   
 
 
-<h1 id="welcome-to-buildingsbench">Welcome to BuildingsBench</h1>
-<h2 id="overview">Overview</h2>
+<h1 id="welcome-to-buildingsbench">Welcome to BuildingsBench<a class="headerlink" href="#welcome-to-buildingsbench" title="Permanent link"></a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link"></a></h2>
 <p>BuildingsBench is a platform for:</p>
 <ul>
 <li>Large-scale pretraining with the synthetic Buildings-900K dataset for short-term load forecasting (STLF). Buildings-900K is statistically representative of the entire U.S. building stock.</li>
 <li>Benchmarking on two tasks evaluating generalization: zero-shot STLF and transfer learning for STLF.</li>
 </ul>
 <p>We provide an index-based PyTorch <a href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#buildings-900k-pytorch-dataset">Dataset</a> for large-scale pretraining, easy data loading for multiple real building energy consumption datasets as <a href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV">PyTorch Tensors</a> or <a href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV">Pandas DataFrames</a>, from simple (<a href="https://nrel.github.io/BuildingsBench/API/models/buildings_bench-models/#buildings_bench.models.persistence">persistence</a>) to advanced (<a href="https://nrel.github.io/BuildingsBench/API/models/buildings_bench-models/#buildings_bench.models.transformers">transformers</a>) baselines, <a href="https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-evaluation/">metrics management</a>, a <a href="https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-tokenizer/">tokenizer</a> based on KMeans for load time series, and more.</p>
-<h3 id="load-a-benchmark-dataset">Load a benchmark dataset</h3>
+<h3 id="load-a-benchmark-dataset">Load a benchmark dataset<a class="headerlink" href="#load-a-benchmark-dataset" title="Permanent link"></a></h3>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span> <span class="nn">torch</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span> <span class="nn">buildings_bench</span> <span class="kn">import</span> <span class="n">load_torch_dataset</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
@@ -623,7 +571,7 @@
 </span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>        <span class="c1"># target = x[:, -24:], 24 hour target prediction</span>
 </span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>        <span class="c1"># ...</span>
 </span></code></pre></div>
-<h2 id="installation">Installation</h2>
+<h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link"></a></h2>
 <p>To just access the provided dataloaders, models, metrics, etc., install the package with:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>buildings_bench
 </span></code></pre></div>
@@ -634,7 +582,7 @@
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">cd</span><span class="w"> </span>BuildingsBench
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[benchmark]&quot;</span>
 </span></code></pre></div></p>
-<h3 id="installing-faiss-gpu">Installing faiss-gpu</h3>
+<h3 id="installing-faiss-gpu">Installing faiss-gpu<a class="headerlink" href="#installing-faiss-gpu" title="Permanent link"></a></h3>
 <p>Due to a PyPI limitation, we have to install <code>faiss-gpu</code> (for KMeans) by directly downloading the wheel from <a href="https://github.com/kyamagu/faiss-wheels/releases/">https://github.com/kyamagu/faiss-wheels/releases/</a>.
 Download the wheel for the python version you are using, then install it in your environment.</p>
 <p>For example:</p>
@@ -642,11 +590,11 @@ Download the wheel for the python version you are using, then install it in your
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>pip<span class="w"> </span>install<span class="w"> </span>faiss_gpu-1.7.3-cp38-cp38-manylinux2014_x86_64.whl
 </span></code></pre></div>
-<h3 id="optional-lightgbm">[Optional] LightGBM</h3>
+<h3 id="optional-lightgbm">[Optional] LightGBM<a class="headerlink" href="#optional-lightgbm" title="Permanent link"></a></h3>
 <p>If running the LightGBM baseline, you will need to install LightGBM.
 Follow instructions <a href="https://pypi.org/project/lightgbm/">here</a> for your OS. 
 Then, <code>pip install skforecast</code>.</p>
-<h3 id="environment-variables">Environment variables</h3>
+<h3 id="environment-variables">Environment variables<a class="headerlink" href="#environment-variables" title="Permanent link"></a></h3>
 <p>Set the environment variable <code>BUILDINGS_BENCH</code> to the path where your stored the datasets <code>BuildingsBench</code>.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">BUILDINGS_BENCH</span><span class="o">=</span>/path/to/BuildingsBench<span class="sb">`</span>
 </span></code></pre></div>
@@ -655,10 +603,10 @@ Then, <code>pip install skforecast</code>.</p>
 <li><code>WANDB_ENTITY</code>: your wandb username</li>
 <li><code>WANDB_PROJECT</code>: the name of your wandb project for this benchmark</li>
 </ul>
-<h3 id="download-the-datasets">Download the datasets</h3>
+<h3 id="download-the-datasets">Download the datasets<a class="headerlink" href="#download-the-datasets" title="Permanent link"></a></h3>
 <p>Download the tar files to disk and untar, which will create a directory called <code>BuildingsBench</code> with the data.</p>
 <p>The files will be available for download <a href="https://data.openei.org/submissions/5859">here</a>.</p>
-<h3 id="run-tests">Run tests</h3>
+<h3 id="run-tests">Run tests<a class="headerlink" href="#run-tests" title="Permanent link"></a></h3>
 <p>Verify your installation by running unit tests:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>python<span class="w"> </span>-m<span class="w"> </span>unittest
 </span></code></pre></div>
