@@ -550,8 +550,9 @@
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="s1">&#39;longitude&#39;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">,</span>     <span class="c1"># (batch_size, seq_len, 1)</span>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>To use these scripts with your model you'll need to register your model with our platform. Please see the tutorial on <a href="https://github.com/NREL/BuildingsBench/blob/main/tutorials/1_register_your_model.ipynb">registering your model</a> for a Jupyter Notebook version of the following instructions.</p>
+<p>To use these scripts with your model you'll need to register your model with our platform. </p>
 <h3 id="registering-your-model">Registering your model<a class="headerlink" href="#registering-your-model" title="Permanent link"></a></h3>
+<p>Please see this <a href="https://github.com/NREL/BuildingsBench/blob/main/tutorials/registering_your_model_with_the_benchmark.ipynb">step-by-step tutorial</a> for a Jupyter Notebook version of the following instructions.</p>
 <p>Make sure to have installed the benchmark in editable mode: <code>pip install -e .</code></p>
 <ol>
 <li>Create a file called <code>your_model.py</code> with your model's implementation, and make your model a subclass of the base model in <code>./buildings_bench/models/base_model.py</code>. Make sure to implement the abstract methods: <code>forward</code>, <code>loss</code>, <code>load_from_checkpoint</code>, <code>predict</code>, <code>unfreeze_and_get_parameters_for_finetuning</code>.</li>
