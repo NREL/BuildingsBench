@@ -7,7 +7,7 @@
 ## Overview 
 
 BuildingsBench is a platform for
-- Large-scale pretraining with the synthetic Buildings-900K dataset for short-term load forecasting (STLF). Buildings-900K is statistically representative of the entire U.S. building stock.
+- Large-scale pretraining with the synthetic Buildings-900K dataset for short-term load forecasting (STLF). Buildings-900K is statistically representative of the entire U.S. building stock and is extracted from the NREL [End-Use Load Profiles database](https://www.nrel.gov/buildings/end-use-load-profiles.html).
 - Benchmarking on two tasks evaluating generalization: zero-shot STLF and transfer learning for STLF.
 
 We provide an index-based PyTorch Dataset for large-scale pretraining, easy data loading for multiple real building energy consumption datasets as PyTorch Tensors or Pandas DataFrames, simple (persistence) to advanced (transformer) baselines, metrics management, and more.
@@ -128,7 +128,9 @@ Our benchmark assumes each model takes as input a dictionary of torch tensors wi
 
 To use these scripts with your model you'll need to register your model with our platform.
 
-### Registering your model
+### Registering your model with the benchmark
+
+See this [step-by-step tutorial](https://github.com/NREL/BuildingsBench/blob/main/tutorials/registering_your_model_with_the_benchmark.ipynb) for more details.
 
 Make sure to have installed the benchmark in editable mode: `pip install -e .`
 
