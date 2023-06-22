@@ -469,6 +469,13 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#tokenizer-quick-start" class="md-nav__link">
+    Tokenizer Quick Start
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#loadquantizer" class="md-nav__link">
     LoadQuantizer
   </a>
@@ -544,20 +551,53 @@
 
 
 <h1 id="buildings_benchtokenizer">buildings_bench.tokenizer<a class="headerlink" href="#buildings_benchtokenizer" title="Permanent link"></a></h1>
+<h2 id="tokenizer-quick-start">Tokenizer Quick Start<a class="headerlink" href="#tokenizer-quick-start" title="Permanent link"></a></h2>
+<h3 id="instantiate-a-loadquantizer">Instantiate a LoadQuantizer<a class="headerlink" href="#instantiate-a-loadquantizer" title="Permanent link"></a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span> <span class="nn">buildings_bench.tokenizer</span> <span class="kn">import</span> <span class="n">LoadQuantizer</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">transform_path</span> <span class="o">=</span>  <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;BUILDINGS_BENCH&#39;</span><span class="p">))</span> <span class="o">/</span> <span class="s1">&#39;metadata&#39;</span> <span class="o">/</span> <span class="s1">&#39;transforms&#39;</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">load_transform</span> <span class="o">=</span> <span class="n">LoadQuantizer</span><span class="p">(</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="n">with_merge</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Default vocabulary has merged KMeans centroids</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="n">num_centroids</span><span class="o">=</span><span class="mi">2274</span><span class="p">,</span> <span class="c1"># Default vocabulary has 2,274 tokens</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda:0&#39;</span> <span class="k">if</span> <span class="s1">&#39;cuda&#39;</span> <span class="ow">in</span> <span class="n">args</span><span class="o">.</span><span class="n">device</span> <span class="k">else</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1"># Load the saved faiss KMeans state from disk</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="n">load_transform</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">transform_path</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="quantize-a-load-time-series">Quantize a load time series<a class="headerlink" href="#quantize-a-load-time-series" title="Permanent link"></a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;load&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">load_transform</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="s1">&#39;load&#39;</span><span class="p">])</span>
+</span></code></pre></div>
+<h3 id="dequantize-transformer-predictions">Dequantize transformer predictions<a class="headerlink" href="#dequantize-transformer-predictions" title="Permanent link"></a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># predictions are a Tensor of shape [batch_size, pred_len, 1] of quantized values</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1"># distribution_params is a Tensor of shape [batch_size, pred_len, num_centroids] of logits</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">predictions</span><span class="p">,</span> <span class="n">distribution_params</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1"># Dequantize the predictions</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">predictions</span> <span class="o">=</span> <span class="n">load_transform</span><span class="o">.</span><span class="n">undo_transform</span><span class="p">(</span><span class="n">predictions</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="extract-the-categorical-distribution">Extract the categorical distribution<a class="headerlink" href="#extract-the-categorical-distribution" title="Permanent link"></a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># First, apply softmax to the logits to normalize them into a categorical distribution</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">distribution_params</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">distribution_params</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1"># The merged centroid values are the load values corresponding</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c1"># to each token. Note that the merged centroids are already sorted</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c1"># in increasing order.</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="c1"># if using merge...</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="n">load_values</span> <span class="o">=</span> <span class="n">load_transform</span><span class="o">.</span><span class="n">merged_centroids</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="c1"># else, load_values = load_transform.kmeans.centroids.squeeze()</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="c1"># Now, distribution_params[i] is the probability </span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="c1"># assigned to load_values[i].</span>
+</span></code></pre></div>
+<hr />
 <h2 id="loadquantizer">LoadQuantizer<a class="headerlink" href="#loadquantizer" title="Permanent link"></a></h2>
 
 
 <div class="doc doc-object doc-class">
 
 
-
-<h3 id="buildings_bench.tokenizer.LoadQuantizer" class="doc doc-heading">
-        <code>buildings_bench.tokenizer.LoadQuantizer</code>
-
-
-</h3>
-
-
+<a id="buildings_bench.tokenizer.LoadQuantizer"></a>
   <div class="doc doc-contents first">
 
   
@@ -581,11 +621,13 @@
 
 
 
-<h4 id="buildings_bench.tokenizer.LoadQuantizer.__init__" class="doc doc-heading">
-<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_centroids</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2274</span><span class="p">,</span> <span class="n">with_merge</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">merge_threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span></code>
+<h3 id="buildings_bench.tokenizer.LoadQuantizer.__init__" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">__init__</span>
 
-</h4>
 
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="fm">__init__</span><span class="p">(</span><span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_centroids</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2274</span><span class="p">,</span> <span class="n">with_merge</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">merge_threshold</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mf">0.01</span><span class="p">,</span> <span class="n">device</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;cpu&#39;</span><span class="p">)</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -682,16 +724,18 @@
 
 
 
-<h4 id="buildings_bench.tokenizer.LoadQuantizer.transform" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">transform</span><span class="p">(</span><span class="n">sample</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span></code>
+<h3 id="buildings_bench.tokenizer.LoadQuantizer.train" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">train</span>
 
-</h4>
 
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">train</span><span class="p">(</span><span class="n">sample</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
-      <p>Transform a sample to a sequence of indices</p>
-<p>The sample contains continuous values which we quantize</p>
+      <p>Fit KMeans to a subset of the data. </p>
+<p>Optionally, merge centroids that are within a threshold.</p>
 
   <p><strong>Parameters:</strong></p>
   <table>
@@ -707,12 +751,60 @@
         <tr>
           <td><code>sample</code></td>
           <td>
-                <code>np.ndarray) or (torch.Tensor</code>
+                <code><span title="numpy">np</span>.<span title="numpy.ndarray">ndarray</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>shape [num_samples, 1]</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h3 id="buildings_bench.tokenizer.LoadQuantizer.transform" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">transform</span>
+
+
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">transform</span><span class="p">(</span><span class="n">sample</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span>
+</span></code></pre></div>
+
+  <div class="doc doc-contents ">
+  
+      <p>Quantize a sample of load values into a sequence of indices.</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>sample</code></td>
+          <td>
+                <code><span title="typing.Union">Union</span>[<span title="numpy">np</span>.<span title="numpy.ndarray">ndarray</span>, torch.<span title="torch.Tensor">Tensor</span>]</code>
           </td>
           <td>
             <div class="doc-md-description">
               <p>of shape (n, 1) or (b,n,1). 
-numpy if device is cpu or torch Tensor if device is cuda.</p>
+type is numpy if device is cpu or torch Tensor if device is cuda.</p>
             </div>
           </td>
           <td>
@@ -726,18 +818,18 @@ numpy if device is cpu or torch Tensor if device is cuda.</p>
   <table>
     <thead>
       <tr>
-        <th>Type</th>
+<th>Name</th>        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-          <td>
+<td><code>sample</code></td>          <td>
                 <code><span title="typing.Union">Union</span>[<span title="numpy">np</span>.<span title="numpy.ndarray">ndarray</span>, torch.<span title="torch.Tensor">Tensor</span>]</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>np.ndarray or torch.Tensor: of shape (n, 1) or (b,n,1).</p>
+              <p>of shape (n, 1) or (b,n,1).</p>
             </div>
           </td>
         </tr>
@@ -752,16 +844,17 @@ numpy if device is cpu or torch Tensor if device is cuda.</p>
 
 
 
-<h4 id="buildings_bench.tokenizer.LoadQuantizer.undo_transform" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">undo_transform</span><span class="p">(</span><span class="n">sample</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span></code>
+<h3 id="buildings_bench.tokenizer.LoadQuantizer.undo_transform" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">undo_transform</span>
 
-</h4>
 
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">undo_transform</span><span class="p">(</span><span class="n">sample</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
-      <p>Undo the transformation of a sample</p>
-<p>The sample contains quantized values which we dequantize</p>
+      <p>Dequantize a sample of integer indices into a sequence of load values.</p>
 
   <p><strong>Parameters:</strong></p>
   <table>
@@ -777,12 +870,12 @@ numpy if device is cpu or torch Tensor if device is cuda.</p>
         <tr>
           <td><code>sample</code></td>
           <td>
-                <code>np.ndarray) or (torch.LongTensor</code>
+                <code><span title="typing.Union">Union</span>[<span title="numpy">np</span>.<span title="numpy.ndarray">ndarray</span>, torch.<span title="torch.Tensor">Tensor</span>]</code>
           </td>
           <td>
             <div class="doc-md-description">
               <p>of shape (n, 1) or (b,n,1). 
-numpy if device is cpu or torch Tensor if device is cuda.</p>
+type is numpy if device is cpu or torch Tensor if device is cuda.</p>
             </div>
           </td>
           <td>
@@ -796,18 +889,18 @@ numpy if device is cpu or torch Tensor if device is cuda.</p>
   <table>
     <thead>
       <tr>
-        <th>Type</th>
+<th>Name</th>        <th>Type</th>
         <th>Description</th>
       </tr>
     </thead>
     <tbody>
         <tr>
-          <td>
+<td><code>sample</code></td>          <td>
                 <code><span title="typing.Union">Union</span>[<span title="numpy">np</span>.<span title="numpy.ndarray">ndarray</span>, torch.<span title="torch.Tensor">Tensor</span>]</code>
           </td>
           <td>
             <div class="doc-md-description">
-              <p>np.ndarray or torch.Tensor: of shape (n, 1) or (b,n,1).</p>
+              <p>of shape (n, 1) or (b,n,1).</p>
             </div>
           </td>
         </tr>

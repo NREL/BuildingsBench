@@ -640,10 +640,12 @@
 
 
 <h3 id="buildings_bench.models.model_factory" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">buildings_bench</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">model_factory</span><span class="p">(</span><span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model_args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span></code>
+        <span class="doc doc-object-name doc-function-name">buildings_bench.models.model_factory</span>
+
 
 </h3>
-
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">buildings_bench</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">model_factory</span><span class="p">(</span><span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model_args</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Callable</span><span class="p">]</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents first">
   
@@ -747,14 +749,7 @@ the distribution parameters may be, e.g., logits, or mean and variance.</p>
 <div class="doc doc-object doc-class">
 
 
-
-<h3 id="buildings_bench.models.base_model.BaseModel" class="doc doc-heading">
-        <code>buildings_bench.models.base_model.BaseModel</code>
-
-
-</h3>
-
-
+<a id="buildings_bench.models.base_model.BaseModel"></a>
   <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code><span title="torch.nn">nn</span>.<span title="torch.nn.Module">Module</span></code></p>
@@ -780,11 +775,13 @@ the distribution parameters may be, e.g., logits, or mean and variance.</p>
 
 
 
-<h4 id="buildings_bench.models.base_model.BaseModel.__init__" class="doc doc-heading">
-<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">context_len</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">,</span> <span class="n">continuous_loads</span><span class="p">)</span></code>
+<h3 id="buildings_bench.models.base_model.BaseModel.__init__" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">__init__</span>
 
-</h4>
 
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="fm">__init__</span><span class="p">(</span><span class="n">context_len</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">,</span> <span class="n">continuous_loads</span><span class="p">)</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -854,15 +851,17 @@ the distribution parameters may be, e.g., logits, or mean and variance.</p>
 
 
 
-<h4 id="buildings_bench.models.base_model.BaseModel.forward" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">forward</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span></code>
+<h3 id="buildings_bench.models.base_model.BaseModel.forward" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">forward</span>
+
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
   </span>
 
-</h4>
-
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">forward</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -938,15 +937,17 @@ the distribution parameters may be, e.g., logits, or mean and variance.</p>
 
 
 
-<h4 id="buildings_bench.models.base_model.BaseModel.loss" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">loss</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></code>
+<h3 id="buildings_bench.models.base_model.BaseModel.loss" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">loss</span>
+
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
   </span>
 
-</h4>
-
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">loss</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -1024,15 +1025,17 @@ the distribution parameters may be, e.g., logits, or mean and variance.</p>
 
 
 
-<h4 id="buildings_bench.models.base_model.BaseModel.predict" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span></code>
+<h3 id="buildings_bench.models.base_model.BaseModel.predict" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">predict</span>
+
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
   </span>
 
-</h4>
-
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">predict</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">Dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">]</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -1106,15 +1109,17 @@ the distribution parameters may be, e.g., logits, or mean and variance.</p>
 
 
 
-<h4 id="buildings_bench.models.base_model.BaseModel.unfreeze_and_get_parameters_for_finetuning" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">unfreeze_and_get_parameters_for_finetuning</span><span class="p">()</span></code>
+<h3 id="buildings_bench.models.base_model.BaseModel.unfreeze_and_get_parameters_for_finetuning" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">unfreeze_and_get_parameters_for_finetuning</span>
+
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
   </span>
 
-</h4>
-
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">unfreeze_and_get_parameters_for_finetuning</span><span class="p">()</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -1132,15 +1137,17 @@ the distribution parameters may be, e.g., logits, or mean and variance.</p>
 
 
 
-<h4 id="buildings_bench.models.base_model.BaseModel.load_from_checkpoint" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">load_from_checkpoint</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span></code>
+<h3 id="buildings_bench.models.base_model.BaseModel.load_from_checkpoint" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">load_from_checkpoint</span>
+
   
   <span class="doc doc-labels">
       <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
   </span>
 
-</h4>
-
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">load_from_checkpoint</span><span class="p">(</span><span class="n">checkpoint_path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">])</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -1163,14 +1170,7 @@ the distribution parameters may be, e.g., logits, or mean and variance.</p>
 <div class="doc doc-object doc-class">
 
 
-
-<h3 id="buildings_bench.models.transformers.LoadForecastingTransformer" class="doc doc-heading">
-        <code>buildings_bench.models.transformers.LoadForecastingTransformer</code>
-
-
-</h3>
-
-
+<a id="buildings_bench.models.transformers.LoadForecastingTransformer"></a>
   <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code><a class="autorefs autorefs-internal" title="buildings_bench.models.base_model.BaseModel" href="#buildings_bench.models.base_model.BaseModel">BaseModel</a></code></p>
@@ -1203,11 +1203,13 @@ the distribution parameters may be, e.g., logits, or mean and variance.</p>
 
 
 
-<h4 id="buildings_bench.models.transformers.LoadForecastingTransformer.__init__" class="doc doc-heading">
-<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2274</span><span class="p">,</span> <span class="n">num_encoder_layers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">num_decoder_layers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">d_model</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span><span class="p">,</span> <span class="n">nhead</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="n">dim_feedforward</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span><span class="p">,</span> <span class="n">dropout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">activation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;gelu&#39;</span><span class="p">,</span> <span class="n">continuous_loads</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">continuous_head</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;mse&#39;</span><span class="p">,</span> <span class="n">ignore_spatial</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span></code>
+<h3 id="buildings_bench.models.transformers.LoadForecastingTransformer.__init__" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">__init__</span>
 
-</h4>
 
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="fm">__init__</span><span class="p">(</span><span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">vocab_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2274</span><span class="p">,</span> <span class="n">num_encoder_layers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">num_decoder_layers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="n">d_model</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span><span class="p">,</span> <span class="n">nhead</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">,</span> <span class="n">dim_feedforward</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span><span class="p">,</span> <span class="n">dropout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">activation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;gelu&#39;</span><span class="p">,</span> <span class="n">continuous_loads</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">continuous_head</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;mse&#39;</span><span class="p">,</span> <span class="n">ignore_spatial</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -1416,11 +1418,13 @@ the distribution parameters may be, e.g., logits, or mean and variance.</p>
 
 
 
-<h4 id="buildings_bench.models.transformers.LoadForecastingTransformer.forward" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">forward</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></code>
+<h3 id="buildings_bench.models.transformers.LoadForecastingTransformer.forward" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">forward</span>
 
-</h4>
 
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">forward</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -1486,11 +1490,13 @@ the distribution parameters may be, e.g., logits, or mean and variance.</p>
 
 
 
-<h4 id="buildings_bench.models.transformers.LoadForecastingTransformer.generate_sample" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">generate_sample</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">temperature</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">greedy</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">num_samples</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span></code>
+<h3 id="buildings_bench.models.transformers.LoadForecastingTransformer.generate_sample" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">generate_sample</span>
 
-</h4>
 
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">generate_sample</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">temperature</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">greedy</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">num_samples</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -1617,14 +1623,7 @@ Implements greedy decoding and random temperature-controlled sampling.</p>
 <div class="doc doc-object doc-class">
 
 
-
-<h3 id="buildings_bench.models.transformers.TokenEmbedding" class="doc doc-heading">
-        <code>buildings_bench.models.transformers.TokenEmbedding</code>
-
-
-</h3>
-
-
+<a id="buildings_bench.models.transformers.TokenEmbedding"></a>
   <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code><span title="torch.nn">nn</span>.<span title="torch.nn.Module">Module</span></code></p>
@@ -1651,11 +1650,13 @@ indices into corresponding tensor of token embeddings.</p>
 
 
 
-<h4 id="buildings_bench.models.transformers.TokenEmbedding.__init__" class="doc doc-heading">
-<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">vocab_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">emb_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span></code>
+<h3 id="buildings_bench.models.transformers.TokenEmbedding.__init__" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">__init__</span>
 
-</h4>
 
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="fm">__init__</span><span class="p">(</span><span class="n">vocab_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">emb_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -1718,14 +1719,7 @@ indices into corresponding tensor of token embeddings.</p>
 <div class="doc doc-object doc-class">
 
 
-
-<h3 id="buildings_bench.models.transformers.PositionalEncoding" class="doc doc-heading">
-        <code>buildings_bench.models.transformers.PositionalEncoding</code>
-
-
-</h3>
-
-
+<a id="buildings_bench.models.transformers.PositionalEncoding"></a>
   <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code><span title="torch.nn">nn</span>.<span title="torch.nn.Module">Module</span></code></p>
@@ -1752,11 +1746,13 @@ introduce a notion of order within a time-series.</p>
 
 
 
-<h4 id="buildings_bench.models.transformers.PositionalEncoding.__init__" class="doc doc-heading">
-<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">emb_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dropout</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">maxlen</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">)</span></code>
+<h3 id="buildings_bench.models.transformers.PositionalEncoding.__init__" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">__init__</span>
 
-</h4>
 
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="fm">__init__</span><span class="p">(</span><span class="n">emb_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dropout</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">maxlen</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span><span class="p">)</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -1833,14 +1829,7 @@ introduce a notion of order within a time-series.</p>
 <div class="doc doc-object doc-class">
 
 
-
-<h3 id="buildings_bench.models.transformers.TimeSeriesSinusoidalPeriodicEmbedding" class="doc doc-heading">
-        <code>buildings_bench.models.transformers.TimeSeriesSinusoidalPeriodicEmbedding</code>
-
-
-</h3>
-
-
+<a id="buildings_bench.models.transformers.TimeSeriesSinusoidalPeriodicEmbedding"></a>
   <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code><span title="torch.nn">nn</span>.<span title="torch.nn.Module">Module</span></code></p>
@@ -1866,11 +1855,13 @@ introduce a notion of order within a time-series.</p>
 
 
 
-<h4 id="buildings_bench.models.transformers.TimeSeriesSinusoidalPeriodicEmbedding.__init__" class="doc doc-heading">
-<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">embedding_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
+<h3 id="buildings_bench.models.transformers.TimeSeriesSinusoidalPeriodicEmbedding.__init__" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">__init__</span>
 
-</h4>
 
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="fm">__init__</span><span class="p">(</span><span class="n">embedding_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -1911,11 +1902,13 @@ introduce a notion of order within a time-series.</p>
 
 
 
-<h4 id="buildings_bench.models.transformers.TimeSeriesSinusoidalPeriodicEmbedding.forward" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">forward</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></code>
+<h3 id="buildings_bench.models.transformers.TimeSeriesSinusoidalPeriodicEmbedding.forward" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">forward</span>
 
-</h4>
 
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">forward</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -1937,14 +1930,7 @@ introduce a notion of order within a time-series.</p>
 <div class="doc doc-object doc-class">
 
 
-
-<h3 id="buildings_bench.models.transformers.ZeroEmbedding" class="doc doc-heading">
-        <code>buildings_bench.models.transformers.ZeroEmbedding</code>
-
-
-</h3>
-
-
+<a id="buildings_bench.models.transformers.ZeroEmbedding"></a>
   <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code><span title="torch.nn">nn</span>.<span title="torch.nn.Module">Module</span></code></p>
@@ -1970,11 +1956,13 @@ introduce a notion of order within a time-series.</p>
 
 
 
-<h4 id="buildings_bench.models.transformers.ZeroEmbedding.__init__" class="doc doc-heading">
-<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">embedding_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span></code>
+<h3 id="buildings_bench.models.transformers.ZeroEmbedding.__init__" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">__init__</span>
 
-</h4>
 
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="fm">__init__</span><span class="p">(</span><span class="n">embedding_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -2015,11 +2003,13 @@ introduce a notion of order within a time-series.</p>
 
 
 
-<h4 id="buildings_bench.models.transformers.ZeroEmbedding.forward" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">forward</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span></code>
+<h3 id="buildings_bench.models.transformers.ZeroEmbedding.forward" class="doc doc-heading">
+        <span class="doc doc-object-name doc-function-name">forward</span>
 
-</h4>
 
+</h3>
+<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">forward</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span>
+</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -2042,14 +2032,7 @@ introduce a notion of order within a time-series.</p>
 <div class="doc doc-object doc-class">
 
 
-
-<h3 id="buildings_bench.models.persistence.AveragePersistence" class="doc doc-heading">
-        <code>buildings_bench.models.persistence.AveragePersistence</code>
-
-
-</h3>
-
-
+<a id="buildings_bench.models.persistence.AveragePersistence"></a>
   <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code><a class="autorefs autorefs-internal" title="buildings_bench.models.base_model.BaseModel" href="#buildings_bench.models.base_model.BaseModel">BaseModel</a></code></p>
@@ -2083,14 +2066,7 @@ introduce a notion of order within a time-series.</p>
 <div class="doc doc-object doc-class">
 
 
-
-<h3 id="buildings_bench.models.persistence.CopyLastDayPersistence" class="doc doc-heading">
-        <code>buildings_bench.models.persistence.CopyLastDayPersistence</code>
-
-
-</h3>
-
-
+<a id="buildings_bench.models.persistence.CopyLastDayPersistence"></a>
   <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code><a class="autorefs autorefs-internal" title="buildings_bench.models.base_model.BaseModel" href="#buildings_bench.models.base_model.BaseModel">BaseModel</a></code></p>
@@ -2124,14 +2100,7 @@ introduce a notion of order within a time-series.</p>
 <div class="doc doc-object doc-class">
 
 
-
-<h3 id="buildings_bench.models.persistence.CopyLastWeekPersistence" class="doc doc-heading">
-        <code>buildings_bench.models.persistence.CopyLastWeekPersistence</code>
-
-
-</h3>
-
-
+<a id="buildings_bench.models.persistence.CopyLastWeekPersistence"></a>
   <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code><a class="autorefs autorefs-internal" title="buildings_bench.models.base_model.BaseModel" href="#buildings_bench.models.base_model.BaseModel">BaseModel</a></code></p>
@@ -2166,14 +2135,7 @@ introduce a notion of order within a time-series.</p>
 <div class="doc doc-object doc-class">
 
 
-
-<h3 id="buildings_bench.models.linear_regression.LinearRegression" class="doc doc-heading">
-        <code>buildings_bench.models.linear_regression.LinearRegression</code>
-
-
-</h3>
-
-
+<a id="buildings_bench.models.linear_regression.LinearRegression"></a>
   <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code><a class="autorefs autorefs-internal" title="buildings_bench.models.base_model.BaseModel" href="#buildings_bench.models.base_model.BaseModel">BaseModel</a></code></p>
@@ -2210,14 +2172,7 @@ y = Wx + b, where W is a matrix of shape [pred_len, context_len].</p>
 <div class="doc doc-object doc-class">
 
 
-
-<h3 id="buildings_bench.models.dlinear_regression.DLinearRegression" class="doc doc-heading">
-        <code>buildings_bench.models.dlinear_regression.DLinearRegression</code>
-
-
-</h3>
-
-
+<a id="buildings_bench.models.dlinear_regression.DLinearRegression"></a>
   <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code><a class="autorefs autorefs-internal" title="buildings_bench.models.base_model.BaseModel" href="#buildings_bench.models.base_model.BaseModel">BaseModel</a></code></p>
