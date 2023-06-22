@@ -29,7 +29,7 @@ Main entry point for loading a BuildingsBench model is `model_factory()`.
     options:
         show_source: false
         heading_level: 3
-        
+        show_root_heading: false
 
 ---
 
@@ -39,6 +39,7 @@ Main entry point for loading a BuildingsBench model is `model_factory()`.
     options:
         show_source: false
         heading_level: 3
+        show_root_heading: false
         
 
 ## TokenEmbedding
@@ -47,7 +48,7 @@ Main entry point for loading a BuildingsBench model is `model_factory()`.
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false
         
 ## PositionalEncoding
 
@@ -55,6 +56,7 @@ Main entry point for loading a BuildingsBench model is `model_factory()`.
     options:
         show_source: false
         heading_level: 3
+        show_root_heading: false
         
 ## TimeSeriesSinusoidalPeriodicEmbedding
 
@@ -62,6 +64,7 @@ Main entry point for loading a BuildingsBench model is `model_factory()`.
     options:
         show_source: false
         heading_level: 3
+        show_root_heading: false
         
 ## ZeroEmbedding
 
@@ -69,7 +72,7 @@ Main entry point for loading a BuildingsBench model is `model_factory()`.
     options:
         show_source: false
         heading_level: 3
-        
+        show_root_heading: false      
         
 ---
 
@@ -79,6 +82,7 @@ Main entry point for loading a BuildingsBench model is `model_factory()`.
     options:
         show_source: false
         heading_level: 3
+        show_root_heading: false
         
 
 ## Previous Day Persistence
@@ -87,6 +91,7 @@ Main entry point for loading a BuildingsBench model is `model_factory()`.
     options:
         show_source: false
         heading_level: 3
+        show_root_heading: false
         
 
 ## Previous Week Persistence
@@ -95,7 +100,7 @@ Main entry point for loading a BuildingsBench model is `model_factory()`.
     options:
         show_source: false
         heading_level: 3
-        
+        show_root_heading: false        
 
 ---
 
@@ -105,7 +110,7 @@ Main entry point for loading a BuildingsBench model is `model_factory()`.
     options:
         show_source: false
         heading_level: 3
-        
+        show_root_heading: false        
 
 ---
 
@@ -115,4 +120,5 @@ Main entry point for loading a BuildingsBench model is `model_factory()`.
     options:
         show_source: false
         heading_level: 3
+        show_root_heading: false
         

@@ -26,7 +26,8 @@ plugins:
                 show_signature_annotations: true
                 show_source: false  # don't include source code
                 members_order: source  # order methods according to their order of definition in the source code, not alphabetical order
-                
+            options:
+                separate_signature: true     
 
 nav: 
   - Home: index.md

@@ -34,6 +34,13 @@ class LoadQuantizer:
         return self.K
 
     def train(self, sample: np.ndarray) -> None:
+        """Fit KMeans to a subset of the data. 
+        
+        Optionally, merge centroids that are within a threshold.
+
+        Args:
+            sample (np.ndarray): shape [num_samples, 1]
+        """
         self.kmeans = faiss.Kmeans(d=1, k=self.K, niter=300, nredo=10,
                      seed=self.seed, verbose=True, gpu=(True if 'cuda' in self.device else False))
         # max is 256, min is 39 per centroid by defaul
@@ -147,16 +154,14 @@ class LoadQuantizer:
 
 
     def transform(self, sample: Union[np.ndarray, torch.Tensor]) -> Union[np.ndarray, torch.Tensor]:
-        """Transform a sample to a sequence of indices
+        """Quantize a sample of load values into a sequence of indices.
         
-        The sample contains continuous values which we quantize
-
         Args:
-            sample (np.ndarray) or (torch.Tensor): of shape (n, 1) or (b,n,1). 
-                numpy if device is cpu or torch Tensor if device is cuda.
+            sample Union[np.ndarray, torch.Tensor]: of shape (n, 1) or (b,n,1). 
+                type is numpy if device is cpu or torch Tensor if device is cuda.
 
         Returns:
-            np.ndarray or torch.Tensor: of shape (n, 1) or (b,n,1).
+            sample (Union[np.ndarray, torch.Tensor]): of shape (n, 1) or (b,n,1).
         """
         init_shape = sample.shape
         sample = sample.reshape(-1,1)
@@ -169,16 +174,14 @@ class LoadQuantizer:
 
 
     def undo_transform(self, sample: Union[np.ndarray, torch.Tensor]) -> Union[np.ndarray, torch.Tensor]:
-        """Undo the transformation of a sample
-
-        The sample contains quantized values which we dequantize
+        """Dequantize a sample of integer indices into a sequence of load values.
 
         Args:
-            sample (np.ndarray) or (torch.LongTensor): of shape (n, 1) or (b,n,1). 
-                numpy if device is cpu or torch Tensor if device is cuda.
+            sample Union[np.ndarray, torch.Tensor]: of shape (n, 1) or (b,n,1). 
+                type is numpy if device is cpu or torch Tensor if device is cuda.
 
         Returns:
-            np.ndarray or torch.Tensor: of shape (n, 1) or (b,n,1).
+            sample (Union[np.ndarray, torch.Tensor]): of shape (n, 1) or (b,n,1).
         """
         init_shape = sample.shape
         sample = sample.reshape(-1)

@@ -49,7 +49,7 @@ Available PyTorch Datasets:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false
 
 ---
 
@@ -59,7 +59,7 @@ Available PyTorch Datasets:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false
 
 ## PandasTransformerDataset
 
@@ -67,7 +67,7 @@ Available PyTorch Datasets:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false
 
 ## TorchBuildingDatasetFromParquet
 
@@ -75,7 +75,7 @@ Available PyTorch Datasets:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false
 
 ## TorchBuildingDatasetFromCSV
 
@@ -83,7 +83,7 @@ Available PyTorch Datasets:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false
 
 ## PandasBuildingDatasetsFromCSV
 
@@ -91,4 +91,4 @@ Available PyTorch Datasets:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false

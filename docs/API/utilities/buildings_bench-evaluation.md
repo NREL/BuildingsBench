@@ -101,7 +101,7 @@ for building_name, building_dataset in buildings_datasets_generator:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false
 
 
 ## DatasetMetricsManager
@@ -110,7 +110,7 @@ for building_name, building_dataset in buildings_datasets_generator:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false
 
 ## MetricsManager
 
@@ -118,8 +118,7 @@ for building_name, building_dataset in buildings_datasets_generator:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
-
+        show_root_heading: false
 
 ---
 
@@ -129,7 +128,7 @@ for building_name, building_dataset in buildings_datasets_generator:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false
 
 
 ## BuildingsBenchMetric
@@ -138,7 +137,7 @@ for building_name, building_dataset in buildings_datasets_generator:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false
 
 ## Metric
 
@@ -146,7 +145,7 @@ for building_name, building_dataset in buildings_datasets_generator:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false
 
 ## absolute_error
 
@@ -154,7 +153,7 @@ for building_name, building_dataset in buildings_datasets_generator:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false
 
 ## squared_error
 
@@ -162,7 +161,7 @@ for building_name, building_dataset in buildings_datasets_generator:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false
 
 ## bias_error
 
@@ -170,7 +169,7 @@ for building_name, building_dataset in buildings_datasets_generator:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false
 
 ---
 
@@ -180,7 +179,7 @@ for building_name, building_dataset in buildings_datasets_generator:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false
 
 
 ## RankedProbabilityScore
@@ -189,7 +188,7 @@ for building_name, building_dataset in buildings_datasets_generator:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false
 
 ## ContinuousRankedProbabilityScore
 
@@ -197,7 +196,7 @@ for building_name, building_dataset in buildings_datasets_generator:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false
 
 ---
 
@@ -207,5 +206,5 @@ for building_name, building_dataset in buildings_datasets_generator:
     options:
         show_source: false
         heading_level: 3
-        show_root_heading: true
+        show_root_heading: false
 

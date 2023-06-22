@@ -60,6 +60,16 @@ class Metric(BuildingsBenchMetric):
     ```
     """
     def __init__(self, name: str, type: MetricType, function: Callable, **kwargs):
+        """
+        Args:
+            name (str): The name of the metric.
+            type (MetricType): The type of the metric.
+            function (Callable): A function that takes two tensors and returns a tensor.
+        
+        Keyword Args:
+            normalize (bool): Whether to normalize the error.
+            sqrt (bool): Whether to take the square root of the error.
+        """
         super().__init__(name, type)
         self.function = function
         self.kwargs = kwargs
@@ -69,8 +79,9 @@ class Metric(BuildingsBenchMetric):
 
     def __call__(self, y_true, y_pred) -> None:
         """
-        y_true (torch.Tensor): shape [batch_size, pred_len]
-        y_pred (torch.Tensor): shape [batch_size, pred_len]
+        Args:
+            y_true (torch.Tensor): shape [batch_size, pred_len]
+            y_pred (torch.Tensor): shape [batch_size, pred_len]
         """
         self.UNUSED_FLAG = False
         self.errors += [self.function(y_true, y_pred)]
