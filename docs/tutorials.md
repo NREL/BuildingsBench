@@ -1,4 +1,4 @@
-## Tutorials
+Links to Jupyter Notebooks hosted on Github: 
 
 - [Dataset Quick Start](https://github.com/NREL/BuildingsBench/blob/main/tutorials/dataset_quick_start.ipynb)
 - [Register a new model with BuildingsBench](https://github.com/NREL/BuildingsBench/blob/main/tutorials/registering_your_model_with_the_benchmark.ipynb)

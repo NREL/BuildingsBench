@@ -102,7 +102,7 @@ Download and untar all files, which will create a directory called `BuildingsBen
 Set the environment variable `BUILDINGS_BENCH` to the path where the folder `BuildingsBench` is located.
 
 ```bash
-export BUILDINGS_BENCH=/path/to/BuildingsBench`
+export BUILDINGS_BENCH=/path/to/BuildingsBench
 ```
 
 If using `wandb`, set the following:

@@ -31,7 +31,7 @@ plugins:
 
 nav: 
   - Home: index.md
-  - Running The Benchmark: running.md
+  - Running the Benchmark: running.md
   - Tutorials: tutorials.md
   - API: 
     - Data:

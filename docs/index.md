@@ -77,15 +77,18 @@ The pretraining dataset and evaluation data is available for download [here](htt
 
 
 The Buildings-900K pretraining data is divided into 4 tar files:
+
 - `comstock_amy2018.tar.gz`
 - `comstock_tmy3.tar.gz`
 - `resstock_amy2018.tar.gz`
 - `resstock_tmy3.tar.gz`
 
 The evaluation datasets are available in a single file:
+
 - `BuildingsBench.tar.gz`
 
 One tar file for the metadata which has files that are necessary for running pretraining (such as index files for the Buildings-900K PyTorch Dataset) and the benchmark tasks.
+
 - `metadata.tar.gz`
 
 Download and untar all files, which will create a directory called `BuildingsBench`.
@@ -96,7 +99,7 @@ Download and untar all files, which will create a directory called `BuildingsBen
 Set the environment variable `BUILDINGS_BENCH` to the path where the folder `BuildingsBench` is located.
 
 ```bash
-export BUILDINGS_BENCH=/path/to/BuildingsBench`
+export BUILDINGS_BENCH=/path/to/BuildingsBench
 ```
 
 If using `wandb`, set the following:

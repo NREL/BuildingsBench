@@ -1,4 +1,4 @@
-## Running The Benchmark
+## Getting Started
 
 We provide scripts in the `./scripts` directory for pretraining and to run the benchmark tasks (zero-shot STLF and transfer learning), either with our provided baselines or your own model.
 
