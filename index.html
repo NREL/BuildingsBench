@@ -265,6 +265,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#download-the-datasets-and-metadata" class="md-nav__link">
+    Download the datasets and metadata
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -548,10 +555,10 @@
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link"></a></h2>
 <p>BuildingsBench is a platform for:</p>
 <ul>
-<li>Large-scale pretraining with the synthetic Buildings-900K dataset for short-term load forecasting (STLF). Buildings-900K is statistically representative of the entire U.S. building stock.</li>
+<li>Large-scale pretraining with the synthetic Buildings-900K dataset for short-term load forecasting (STLF). Buildings-900K is statistically representative of the entire U.S. building stock and is extracted from the NREL <a href="https://www.nrel.gov/buildings/end-use-load-profiles.html">End-Use Load Profiles database</a>.</li>
 <li>Benchmarking on two tasks evaluating generalization: zero-shot STLF and transfer learning for STLF.</li>
 </ul>
-<p>We provide an index-based PyTorch <a href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#buildings-900k-pytorch-dataset">Dataset</a> for large-scale pretraining, easy data loading for multiple real building energy consumption datasets as <a href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV">PyTorch Tensors</a> or <a href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV">Pandas DataFrames</a>, from simple (<a href="https://nrel.github.io/BuildingsBench/API/models/buildings_bench-models/#buildings_bench.models.persistence">persistence</a>) to advanced (<a href="https://nrel.github.io/BuildingsBench/API/models/buildings_bench-models/#buildings_bench.models.transformers">transformers</a>) baselines, <a href="https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-evaluation/">metrics management</a>, a <a href="https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-tokenizer/">tokenizer</a> based on KMeans for load time series, and more.</p>
+<p>We provide an index-based PyTorch <a href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#the-buildings-900k-pytorch-dataset">Dataset</a> for large-scale pretraining, easy data loading for multiple real building energy consumption datasets as <a href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#torchbuildingdatasetsfromcsv">PyTorch Tensors</a> or <a href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#pandasbuildingdatasetsfromcsv">Pandas DataFrames</a>, from simple persistence to advanced transformer baselines, <a href="https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-evaluation/">metrics management</a>, a <a href="https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-tokenizer/">tokenizer</a> based on KMeans for load time series, and more.</p>
 <h3 id="load-a-benchmark-dataset">Load a benchmark dataset<a class="headerlink" href="#load-a-benchmark-dataset" title="Permanent link"></a></h3>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span> <span class="nn">torch</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span> <span class="nn">buildings_bench</span> <span class="kn">import</span> <span class="n">load_torch_dataset</span>
@@ -594,8 +601,20 @@ Download the wheel for the python version you are using, then install it in your
 <p>If running the LightGBM baseline, you will need to install LightGBM.
 Follow instructions <a href="https://pypi.org/project/lightgbm/">here</a> for your OS. 
 Then, <code>pip install skforecast</code>.</p>
+<h2 id="download-the-datasets-and-metadata">Download the datasets and metadata<a class="headerlink" href="#download-the-datasets-and-metadata" title="Permanent link"></a></h2>
+<p>The pretraining dataset and evaluation data is available for download <a href="https://data.openei.org/submissions/5859">here</a> as tar files, or can be accessed via AWS S3 <a href="https://data.openei.org/s3_viewer?bucket=oedi-data-lake&amp;prefix=buildings-bench">here</a>. The benchmark datasets are &lt; 1GB in size in total, but the pretraining data is ~110GB in size.</p>
+<p>The Buildings-900K pretraining data is divided into 4 tar files:
+- <code>comstock_amy2018.tar.gz</code>
+- <code>comstock_tmy3.tar.gz</code>
+- <code>resstock_amy2018.tar.gz</code>
+- <code>resstock_tmy3.tar.gz</code></p>
+<p>The evaluation datasets are available in a single file:
+- <code>BuildingsBench.tar.gz</code></p>
+<p>One tar file for the metadata which has files that are necessary for running pretraining (such as index files for the Buildings-900K PyTorch Dataset) and the benchmark tasks.
+- <code>metadata.tar.gz</code></p>
+<p>Download and untar all files, which will create a directory called <code>BuildingsBench</code>.</p>
 <h3 id="environment-variables">Environment variables<a class="headerlink" href="#environment-variables" title="Permanent link"></a></h3>
-<p>Set the environment variable <code>BUILDINGS_BENCH</code> to the path where your stored the datasets <code>BuildingsBench</code>.</p>
+<p>Set the environment variable <code>BUILDINGS_BENCH</code> to the path where the folder <code>BuildingsBench</code> is located.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">BUILDINGS_BENCH</span><span class="o">=</span>/path/to/BuildingsBench<span class="sb">`</span>
 </span></code></pre></div>
 <p>If using <code>wandb</code>, set the following:</p>
@@ -603,9 +622,6 @@ Then, <code>pip install skforecast</code>.</p>
 <li><code>WANDB_ENTITY</code>: your wandb username</li>
 <li><code>WANDB_PROJECT</code>: the name of your wandb project for this benchmark</li>
 </ul>
-<h3 id="download-the-datasets">Download the datasets<a class="headerlink" href="#download-the-datasets" title="Permanent link"></a></h3>
-<p>Download the tar files to disk and untar, which will create a directory called <code>BuildingsBench</code> with the data.</p>
-<p>The files will be available for download <a href="https://data.openei.org/submissions/5859">here</a>.</p>
 <h3 id="run-tests">Run tests<a class="headerlink" href="#run-tests" title="Permanent link"></a></h3>
 <p>Verify your installation by running unit tests:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>python<span class="w"> </span>-m<span class="w"> </span>unittest

@@ -539,6 +539,7 @@
 
 <h2 id="running-the-benchmark">Running The Benchmark<a class="headerlink" href="#running-the-benchmark" title="Permanent link"></a></h2>
 <p>We provide scripts in the <code>./scripts</code> directory for pretraining and to run the benchmark tasks (zero-shot STLF and transfer learning), either with our provided baselines or your own model.</p>
+<p>PyTorch checkpoint files for our trained models are available for download as a single tar file  <a href="https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.0.0/compressed/checkpoints.tar.gz">here</a> or as individual files on S3 <a href="https://data.openei.org/s3_viewer?bucket=oedi-data-lake&amp;prefix=buildings-bench%2Fv1.0.0%2Fcheckpoints%2F">here</a>.</p>
 <p>Our benchmark assumes each model takes as input a dictionary of torch tensors with the following keys:</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="s1">&#39;load&#39;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>               <span class="c1"># (batch_size, seq_len, 1)</span>
