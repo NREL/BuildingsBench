@@ -289,7 +289,7 @@
   
     <li class="md-nav__item">
       <a href="running/" class="md-nav__link">
-        Running The Benchmark
+        Running the Benchmark
       </a>
     </li>
   
@@ -603,19 +603,25 @@ Follow instructions <a href="https://pypi.org/project/lightgbm/">here</a> for yo
 Then, <code>pip install skforecast</code>.</p>
 <h2 id="download-the-datasets-and-metadata">Download the datasets and metadata<a class="headerlink" href="#download-the-datasets-and-metadata" title="Permanent link"></a></h2>
 <p>The pretraining dataset and evaluation data is available for download <a href="https://data.openei.org/submissions/5859">here</a> as tar files, or can be accessed via AWS S3 <a href="https://data.openei.org/s3_viewer?bucket=oedi-data-lake&amp;prefix=buildings-bench">here</a>. The benchmark datasets are &lt; 1GB in size in total, but the pretraining data is ~110GB in size.</p>
-<p>The Buildings-900K pretraining data is divided into 4 tar files:
-- <code>comstock_amy2018.tar.gz</code>
-- <code>comstock_tmy3.tar.gz</code>
-- <code>resstock_amy2018.tar.gz</code>
-- <code>resstock_tmy3.tar.gz</code></p>
-<p>The evaluation datasets are available in a single file:
-- <code>BuildingsBench.tar.gz</code></p>
-<p>One tar file for the metadata which has files that are necessary for running pretraining (such as index files for the Buildings-900K PyTorch Dataset) and the benchmark tasks.
-- <code>metadata.tar.gz</code></p>
+<p>The Buildings-900K pretraining data is divided into 4 tar files:</p>
+<ul>
+<li><code>comstock_amy2018.tar.gz</code></li>
+<li><code>comstock_tmy3.tar.gz</code></li>
+<li><code>resstock_amy2018.tar.gz</code></li>
+<li><code>resstock_tmy3.tar.gz</code></li>
+</ul>
+<p>The evaluation datasets are available in a single file:</p>
+<ul>
+<li><code>BuildingsBench.tar.gz</code></li>
+</ul>
+<p>One tar file for the metadata which has files that are necessary for running pretraining (such as index files for the Buildings-900K PyTorch Dataset) and the benchmark tasks.</p>
+<ul>
+<li><code>metadata.tar.gz</code></li>
+</ul>
 <p>Download and untar all files, which will create a directory called <code>BuildingsBench</code>.</p>
 <h3 id="environment-variables">Environment variables<a class="headerlink" href="#environment-variables" title="Permanent link"></a></h3>
 <p>Set the environment variable <code>BUILDINGS_BENCH</code> to the path where the folder <code>BuildingsBench</code> is located.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">BUILDINGS_BENCH</span><span class="o">=</span>/path/to/BuildingsBench<span class="sb">`</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">BUILDINGS_BENCH</span><span class="o">=</span>/path/to/BuildingsBench
 </span></code></pre></div>
 <p>If using <code>wandb</code>, set the following:</p>
 <ul>
