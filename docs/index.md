@@ -4,10 +4,10 @@
 
 BuildingsBench is a platform for:
 
-- Large-scale pretraining with the synthetic Buildings-900K dataset for short-term load forecasting (STLF). Buildings-900K is statistically representative of the entire U.S. building stock.
+- Large-scale pretraining with the synthetic Buildings-900K dataset for short-term load forecasting (STLF). Buildings-900K is statistically representative of the entire U.S. building stock and is extracted from the NREL [End-Use Load Profiles database](https://www.nrel.gov/buildings/end-use-load-profiles.html).
 - Benchmarking on two tasks evaluating generalization: zero-shot STLF and transfer learning for STLF.
 
-We provide an index-based PyTorch [Dataset](https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#buildings-900k-pytorch-dataset) for large-scale pretraining, easy data loading for multiple real building energy consumption datasets as [PyTorch Tensors](https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV) or [Pandas DataFrames](https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV), from simple ([persistence](https://nrel.github.io/BuildingsBench/API/models/buildings_bench-models/#buildings_bench.models.persistence)) to advanced ([transformers](https://nrel.github.io/BuildingsBench/API/models/buildings_bench-models/#buildings_bench.models.transformers)) baselines, [metrics management](https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-evaluation/), a [tokenizer](https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-tokenizer/) based on KMeans for load time series, and more.
+We provide an index-based PyTorch [Dataset](https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#the-buildings-900k-pytorch-dataset) for large-scale pretraining, easy data loading for multiple real building energy consumption datasets as [PyTorch Tensors](https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#torchbuildingdatasetsfromcsv) or [Pandas DataFrames](https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#pandasbuildingdatasetsfromcsv), from simple persistence to advanced transformer baselines, [metrics management](https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-evaluation/), a [tokenizer](https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-tokenizer/) based on KMeans for load time series, and more.
 
 
 ### Load a benchmark dataset
@@ -71,9 +71,29 @@ If running the LightGBM baseline, you will need to install LightGBM.
 Follow instructions [here](https://pypi.org/project/lightgbm/) for your OS. 
 Then, `pip install skforecast`.
 
+## Download the datasets and metadata
+
+The pretraining dataset and evaluation data is available for download [here](https://data.openei.org/submissions/5859) as tar files, or can be accessed via AWS S3 [here](https://data.openei.org/s3_viewer?bucket=oedi-data-lake&prefix=buildings-bench). The benchmark datasets are < 1GB in size in total, but the pretraining data is ~110GB in size.
+
+
+The Buildings-900K pretraining data is divided into 4 tar files:
+- `comstock_amy2018.tar.gz`
+- `comstock_tmy3.tar.gz`
+- `resstock_amy2018.tar.gz`
+- `resstock_tmy3.tar.gz`
+
+The evaluation datasets are available in a single file:
+- `BuildingsBench.tar.gz`
+
+One tar file for the metadata which has files that are necessary for running pretraining (such as index files for the Buildings-900K PyTorch Dataset) and the benchmark tasks.
+- `metadata.tar.gz`
+
+Download and untar all files, which will create a directory called `BuildingsBench`.
+
+
 ### Environment variables
 
-Set the environment variable `BUILDINGS_BENCH` to the path where your stored the datasets `BuildingsBench`.
+Set the environment variable `BUILDINGS_BENCH` to the path where the folder `BuildingsBench` is located.
 
 ```bash
 export BUILDINGS_BENCH=/path/to/BuildingsBench`
@@ -83,13 +103,6 @@ If using `wandb`, set the following:
 
 - `WANDB_ENTITY`: your wandb username
 - `WANDB_PROJECT`: the name of your wandb project for this benchmark
-
-
-### Download the datasets
-
-Download the tar files to disk and untar, which will create a directory called `BuildingsBench` with the data.
-
-The files will be available for download [here](https://data.openei.org/submissions/5859).
 
 
 ### Run tests

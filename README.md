@@ -76,9 +76,30 @@ If running the LightGBM baseline, you will need to install LightGBM.
 Follow instructions [here](https://pypi.org/project/lightgbm/) for your OS. 
 Then, `pip install skforecast`.
 
+
+## Download the datasets and metadata
+
+The pretraining dataset and evaluation data is available for download [here](https://data.openei.org/submissions/5859) as tar files, or can be accessed via AWS S3 [here](https://data.openei.org/s3_viewer?bucket=oedi-data-lake&prefix=buildings-bench). The benchmark datasets are < 1GB in size in total, but the pretraining data is ~110GB in size.
+
+
+The Buildings-900K pretraining data is divided into 4 tar files:
+- `comstock_amy2018.tar.gz`
+- `comstock_tmy3.tar.gz`
+- `resstock_amy2018.tar.gz`
+- `resstock_tmy3.tar.gz`
+
+The evaluation datasets are available in a single file:
+- `BuildingsBench.tar.gz`
+
+One tar file for the metadata which has files that are necessary for running pretraining (such as index files for the Buildings-900K PyTorch Dataset) and the benchmark tasks.
+- `metadata.tar.gz`
+
+Download and untar all files, which will create a directory called `BuildingsBench`.
+
+
 ### Environment variables
 
-Set the environment variable `BUILDINGS_BENCH` to the path where your stored the datasets `BuildingsBench`.
+Set the environment variable `BUILDINGS_BENCH` to the path where the folder `BuildingsBench` is located.
 
 ```bash
 export BUILDINGS_BENCH=/path/to/BuildingsBench`
@@ -89,20 +110,9 @@ If using `wandb`, set the following:
 - `WANDB_ENTITY`: your wandb username
 - `WANDB_PROJECT`: the name of your wandb project for this benchmark
 
-
-## Download the datasets and metadata
-
-Download the tar files to disk and untar, which will create a directory called `BuildingsBench` with the datasets.
-
-The files are accessible for download [here](https://data.openei.org/submissions/5859).
-
-The benchmark datasets are < 1GB in size in total, but the pretraining dataset is ~110GB in size.
-The file `metadata.tar.gz` has files that are necessary for running pretraining (such as index files for the Buildings-900K PyTorch Dataset) and the benchmark tasks.
-
-
 ## Run tests
 
-Verify your installation by running unit tests:
+Verify your local installation by running unit tests from the base directory:
 
 ```bash
 python -m unittest
@@ -172,18 +182,27 @@ This script is implemented with PyTorch `DistributedDataParallel`, so it can be 
 
 ## BuildingsBench Leaderboard
 
+Metrics:
+
+- NRMSE: Normalized Root Mean Squared Error (%)
+- RPS: Ranked Probability Score
+  - Gaussian Continuous Ranked Probability Score for Gaussian models
+  - Categorical Discrete Ranked Probability Score for token-based models
+
+PyTorch checkpoint files for all trained models can be downloaded in a single tar file [here](https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.0.0/compressed/checkpoints.tar.gz).
+
 ### Zero-shot STLF
 
-Eval over all real buildings for all available years. Lower is better.
+Eval over all real buildings for all available years. Lower is better. Individual model checkpoints are available via AWS S3 for download by clicking on the model name.
 
 | Model | Commercial NRMSE (%) |  Commercial RPS | Residential NRMSE (%) | Residential RPS | 
 | --- | --- | --- | --- | --- |
-| [Transformer-L (Gaussian)]() | 13.86 | 5.15 | 83.87 | 0.082 | 
-| [Transformer-M (Gaussian)]() | 14.01 | 4.90| 83.17 | 0.085 |
-| [Transformer-S (Gaussian)]() | 22.07 | 8.09 | 83.97 | 0.078|
-| [Transformer-L (Tokens)]() | 14.82 | 4.81 | 101.7 | 0.072 |
-| [Transformer-M (Tokens)]() | 14.54 | 4.67 | 102.1 | 0.071 |
-| [Transformer-S (Tokens)]() | 14.88 | 5.17 | 103.2  |0.071 |
+| [Transformer-L (Gaussian)](https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.0.0/checkpoints/Transformer_Gaussian_L.pt) | 13.86 | 5.15 | 83.87 | 0.082 | 
+| [Transformer-M (Gaussian)](https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.0.0/checkpoints/Transformer_Gaussian_M.pt) | 14.01 | 4.90| 83.17 | 0.085 |
+| [Transformer-S (Gaussian)](https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.0.0/checkpoints/Transformer_Gaussian_S.pt) | 22.07 | 8.09 | 83.97 | 0.078|
+| [Transformer-L (Tokens)](https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.0.0/checkpoints/Transformer_Tokens_L.pt) | 14.82 | 4.81 | 101.7 | 0.072 |
+| [Transformer-M (Tokens)](https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.0.0/checkpoints/Transformer_Tokens_M.pt) | 14.54 | 4.67 | 102.1 | 0.071 |
+| [Transformer-S (Tokens)](https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.0.0/checkpoints/Transformer_Tokens_S.pt) | 14.88 | 5.17 | 103.2  |0.071 |
 | Persistence Ensemble | 17.17 | 5.39 | 80.11 | 0.067 |
 | Previous Day Persistence | 17.41 | - | 102.44 | - |
 | Previous Week Persistence | 19.96 | - | 103.51 | - |
@@ -192,6 +211,7 @@ Eval over all real buildings for all available years. Lower is better.
 
 Results are over a sub-sample of 100 residential and 100 commercial buildings--see the list of buildings in the datasets metadata directory: `BuildingsBench/metadata/transfer_learning_residential_buildings.csv` and `BuildingsBench/metadata/transfer_learning_commercial_buildings.csv`.
 Models are provided with the first 6 months of consumption data for fine-tuning and tested with a 24-hour sliding window on the next 6 months.
+These results are for the Transformer-L models.
 
 | Model | Commercial NRMSE (%) |  Commercial RPS | Residential NRMSE (%) | Residential RPS |
 | --- | --- | --- | --- | --- |

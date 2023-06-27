@@ -69,7 +69,7 @@ Available PyTorch Datasets:
         heading_level: 3
         show_root_heading: false
 
-## TorchBuildingDatasetFromParquet
+## TorchBuildingDatasetsFromParquet
 
 ::: buildings_bench.data.datasets.TorchBuildingDatasetFromParquet
     options:
@@ -77,7 +77,7 @@ Available PyTorch Datasets:
         heading_level: 3
         show_root_heading: false
 
-## TorchBuildingDatasetFromCSV
+## TorchBuildingDatasetsFromCSV
 
 ::: buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV
     options:

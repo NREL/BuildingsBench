@@ -2,6 +2,9 @@
 
 We provide scripts in the `./scripts` directory for pretraining and to run the benchmark tasks (zero-shot STLF and transfer learning), either with our provided baselines or your own model.
 
+PyTorch checkpoint files for our trained models are available for download as a single tar file  [here](https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.0.0/compressed/checkpoints.tar.gz) or as individual files on S3 [here](https://data.openei.org/s3_viewer?bucket=oedi-data-lake&prefix=buildings-bench%2Fv1.0.0%2Fcheckpoints%2F).
+
+
 Our benchmark assumes each model takes as input a dictionary of torch tensors with the following keys:
 
 ```python
