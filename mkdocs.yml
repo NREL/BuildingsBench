@@ -12,6 +12,19 @@ theme:
       - navigation.sections  # Sections are included in the navigation on the left.
       - toc.integrate  # Table of contents is integrated on the left; does not appear separately on the right.
       - header.autohide  # header disappears as you scroll
+  palette:
+      - scheme: default
+        primary: white
+        accent: amber
+        toggle:
+            icon: material/weather-night
+            name: Switch to dark mode
+      - scheme: slate
+        primary: black
+        accent: amber
+        toggle:
+            icon: material/weather-sunny
+            name: Switch to light mode
 plugins:
   - search
   - autorefs  # Cross-links to headings
@@ -26,8 +39,7 @@ plugins:
                 show_signature_annotations: true
                 show_source: false  # don't include source code
                 members_order: source  # order methods according to their order of definition in the source code, not alphabetical order
-            options:
-                separate_signature: true     
+                heading_level: 4    
 
 nav: 
   - Home: index.md

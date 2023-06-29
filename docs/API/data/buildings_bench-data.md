@@ -21,7 +21,7 @@ Available PyTorch Datasets:
 ::: buildings_bench.data.load_pretraining
     options:
         show_source: false
-        heading_level: 3
+        heading_level: 4
         show_root_heading: true
 
 ## load_torch_dataset
@@ -29,7 +29,7 @@ Available PyTorch Datasets:
 ::: buildings_bench.data.load_torch_dataset
     options:
         show_source: false
-        heading_level: 3
+        heading_level: 4
         show_root_heading: true
 
 
@@ -38,7 +38,7 @@ Available PyTorch Datasets:
 ::: buildings_bench.data.load_pandas_dataset
     options:
         show_source: false
-        heading_level: 3
+        heading_level: 4
         show_root_heading: true
 
 ---
@@ -48,8 +48,8 @@ Available PyTorch Datasets:
 ::: buildings_bench.data.buildings900K.Buildings900K
     options:
         show_source: false
-        heading_level: 3
-        show_root_heading: false
+        heading_level: 4
+        show_root_heading: true
 
 ---
 
@@ -58,37 +58,37 @@ Available PyTorch Datasets:
 ::: buildings_bench.data.datasets.TorchBuildingDataset
     options:
         show_source: false
-        heading_level: 3
-        show_root_heading: false
+        heading_level: 4
+        show_root_heading: true
 
 ## PandasTransformerDataset
 
 ::: buildings_bench.data.datasets.PandasTransformerDataset
     options:
         show_source: false
-        heading_level: 3
-        show_root_heading: false
+        heading_level: 4
+        show_root_heading: true
 
 ## TorchBuildingDatasetsFromParquet
 
 ::: buildings_bench.data.datasets.TorchBuildingDatasetFromParquet
     options:
         show_source: false
-        heading_level: 3
-        show_root_heading: false
+        heading_level: 4
+        show_root_heading: true
 
 ## TorchBuildingDatasetsFromCSV
 
 ::: buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV
     options:
         show_source: false
-        heading_level: 3
-        show_root_heading: false
+        heading_level: 4
+        show_root_heading: true
 
 ## PandasBuildingDatasetsFromCSV
 
 ::: buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV
     options:
         show_source: false
-        heading_level: 3
-        show_root_heading: false
+        heading_level: 4
+        show_root_heading: true
