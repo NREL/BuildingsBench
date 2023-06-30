@@ -50,7 +50,7 @@ def main(args):
     bc = BoxCoxTransform()
     bc.train(np.vstack(all_buildings))
     bc.save(output_dir)
-    print('BoxCox: ', bc.lambdas_)
+    print('BoxCox: ', bc.boxcox.lambdas_)
  
 
         

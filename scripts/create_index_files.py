@@ -27,7 +27,7 @@ def main(args):
     # withhold 1 puma from each census region (all res and com buildingss) for test only
     # midwest, south, northeast, west
     # read withheld pumas from file
-    with open(output_dir / 'withheld_pumas.tsv', 'r') as f:
+    with open(Path(os.environ.get('BUILDINGS_BENCH','')) / 'metadata' / 'withheld_pumas.tsv', 'r') as f:
         # tab separated file
         line = f.readlines()[0]
         withheld_pumas = line.strip('\n').split('\t')
@@ -101,7 +101,7 @@ if __name__ == '__main__':
     args.add_argument('--sliding_window_stride', type=int, default=24, required=False,
                         help='Stride for sliding window to split timeseries into training examples. Default: 24 hours')
     args.add_argument('--context_len', type=int, default=168, required=False,
-                                help='Length of context sequence. For handling year beginning and year end. Default: 72 hours')
+                                help='Length of context sequence. For handling year beginning and year end. Default: 168 hours')
     args.add_argument('--pred_len', type=int, default=24, required=False,
                                 help='Length of prediction sequence. For handling year beginning and year end. Default: 24 hours')
 

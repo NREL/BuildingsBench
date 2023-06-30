@@ -121,7 +121,7 @@ if __name__ == '__main__':
     args.add_argument('--sliding_window_stride', type=int, default=24, required=False,
                         help='Stride for sliding window to split timeseries into training examples. Default: 24 hours')
     args.add_argument('--context_len', type=int, default=168, required=False,
-                                help='Length of context sequence. For handling year beginning and year end. Default: 72 hours')
+                                help='Length of context sequence. For handling year beginning and year end. Default: 168 hours')
     args.add_argument('--pred_len', type=int, default=24, required=False,
                                 help='Length of prediction sequence. For handling year beginning and year end. Default: 24 hours')
 

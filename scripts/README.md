@@ -1,9 +1,13 @@
 # BuildingsBench Scripts
 
+## Evaluation
 - `pretrain.py`: Launch pretraining on Buildings-900K.
+- `pretrain.sh`: Example `torchrun` launch script.
 - `zero_shot.py`: Evaluate a model on BuildingsBench benchmark on the zero-shot STLF task.
 - `transfer_learning_torch.py`: Evaluate a PyTorch model on the BuildingsBench benchmark transfer learning task.
 - `transfer_learning_lightgbm.py`: Evaluate LightGBM on the BuildingsBench benchmark transfer learning task.
+
+## Benchmark data creation
 - `./process_raw_data`
   - `create_buildings900K.py`: Launch a PySpark job to process the raw EULP database and save the Buildings-900K Parquet files.
   - `download_and_process_buildingsbench.py`: Replicate the preprocessing applied to the BuildingsBench evaluation datasets.

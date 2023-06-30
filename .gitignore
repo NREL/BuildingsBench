@@ -10,4 +10,5 @@ build/
 dist/
 hpc/
 .DS_Store
+scratch/
 tutorials/.ipynb_checkpoints/

@@ -50,8 +50,8 @@ def main(args):
 if __name__ == '__main__':
     args = argparse.ArgumentParser()
 
-    args.add_argument('--num_clusters', type=int, default=512, required=False,
-                        help='Number of clusters for KMeans. Default: 512')
+    args.add_argument('--num_clusters', type=int, default=8192, required=False,
+                        help='Number of clusters for KMeans. Default: 8192')
     args.add_argument('--without_merge', action='store_true',
                         help='Do not merge clusters in KMeans. Default: False')
     args.add_argument('--merge_threshold', type=float, default=0.01, required=False,
