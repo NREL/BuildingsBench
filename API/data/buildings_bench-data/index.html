@@ -31,6 +31,9 @@
     
       <link rel="stylesheet" href="../../../assets/stylesheets/main.26e3688c.min.css">
       
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ecc896b0.min.css">
+      
       
 
     
@@ -61,7 +64,14 @@
   </head>
   
   
-    <body dir="ltr">
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="amber">
   
     
     
@@ -114,6 +124,32 @@
         </div>
       </div>
     </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="amber"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+            
+              <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+              </label>
+            
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="amber"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+            
+              <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+              </label>
+            
+          
+        </form>
+      
     
     
     
@@ -621,13 +657,11 @@
 
 
 
-<h3 id="buildings_bench.data.load_pretraining" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">buildings_bench.data.load_pretraining</span>
+<h4 id="buildings_bench.data.load_pretraining" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">buildings_bench</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load_pretraining</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">num_buildings_ablation</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">24</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span></code>
 
+</h4>
 
-</h3>
-<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">buildings_bench</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load_pretraining</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">num_buildings_ablation</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">24</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">Dataset</span>
-</span></code></pre></div>
 
   <div class="doc doc-contents first">
   
@@ -764,13 +798,11 @@
 
 
 
-<h3 id="buildings_bench.data.load_torch_dataset" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">buildings_bench.data.load_torch_dataset</span>
+<h4 id="buildings_bench.data.load_torch_dataset" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">buildings_bench</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load_torch_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dataset_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">24</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">TorchBuildingDatasetsFromCSV</span><span class="p">,</span> <span class="n">TorchBuildingDatasetFromParquet</span><span class="p">]</span></code>
 
+</h4>
 
-</h3>
-<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">buildings_bench</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load_torch_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dataset_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="mi">24</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">TorchBuildingDatasetsFromCSV</span><span class="p">,</span> <span class="n">TorchBuildingDatasetFromParquet</span><span class="p">]</span>
-</span></code></pre></div>
 
   <div class="doc doc-contents first">
   
@@ -906,13 +938,11 @@
 
 
 
-<h3 id="buildings_bench.data.load_pandas_dataset" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">buildings_bench.data.load_pandas_dataset</span>
+<h4 id="buildings_bench.data.load_pandas_dataset" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">buildings_bench</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load_pandas_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dataset_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">feature_set</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;engineered&#39;</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PandasBuildingDatasetsFromCSV</span></code>
 
+</h4>
 
-</h3>
-<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">buildings_bench</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">load_pandas_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dataset_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">feature_set</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;engineered&#39;</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PandasBuildingDatasetsFromCSV</span>
-</span></code></pre></div>
 
   <div class="doc doc-contents first">
   
@@ -1034,7 +1064,14 @@
 <div class="doc doc-object doc-class">
 
 
-<a id="buildings_bench.data.buildings900K.Buildings900K"></a>
+
+<h4 id="buildings_bench.data.buildings900K.Buildings900K" class="doc doc-heading">
+        <code>buildings_bench.data.buildings900K.Buildings900K</code>
+
+
+</h4>
+
+
   <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code>torch.<span title="torch.utils">utils</span>.<span title="torch.utils.data">data</span>.<span title="torch.utils.data.Dataset">Dataset</span></code></p>
@@ -1076,13 +1113,11 @@ line in the index file for random access.</p>
 
 
 
-<h3 id="buildings_bench.data.buildings900K.Buildings900K.__init__" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">__init__</span>
+<h5 id="buildings_bench.data.buildings900K.Buildings900K.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">dataset_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">index_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span></code>
 
+</h5>
 
-</h3>
-<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="fm">__init__</span><span class="p">(</span><span class="n">dataset_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">index_file</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
-</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -1195,13 +1230,11 @@ The index file has to be generated with the same pred length.</p>
 
 
 
-<h3 id="buildings_bench.data.buildings900K.Buildings900K.init_fp" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">init_fp</span>
+<h5 id="buildings_bench.data.buildings900K.Buildings900K.init_fp" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">init_fp</span><span class="p">()</span></code>
 
+</h5>
 
-</h3>
-<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">init_fp</span><span class="p">()</span>
-</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -1219,13 +1252,11 @@ The file is opened in binary mode which lets us disable buffering.</p>
 
 
 
-<h3 id="buildings_bench.data.buildings900K.Buildings900K.__read_index_file" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">__read_index_file</span>
+<h5 id="buildings_bench.data.buildings900K.Buildings900K.__read_index_file" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">__read_index_file</span><span class="p">(</span><span class="n">index_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
 
+</h5>
 
-</h3>
-<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">__read_index_file</span><span class="p">(</span><span class="n">index_file</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
-</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -1248,7 +1279,14 @@ The file is opened in binary mode which lets us disable buffering.</p>
 <div class="doc doc-object doc-class">
 
 
-<a id="buildings_bench.data.datasets.TorchBuildingDataset"></a>
+
+<h4 id="buildings_bench.data.datasets.TorchBuildingDataset" class="doc doc-heading">
+        <code>buildings_bench.data.datasets.TorchBuildingDataset</code>
+
+
+</h4>
+
+
   <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code>torch.<span title="torch.utils">utils</span>.<span title="torch.utils.data">data</span>.<span title="torch.utils.data.Dataset">Dataset</span></code></p>
@@ -1275,13 +1313,11 @@ The file is opened in binary mode which lets us disable buffering.</p>
 
 
 
-<h3 id="buildings_bench.data.datasets.TorchBuildingDataset.__init__" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">__init__</span>
+<h5 id="buildings_bench.data.datasets.TorchBuildingDataset.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">dataframe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">building_latlon</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">building_type</span><span class="p">:</span> <span class="n">BuildingTypes</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">sliding_window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">is_leap_year</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span></code>
 
+</h5>
 
-</h3>
-<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="fm">__init__</span><span class="p">(</span><span class="n">dataframe</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">building_latlon</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">building_type</span><span class="p">:</span> <span class="n">BuildingTypes</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">sliding_window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">is_leap_year</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span>
-</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -1442,7 +1478,14 @@ The file is opened in binary mode which lets us disable buffering.</p>
 <div class="doc doc-object doc-class">
 
 
-<a id="buildings_bench.data.datasets.PandasTransformerDataset"></a>
+
+<h4 id="buildings_bench.data.datasets.PandasTransformerDataset" class="doc doc-heading">
+        <code>buildings_bench.data.datasets.PandasTransformerDataset</code>
+
+
+</h4>
+
+
   <div class="doc doc-contents first">
       <p class="doc doc-class-bases">
         Bases: <code>torch.<span title="torch.utils">utils</span>.<span title="torch.utils.data">data</span>.<span title="torch.utils.data.Dataset">Dataset</span></code></p>
@@ -1469,13 +1512,11 @@ The file is opened in binary mode which lets us disable buffering.</p>
 
 
 
-<h3 id="buildings_bench.data.datasets.PandasTransformerDataset.__init__" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">__init__</span>
+<h5 id="buildings_bench.data.datasets.PandasTransformerDataset.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">sliding_window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">)</span></code>
 
+</h5>
 
-</h3>
-<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="fm">__init__</span><span class="p">(</span><span class="n">df</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">sliding_window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">)</span>
-</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -1566,7 +1607,14 @@ The file is opened in binary mode which lets us disable buffering.</p>
 <div class="doc doc-object doc-class">
 
 
-<a id="buildings_bench.data.datasets.TorchBuildingDatasetFromParquet"></a>
+
+<h4 id="buildings_bench.data.datasets.TorchBuildingDatasetFromParquet" class="doc doc-heading">
+        <code>buildings_bench.data.datasets.TorchBuildingDatasetFromParquet</code>
+
+
+</h4>
+
+
   <div class="doc doc-contents first">
 
   
@@ -1616,13 +1664,11 @@ each building is a column. All time series are for the same year.     </p>
 
 
 
-<h3 id="buildings_bench.data.datasets.TorchBuildingDatasetFromParquet.__init__" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">__init__</span>
+<h5 id="buildings_bench.data.datasets.TorchBuildingDatasetFromParquet.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">parquet_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">building_latlons</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">building_types</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">BuildingTypes</span><span class="p">],</span> <span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">sliding_window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">leap_years</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span></code>
 
+</h5>
 
-</h3>
-<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="fm">__init__</span><span class="p">(</span><span class="n">parquet_datasets</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">building_latlons</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]],</span> <span class="n">building_types</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">BuildingTypes</span><span class="p">],</span> <span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">sliding_window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">leap_years</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
-</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -1775,13 +1821,11 @@ each building is a column. All time series are for the same year.     </p>
 
 
 
-<h3 id="buildings_bench.data.datasets.TorchBuildingDatasetFromParquet.__iter__" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">__iter__</span>
+<h5 id="buildings_bench.data.datasets.TorchBuildingDatasetFromParquet.__iter__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__iter__</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TorchBuildingDataset</span><span class="p">]]</span></code>
 
+</h5>
 
-</h3>
-<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="fm">__iter__</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">TorchBuildingDataset</span><span class="p">]]</span>
-</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -1825,7 +1869,14 @@ each building is a column. All time series are for the same year.     </p>
 <div class="doc doc-object doc-class">
 
 
-<a id="buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV"></a>
+
+<h4 id="buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV" class="doc doc-heading">
+        <code>buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV</code>
+
+
+</h4>
+
+
   <div class="doc doc-contents first">
 
   
@@ -1874,13 +1925,11 @@ each building is a column. All time series are for the same year.     </p>
 
 
 
-<h3 id="buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV.__init__" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">__init__</span>
+<h5 id="buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">data_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">building_year_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">building_latlon</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">building_type</span><span class="p">:</span> <span class="n">BuildingTypes</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">sliding_window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">leap_years</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span></code>
 
+</h5>
 
-</h3>
-<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="fm">__init__</span><span class="p">(</span><span class="n">data_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">building_year_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">building_latlon</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">building_type</span><span class="p">:</span> <span class="n">BuildingTypes</span><span class="p">,</span> <span class="n">context_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">168</span><span class="p">,</span> <span class="n">pred_len</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">sliding_window</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">24</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">leap_years</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
-</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -2033,13 +2082,11 @@ each building is a column. All time series are for the same year.     </p>
 
 
 
-<h3 id="buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV.__iter__" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">__iter__</span>
+<h5 id="buildings_bench.data.datasets.TorchBuildingDatasetsFromCSV.__iter__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__iter__</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ConcatDataset</span><span class="p">]]</span></code>
 
+</h5>
 
-</h3>
-<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="fm">__iter__</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">ConcatDataset</span><span class="p">]]</span>
-</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -2083,7 +2130,14 @@ each building is a column. All time series are for the same year.     </p>
 <div class="doc doc-object doc-class">
 
 
-<a id="buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV"></a>
+
+<h4 id="buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV" class="doc doc-heading">
+        <code>buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV</code>
+
+
+</h4>
+
+
   <div class="doc doc-contents first">
 
   
@@ -2134,13 +2188,11 @@ The Pandas Dataframe contain all of the years of data for the building.</p>
 
 
 
-<h3 id="buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV.__init__" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">__init__</span>
+<h5 id="buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">data_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">building_year_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">building_latlon</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">building_type</span><span class="p">:</span> <span class="n">BuildingTypes</span><span class="p">,</span> <span class="n">features</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;transformer&#39;</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">leap_years</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[])</span></code>
 
+</h5>
 
-</h3>
-<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="fm">__init__</span><span class="p">(</span><span class="n">data_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">building_year_files</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span> <span class="n">building_latlon</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">building_type</span><span class="p">:</span> <span class="n">BuildingTypes</span><span class="p">,</span> <span class="n">features</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;transformer&#39;</span><span class="p">,</span> <span class="n">apply_scaler_transform</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">scaler_transform_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">leap_years</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="p">[])</span>
-</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
@@ -2267,13 +2319,11 @@ The Pandas Dataframe contain all of the years of data for the building.</p>
 
 
 
-<h3 id="buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV.__iter__" class="doc doc-heading">
-        <span class="doc doc-object-name doc-function-name">__iter__</span>
+<h5 id="buildings_bench.data.datasets.PandasBuildingDatasetsFromCSV.__iter__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__iter__</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]]</span></code>
 
+</h5>
 
-</h3>
-<div class="highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="fm">__iter__</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">]]</span>
-</span></code></pre></div>
 
   <div class="doc doc-contents ">
   
