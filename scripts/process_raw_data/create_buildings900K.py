@@ -1,4 +1,10 @@
 import argparse
+try:
+    import pyspark
+except:
+    print('please install pyspark with `pip install pyspark`')
+    exit(1)
+
 from pyspark import SparkContext, SparkConf
 from pyspark.sql import SparkSession
 import pyspark.sql.functions as F
@@ -46,8 +52,6 @@ def main(args):
                                             cr,
                                             'upgrade=0')
                 
-                #puma_buildings_path = os.path.join(eulp_dir, f'{res_or_com}_{year}_release_1', 'timeseries_individual_buildings', cr, 'upgrade=0')
-
                 for puma_id in list_of_pumas:
                     print(f'processing {puma_id} to store buildings as a parquet file...')
 
@@ -58,7 +62,6 @@ def main(args):
                         print(f'{target_puma_path} already exists. Skipping...')
                         continue
 
-                    #df = spark.read.parquet(os.path.join(puma_buildings_path, os.path.basename(puma_id)))
                     df = spark.read.parquet(puma_id)
 
                     # Just the datapoints we need  
