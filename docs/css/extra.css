@@ -34,13 +34,63 @@ h2.doc-heading {
     font-size: 0.9rem;
   }
 
-h3.doc-heading {
-  font-size: 0.9rem;
-}
-h4.doc-heading {
-  font-size: 0.9rem;
+
+[data-md-color-scheme="default"] .md-typeset hr {
+    border-bottom-color: rgb(0, 0, 0);
+    border-bottom-width: 1pt;
 }
 
+[data-md-color-scheme="slate"] .md-typeset hr {
+    border-bottom-color: rgb(230, 230, 230);
+}
+
+
+/* Highlight functions, classes etc. type signatures. Really helps to make clear where
+   one item ends and another begins. */
+
+[data-md-color-scheme="default"] {
+    --doc-heading-color: #DDD;
+    --doc-heading-border-color: #CCC;
+    --doc-heading-color-alt: #F0F0F0;
+}
+[data-md-color-scheme="slate"] {
+    --doc-heading-color: rgb(25,25,33);
+    --doc-heading-border-color: rgb(25,25,33);
+    --doc-heading-color-alt: rgb(33,33,44);
+    --md-code-bg-color: rgb(38,38,50);
+}
+
+h3.doc-heading {
+    /* NOT var(--md-code-bg-color) as that's not visually distinct from other code blocks.*/
+    font-size: 0.9rem;
+    background-color: var(--doc-heading-color);
+    border: solid var(--doc-heading-border-color);
+    border-width: 1.5pt;
+    border-radius: 2pt;
+    padding: 0pt 5pt 2pt 5pt;
+ }
+
+h4.doc-heading, h5.doc-heading {
+   /* NOT var(--md-code-bg-color) as that's not visually distinct from other code blocks.*/
+   font-size: 0.9rem;
+   background-color: var(--doc-heading-color);
+   border: solid var(--doc-heading-border-color);
+   border-width: 1.5pt;
+   border-radius: 2pt;
+   padding: 0pt 5pt 2pt 5pt;
+}
+
+/* Override the background-color for code blocks inside headings. */
+h3.doc-heading code, h4.doc-heading code, h5.doc-heading code, h6.doc-heading code {
+    background-color: var(--doc-heading-color);
+}
+
+h6.heading {
+    font-size: 0.9rem;
+    background-color: var(--doc-heading-color-alt);
+    border-radius: 2pt;
+    padding: 0pt 5pt 2pt 5pt;
+}
 
   /* Code */
 .highlight .kn,
@@ -101,19 +151,4 @@ html {
     /* Decrease font size for overall webpage
        Down from 137.5% which is the Material default */
     font-size: 130%;
-}
-
-/* Highlight functions, classes etc. type signatures. Really helps to make clear where
-   one item ends and another begins. */
-
-   [data-md-color-scheme="default"] {
-    --doc-heading-color: #DDD;
-    --doc-heading-border-color: #CCC;
-    --doc-heading-color-alt: #F0F0F0;
-}
-[data-md-color-scheme="slate"] {
-    --doc-heading-color: rgb(25,25,33);
-    --doc-heading-border-color: rgb(25,25,33);
-    --doc-heading-color-alt: rgb(33,33,44);
-    --md-code-bg-color: rgb(38,38,50);
 }

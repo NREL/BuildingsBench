@@ -24,7 +24,12 @@ SCRIPT_PATH = Path(os.path.realpath(__file__)).parent
 def validation(model, val_dataloader, args, loss, load_transform, transform, inverse_transform, predict):
     model.eval()
     step = 0
-    if model.module.continuous_loads:
+
+    if args.ignore_scoring_rules:
+        metrics_manager = MetricsManager(
+            metrics=metrics_factory('nrmse', types=[ MetricType.SCALAR, MetricType.HOUR_OF_DAY ]) \
+                    + metrics_factory('nmae', types=[ MetricType.SCALAR, MetricType.HOUR_OF_DAY ])) 
+    elif model.module.continuous_loads:
         metrics_manager = MetricsManager(
             metrics=metrics_factory('nrmse', types=[ MetricType.SCALAR, MetricType.HOUR_OF_DAY ]) \
                     + metrics_factory('nmae', types=[ MetricType.SCALAR, MetricType.HOUR_OF_DAY ]),
@@ -401,6 +406,8 @@ if __name__ == '__main__':
                         help='Number of steps to decay lr to 0. '
                              'Set to -1 to use num_epochs instead.')
     parser.add_argument('--random_seed', type=int, default=99)
+    parser.add_argument('--ignore_scoring_rules', action='store_true',
+                        help='Do not compute a scoring rule for this model.')
     parser.add_argument('--num_epochs', type=int, default=1,
                          help='Number of epochs to train for.')
     parser.add_argument('--resume_from_checkpoint', type=str, default='')
