@@ -308,6 +308,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#citation" class="md-nav__link">
+    Citation
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -595,6 +602,7 @@
 <li>Benchmarking on two tasks evaluating generalization: zero-shot STLF and transfer learning for STLF.</li>
 </ul>
 <p>We provide an index-based PyTorch <a href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#the-buildings-900k-pytorch-dataset">Dataset</a> for large-scale pretraining, easy data loading for multiple real building energy consumption datasets as <a href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#torchbuildingdatasetsfromcsv">PyTorch Tensors</a> or <a href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#pandasbuildingdatasetsfromcsv">Pandas DataFrames</a>, from simple persistence to advanced transformer baselines, <a href="https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-evaluation/">metrics management</a>, a <a href="https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-tokenizer/">tokenizer</a> based on KMeans for load time series, and more.</p>
+<p>Read more about BuildingsBench in our <a href="https://arxiv.org/abs/2307.00142">paper</a>.</p>
 <h3 id="load-a-benchmark-dataset">Load a benchmark dataset<a class="headerlink" href="#load-a-benchmark-dataset" title="Permanent link"></a></h3>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span> <span class="nn">torch</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span> <span class="nn">buildings_bench</span> <span class="kn">import</span> <span class="n">load_torch_dataset</span>
@@ -667,6 +675,15 @@ Then, <code>pip install skforecast</code>.</p>
 <h3 id="run-tests">Run tests<a class="headerlink" href="#run-tests" title="Permanent link"></a></h3>
 <p>Verify your installation by running unit tests:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>python<span class="w"> </span>-m<span class="w"> </span>unittest
+</span></code></pre></div>
+<h2 id="citation">Citation<a class="headerlink" href="#citation" title="Permanent link"></a></h2>
+<p>If you use BuildingsBench in your research, please cite our preprint:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>@article{emami2023buildingsbench,
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  title={BuildingsBench: A Large-Scale Dataset of 900K Buildings and Benchmark for Short-Term Load Forecasting},
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>  author={Emami, Patrick and Sahu, Abhijeet and Graf, Peter},
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>  journal={arXiv preprint arXiv:2307.00142},
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>  year={2023}
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>}
 </span></code></pre></div>
 
 
