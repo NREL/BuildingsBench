@@ -9,6 +9,8 @@ BuildingsBench is a platform for:
 
 We provide an index-based PyTorch [Dataset](https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#the-buildings-900k-pytorch-dataset) for large-scale pretraining, easy data loading for multiple real building energy consumption datasets as [PyTorch Tensors](https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#torchbuildingdatasetsfromcsv) or [Pandas DataFrames](https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#pandasbuildingdatasetsfromcsv), from simple persistence to advanced transformer baselines, [metrics management](https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-evaluation/), a [tokenizer](https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-tokenizer/) based on KMeans for load time series, and more.
 
+Read more about BuildingsBench in our [paper](https://arxiv.org/abs/2307.00142).
+
 
 ### Load a benchmark dataset
 
@@ -114,4 +116,17 @@ Verify your installation by running unit tests:
 
 ```bash
 python -m unittest
+```
+
+## Citation
+
+If you use BuildingsBench in your research, please cite our preprint:
+
+```
+@article{emami2023buildingsbench,
+  title={BuildingsBench: A Large-Scale Dataset of 900K Buildings and Benchmark for Short-Term Load Forecasting},
+  author={Emami, Patrick and Sahu, Abhijeet and Graf, Peter},
+  journal={arXiv preprint arXiv:2307.00142},
+  year={2023}
+}
 ```
