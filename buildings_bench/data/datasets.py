@@ -255,6 +255,7 @@ class PandasBuildingDatasetsFromCSV:
                 building_year_files: List[str],
                 building_latlon: List[float],
                 building_type: BuildingTypes,
+                weather: bool = False,
                 features: str = 'transformer',
                 apply_scaler_transform: str = '',
                 scaler_transform_path: Path = None,
@@ -264,6 +265,7 @@ class PandasBuildingDatasetsFromCSV:
             data_path (Path): Path to the dataset
             building_year_files (List[str]): List of paths to a csv file, each has a timestamp index and multiple columns, one per building.
             building_type (BuildingTypes): Building type for the dataset.
+            weather (bool, optional): load weather data. Defaults to False.
             features (str, optional): Type of features to use. Defaults to 'transformer'. {'transformer','engineered'}
                 'transformer' features: load, latitude, longitude, hour of day, day of week, day of year, building type
                 'engineered' features are an expansive list of mainly calendar-based features, useful for traditional ML models.
@@ -287,6 +289,11 @@ class PandasBuildingDatasetsFromCSV:
                 self.load_transform.load(scaler_transform_path)
 
         self.building_datasets = {}
+        
+        weather_df = None
+        if weather:
+            ds_name = building_year_files[0].split('/')[0]
+            weather_df = pd.read_csv(data_path / (ds_name + f'/weather_{ds_name.lower()}.csv'), index_col=0, header=0, parse_dates=True)
         
         for building_year_file in building_year_files:
             #fullname = building_year_file.split('_')[0]
@@ -312,11 +319,12 @@ class PandasBuildingDatasetsFromCSV:
             
             for bldg_name,df in zip(bldg_names, bldg_dfs):
                 if self.features == 'engineered':
-                    self._prepare_data_with_engineered_features(bldg_name, df, year)
+                    self._prepare_data_with_engineered_features(bldg_name, df, year, weather_df)
                 elif self.features == 'transformer':
                     self._prepare_data_transformer(bldg_name, df, year)
-            
-    def _prepare_data_with_engineered_features(self, bldg_name, df, year):
+
+
+    def _prepare_data_with_engineered_features(self, bldg_name, df, year, weather_df):
         # rename column 1 to power
         df.rename(columns={df.columns[0]: 'power'}, inplace=True)
 
@@ -334,6 +342,9 @@ class PandasBuildingDatasetsFromCSV:
         df["month_of_year"] = df.index.month
         df["weekend"] = df.index.weekday.isin([5,6])
         df= pd.get_dummies(df, columns=["day_of_week", "hour_of_day", "month_of_year", "weekend"])
+
+        if weather_df is not None:
+            df = df.join(weather_df)
 
         if bldg_name in self.building_datasets:
             self.building_datasets[bldg_name] += [(year,df)]

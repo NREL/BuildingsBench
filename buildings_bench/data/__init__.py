@@ -193,6 +193,7 @@ def load_pandas_dataset(
         name: str,
         dataset_path: Path = None,
         feature_set: str = 'engineered',
+        weather: bool = False,
         apply_scaler_transform: str = '',
         scaler_transform_path: Path = None) -> PandasBuildingDatasetsFromCSV:
     """
@@ -202,6 +203,7 @@ def load_pandas_dataset(
         name (str): Name of the dataset to load.
         dataset_path (Path): Path to the benchmark data. Optional.
         feature_set (str): Feature set to use. Default: 'engineered'.
+        weather (bool): load weather data. Default: False
         apply_scaler_transform (str): If not using quantized load or unscaled loads,
                                     applies a {boxcox,standard} scaling transform to the load. Default: ''. 
         scaler_transform_path (Path): Path to data for transform, e.g., pickled data for BoxCox transform.
@@ -238,6 +240,7 @@ def load_pandas_dataset(
             all_by_files,
             building_latlon,
             building_type,
+            weather=weather,
             features=feature_set,
             apply_scaler_transform = apply_scaler_transform,
             scaler_transform_path = scaler_transform_path,
