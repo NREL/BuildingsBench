@@ -595,7 +595,7 @@
 <li>Create a file called <code>your_model.py</code> with your model's implementation, and make your model a subclass of the base model in <code>./buildings_bench/models/base_model.py</code>. Make sure to implement the abstract methods: <code>forward</code>, <code>loss</code>, <code>load_from_checkpoint</code>, <code>predict</code>, <code>unfreeze_and_get_parameters_for_finetuning</code>.</li>
 <li>Place this file under <code>./buildings_bench/models/your_model.py.</code></li>
 <li>Import your model class and add your model's name to the <code>model_registry</code> dictionary in <code>./buildings_bench/models/__init__.py</code>.</li>
-<li>Create a TOML config file under <code>./configs/your_model.toml</code> with each keyword argument your model expects in its constructor (i.e., the hyperparameters for your model) and any additional args for the script you want to run.</li>
+<li>Create a TOML config file under <code>./buildings_bench/configs/your_model.toml</code> with each keyword argument your model expects in its constructor (i.e., the hyperparameters for your model) and any additional args for the script you want to run.</li>
 </ol>
 <p>The TOML config file should look something like this:</p>
 <p><div class="language-toml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">[model]</span>
@@ -610,7 +610,7 @@
 </span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="k">[transfer_learning]</span>
 </span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1"># override any of the default transfer_learning argparse args here</span>
 </span></code></pre></div>
-See <code>./configs/TransformerWithTokenizer-S.toml</code> for an example.</p>
+See <code>./buildings_bench/configs/TransformerWithTokenizer-S.toml</code> for an example.</p>
 <h3 id="pretraining">Pretraining<a class="headerlink" href="#pretraining" title="Permanent link"></a></h3>
 <h4 id="without-slurm">Without SLURM<a class="headerlink" href="#without-slurm" title="Permanent link"></a></h4>
 <p>The script <code>pretrain.py</code> is implemented with PyTorch <code>DistributedDataParallel</code> so it must be launched with <code>torchrun</code> from the command line and the argument <code>--disable_slurm</code> must be passed.
