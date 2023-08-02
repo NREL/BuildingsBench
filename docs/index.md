@@ -37,17 +37,18 @@ for building_name, building in buildings_dataset_generator:
 
 ## Installation
 
-To just access the provided dataloaders, models, metrics, etc., install the package with:
+If you aren't going to pretrain or evaluate models and just want access to the provided dataloaders, model code, metrics computation, etc., install the package with:
 
 ```bash
 pip install buildings_bench
 ```
 
-To run the benchmark itself with provided Python scripts, clone this repository and install it in editable mode in a virtual environment or a conda environment.
+### Full installation
 
-First, create an environment with `python>=3.8`, for example: `conda create -n buildings_bench python=3.8`.
+Otherwise, clone this repository and install it in editable mode in a virtual environment or a conda environment.
 
-Then, install the package in editable mode with
+1. Create an environment with `python>=3.8`, for example: `conda create -n buildings_bench python=3.8`.
+2. Install the package in editable mode with
 ```bash
 git clone https://github.com/NREL/BuildingsBench.git
 cd BuildingsBench
@@ -67,7 +68,7 @@ wget https://github.com/kyamagu/faiss-wheels/releases/download/v1.7.3/faiss_gpu-
 pip install faiss_gpu-1.7.3-cp38-cp38-manylinux2014_x86_64.whl
 ```
 
-### [Optional] LightGBM
+### [Optional] Installing LightGBM
 
 If running the LightGBM baseline, you will need to install LightGBM.
 Follow instructions [here](https://pypi.org/project/lightgbm/) for your OS. 
@@ -93,16 +94,18 @@ One tar file for the metadata which has files that are necessary for running pre
 
 - `metadata.tar.gz`
 
-Download and untar all files, which will create a directory called `BuildingsBench`.
-
+Download and untar all files, which will create a new directory called `BuildingsBench`. **This is the data directory, which is different than the code repository, although both are called "BuildingsBench".**
+See the README file `BuildingsBench/metadata/README.md` (in `metadata.tar.gz`) for more information about how the BuildingsBench dataset directory should be organized.
 
 ### Environment variables
 
-Set the environment variable `BUILDINGS_BENCH` to the path where the folder `BuildingsBench` is located.
+Set the environment variable `BUILDINGS_BENCH` to the path where the data directory `BuildingsBench` is located (created when untarring the data files). **This is not the path to the code repository.**
 
 ```bash
 export BUILDINGS_BENCH=/path/to/BuildingsBench
 ```
+
+#### Wandb 
 
 If using `wandb`, set the following:
 
