@@ -149,7 +149,7 @@ Make sure to have installed the benchmark in editable mode: `pip install -e .[be
 1. Create a file called `your_model.py` with your model's implementation, and make your model a subclass of the base model in `./buildings_bench/models/base_model.py`. Make sure to implement the abstract methods: `forward`, `loss`, `load_from_checkpoint`, `predict`, `unfreeze_and_get_parameters_for_finetuning`.
 2. Place this file under `./buildings_bench/models/your_model.py.`
 3. Import your model class and add your model's name to the `model_registry` dictionary in `./buildings_bench/models/__init__.py`.
-4. Create a TOML config file under `./configs/your_model.toml` with each keyword argument your model expects in its constructor (i.e., the hyperparameters for your model) and any additional args for the script you want to run.
+4. Create a TOML config file under `./buildings_bench/configs/your_model.toml` with each keyword argument your model expects in its constructor (i.e., the hyperparameters for your model) and any additional args for the script you want to run.
 
 The TOML config file should look something like this:
 
