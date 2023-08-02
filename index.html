@@ -623,16 +623,19 @@
 </span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>        <span class="c1"># ...</span>
 </span></code></pre></div>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link"></a></h2>
-<p>To just access the provided dataloaders, models, metrics, etc., install the package with:</p>
+<p>If you aren't going to pretrain or evaluate models and just want access to the provided dataloaders, model code, metrics computation, etc., install the package with:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>pip<span class="w"> </span>install<span class="w"> </span>buildings_bench
 </span></code></pre></div>
-<p>To run the benchmark itself with provided Python scripts, clone this repository and install it in editable mode in a virtual environment or a conda environment.</p>
-<p>First, create an environment with <code>python&gt;=3.8</code>, for example: <code>conda create -n buildings_bench python=3.8</code>.</p>
-<p>Then, install the package in editable mode with
+<h3 id="full-installation">Full installation<a class="headerlink" href="#full-installation" title="Permanent link"></a></h3>
+<p>Otherwise, clone this repository and install it in editable mode in a virtual environment or a conda environment.</p>
+<ol>
+<li>Create an environment with <code>python&gt;=3.8</code>, for example: <code>conda create -n buildings_bench python=3.8</code>.</li>
+<li>Install the package in editable mode with
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/NREL/BuildingsBench.git
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">cd</span><span class="w"> </span>BuildingsBench
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[benchmark]&quot;</span>
-</span></code></pre></div></p>
+</span></code></pre></div></li>
+</ol>
 <h3 id="installing-faiss-gpu">Installing faiss-gpu<a class="headerlink" href="#installing-faiss-gpu" title="Permanent link"></a></h3>
 <p>Due to a PyPI limitation, we have to install <code>faiss-gpu</code> (for KMeans) by directly downloading the wheel from <a href="https://github.com/kyamagu/faiss-wheels/releases/">https://github.com/kyamagu/faiss-wheels/releases/</a>.
 Download the wheel for the python version you are using, then install it in your environment.</p>
@@ -641,7 +644,7 @@ Download the wheel for the python version you are using, then install it in your
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>pip<span class="w"> </span>install<span class="w"> </span>faiss_gpu-1.7.3-cp38-cp38-manylinux2014_x86_64.whl
 </span></code></pre></div>
-<h3 id="optional-lightgbm">[Optional] LightGBM<a class="headerlink" href="#optional-lightgbm" title="Permanent link"></a></h3>
+<h3 id="optional-installing-lightgbm">[Optional] Installing LightGBM<a class="headerlink" href="#optional-installing-lightgbm" title="Permanent link"></a></h3>
 <p>If running the LightGBM baseline, you will need to install LightGBM.
 Follow instructions <a href="https://pypi.org/project/lightgbm/">here</a> for your OS. 
 Then, <code>pip install skforecast</code>.</p>
@@ -662,11 +665,13 @@ Then, <code>pip install skforecast</code>.</p>
 <ul>
 <li><code>metadata.tar.gz</code></li>
 </ul>
-<p>Download and untar all files, which will create a directory called <code>BuildingsBench</code>.</p>
+<p>Download and untar all files, which will create a new directory called <code>BuildingsBench</code>. <strong>This is the data directory, which is different than the code repository, although both are called "BuildingsBench".</strong>
+See the README file <code>BuildingsBench/metadata/README.md</code> (in <code>metadata.tar.gz</code>) for more information about how the BuildingsBench dataset directory should be organized.</p>
 <h3 id="environment-variables">Environment variables<a class="headerlink" href="#environment-variables" title="Permanent link"></a></h3>
-<p>Set the environment variable <code>BUILDINGS_BENCH</code> to the path where the folder <code>BuildingsBench</code> is located.</p>
+<p>Set the environment variable <code>BUILDINGS_BENCH</code> to the path where the data directory <code>BuildingsBench</code> is located (created when untarring the data files). <strong>This is not the path to the code repository.</strong></p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">BUILDINGS_BENCH</span><span class="o">=</span>/path/to/BuildingsBench
 </span></code></pre></div>
+<h4 id="wandb">Wandb<a class="headerlink" href="#wandb" title="Permanent link"></a></h4>
 <p>If using <code>wandb</code>, set the following:</p>
 <ul>
 <li><code>WANDB_ENTITY</code>: your wandb username</li>

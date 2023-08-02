@@ -590,7 +590,7 @@
 <p>To use these scripts with your model you'll need to register your model with our platform. </p>
 <h3 id="registering-your-model">Registering your model<a class="headerlink" href="#registering-your-model" title="Permanent link"></a></h3>
 <p>Please see this <a href="https://github.com/NREL/BuildingsBench/blob/main/tutorials/registering_your_model_with_the_benchmark.ipynb">step-by-step tutorial</a> for a Jupyter Notebook version of the following instructions.</p>
-<p>Make sure to have installed the benchmark in editable mode: <code>pip install -e .</code></p>
+<p>Make sure to have installed the benchmark in editable mode: <code>pip install -e .[benchmark]</code></p>
 <ol>
 <li>Create a file called <code>your_model.py</code> with your model's implementation, and make your model a subclass of the base model in <code>./buildings_bench/models/base_model.py</code>. Make sure to implement the abstract methods: <code>forward</code>, <code>loss</code>, <code>load_from_checkpoint</code>, <code>predict</code>, <code>unfreeze_and_get_parameters_for_finetuning</code>.</li>
 <li>Place this file under <code>./buildings_bench/models/your_model.py.</code></li>
@@ -610,14 +610,44 @@
 </span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="k">[transfer_learning]</span>
 </span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1"># override any of the default transfer_learning argparse args here</span>
 </span></code></pre></div>
-See <code>./configs/TransformerWithTokenizer-L.toml</code> for an example.</p>
+See <code>./configs/TransformerWithTokenizer-S.toml</code> for an example.</p>
 <h3 id="pretraining">Pretraining<a class="headerlink" href="#pretraining" title="Permanent link"></a></h3>
-<p><code>python3 scripts/pretrain.py --config your_model.toml</code></p>
-<p>This script is implemented with PyTorch <code>DistributedDataParallel</code>, so it can be launched with <code>torchrun</code>. See <code>./scripts/pretrain.sh</code> for an example.</p>
+<h4 id="without-slurm">Without SLURM<a class="headerlink" href="#without-slurm" title="Permanent link"></a></h4>
+<p>The script <code>pretrain.py</code> is implemented with PyTorch <code>DistributedDataParallel</code> so it must be launched with <code>torchrun</code> from the command line and the argument <code>--disable_slurm</code> must be passed.
+See <code>./scripts/pretrain.sh</code> for an example.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="ch">#!/bin/bash</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">WORLD_SIZE</span><span class="o">=</span><span class="m">1</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="nv">NUM_GPUS</span><span class="o">=</span><span class="m">1</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>torchrun<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span>--nnodes<span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span>--nproc_per_node<span class="o">=</span><span class="nv">$NUM_GPUS</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span>--rdzv-backend<span class="o">=</span>c10d<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span>--rdzv-endpoint<span class="o">=</span>localhost:0<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span>scripts/pretrain.py<span class="w"> </span>--config<span class="w"> </span>TransformerWithGaussian-S<span class="w"> </span>--disable_slurm
+</span></code></pre></div>
+<p>The argument <code>--disable_slurm</code> is not needed if you are running this script on a Slurm cluster as a batch job.</p>
+<p>This script will automatically log outputs to <code>wandb</code> if the environment variables <code>WANDB_ENTITY</code> and <code>WANDB_PROJECT</code> are set. Otherwise, pass the argument <code>--disable_wandb</code> to disable logging to <code>wandb</code>.</p>
+<h4 id="with-slurm">With SLURM<a class="headerlink" href="#with-slurm" title="Permanent link"></a></h4>
+<p>To launch pretraining as a SLURM batch job:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">WORLD_SIZE</span><span class="o">=</span><span class="k">$((</span><span class="nv">$SLURM_NNODES</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nv">$SLURM_NTASKS_PER_NODE</span><span class="k">))</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;WORLD_SIZE=&quot;</span><span class="nv">$WORLD_SIZE</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MASTER_PORT</span><span class="o">=</span><span class="k">$(</span>expr<span class="w"> </span><span class="m">10000</span><span class="w"> </span>+<span class="w"> </span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span>-n<span class="w"> </span><span class="nv">$SLURM_JOBID</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-c<span class="w"> </span><span class="m">4</span><span class="k">))</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;NODELIST=&quot;</span><span class="si">${</span><span class="nv">SLURM_NODELIST</span><span class="si">}</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="nv">master_addr</span><span class="o">=</span><span class="k">$(</span>scontrol<span class="w"> </span>show<span class="w"> </span>hostnames<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SLURM_JOB_NODELIST</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="k">)</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="nb">export</span><span class="w"> </span><span class="nv">MASTER_ADDR</span><span class="o">=</span><span class="nv">$master_addr</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;MASTER_ADDR=&quot;</span><span class="nv">$MASTER_ADDR</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>srun<span class="w"> </span>python3<span class="w"> </span>scripts/pretrain.py<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">        </span>--config<span class="w"> </span>TransformerWithGaussian-S
+</span></code></pre></div>
 <h3 id="zero-shot-stlf">Zero-shot STLF<a class="headerlink" href="#zero-shot-stlf" title="Permanent link"></a></h3>
-<p><code>python3 scripts/zero_shot.py --config your_model.toml --checkpoint /path/to/checkpoint.pt</code></p>
+<p>This script <code>scripts/zero_shot.py</code> and the script for transfer learning <code>scripts/transfer_learning_torch.py</code> do not use <code>DistributedDataParallel</code> so they can be run without <code>torchrun</code>.</p>
+<p><code>python3 scripts/zero_shot.py --config TransformerWithGaussian-S --checkpoint /path/to/checkpoint.pt</code></p>
 <h3 id="transfer-learning-for-stlf">Transfer Learning for STLF<a class="headerlink" href="#transfer-learning-for-stlf" title="Permanent link"></a></h3>
-<p><code>python3 scripts/transfer_learning_torch.py --config your_model.toml --checkpoint /path/to/checkpoint.pt</code>  </p>
+<p><code>python3 scripts/transfer_learning_torch.py --config TransformerWithGaussian-S --checkpoint /path/to/checkpoint.pt</code>  </p>
 
 
 
