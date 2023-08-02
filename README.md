@@ -166,7 +166,7 @@ The TOML config file should look something like this:
 [transfer_learning]
 # override any of the default transfer_learning argparse args here
 ```
-See `./configs/TransformerWithTokenizer-S.toml` for an example.
+See `./buildings_bench/configs/TransformerWithTokenizer-S.toml` for an example.
 
 ### Pretraining 
 
