@@ -55,6 +55,7 @@ def load_pretraining(
         num_buildings_ablation: int = -1,
         apply_scaler_transform: str = '',
         scaler_transform_path: Path = None,
+        weather: bool = False,
         context_len=168, # week
         pred_len=24) -> torch.utils.data.Dataset:
     r"""
@@ -67,6 +68,7 @@ def load_pretraining(
         apply_scaler_transform (str): If not using quantized load or unscaled loads,
                                  applies a {boxcox,standard} scaling transform to the load. Default: ''.
         scaler_transform_path (Path): Path to data for transform, e.g., pickled data for BoxCox transform.
+        weather (bool): load weather data. Default: False
         context_len (int): Length of the context. Defaults to 168.
         pred_len (int): Length of the prediction horizon. Defaults to 24.
     
@@ -88,7 +90,8 @@ def load_pretraining(
                                context_len=context_len,
                                pred_len=pred_len,
                                apply_scaler_transform=apply_scaler_transform,
-                               scaler_transform_path = scaler_transform_path)
+                               scaler_transform_path = scaler_transform_path,
+                               weather=weather)
     elif name.lower() == 'buildings-900k-val':
         idx_file = f'val_weekly{idx_file_suffix}.idx'
         dataset = Buildings900K(dataset_path,
@@ -96,7 +99,8 @@ def load_pretraining(
                                context_len=context_len,
                                pred_len=pred_len,
                                apply_scaler_transform=apply_scaler_transform,
-                               scaler_transform_path = scaler_transform_path)
+                               scaler_transform_path = scaler_transform_path,
+                               weather=weather)
     return dataset
         
     

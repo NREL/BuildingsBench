@@ -34,7 +34,8 @@ class Buildings900K(torch.utils.data.Dataset):
                 context_len: int = 168,
                 pred_len: int = 24,
                 apply_scaler_transform: str = '',
-                scaler_transform_path: Path = None):
+                scaler_transform_path: Path = None,
+                weather: bool = False):
         """
         Args:
             dataset_path (Path): Path to the pretraining dataset.
@@ -45,6 +46,7 @@ class Buildings900K(torch.utils.data.Dataset):
                 The index file has to be generated with the same pred length.
             apply_scaler_transform (str, optional): Apply a scaler transform to the load. Defaults to ''.
             scaler_transform_path (Path, optional): Path to the scaler transform. Defaults to None.
+            weather (bool): load weather data. Default: False
         """
         self.dataset_path = dataset_path / 'Buildings-900K' / 'end-use-load-profiles-for-us-building-stock' / '2021'
         self.metadata_path = dataset_path / 'metadata'
@@ -58,6 +60,7 @@ class Buildings900K(torch.utils.data.Dataset):
         self.index_file = self.metadata_path / index_file
         self.index_fp = None
         self.__read_index_file(self.index_file)
+        self.weather = weather
         self.time_transform = transforms.TimestampTransform()
         self.spatial_transform = transforms.LatLonTransform()
         self.apply_scaler_transform = apply_scaler_transform
@@ -157,6 +160,49 @@ class Buildings900K(torch.utils.data.Dataset):
             'building_type': building_features,
             'load': load_features[...,None]
         }
+
+        if self.weather == False:
+            return sample
+        
+        ## Append weather features
+        
+        import pandas as pd
+        
+        # load metadata for mapping county ID
+        lookup_df = pd.read_csv(self.metadata_path / 'spatial_tract_lookup_table.csv')
+        lookup_df = lookup_df[['nhgis_2010_county_gisjoin', 'nhgis_2010_puma_gisjoin']]
+        lookup_df = lookup_df.set_index('nhgis_2010_puma_gisjoin')
+        lookup_df = lookup_df[~lookup_df.index.duplicated()] # remove duplicated indices
+
+        # get county ID
+        county = lookup_df.loc[ts_idx[2]]['nhgis_2010_county_gisjoin']
+
+        # load corresponding weather files
+        weather_df = pd.read_csv(str(self.dataset_path / self.building_type_and_year[int(ts_idx[0])] / 'weather' / f'{county}.csv'))
+
+        # This is assuming that the file always starts from January 1st (ignoring the year)
+        import datetime
+        assert datetime.datetime.strptime(weather_df['date_time'].iloc[0], '%Y-%m-%d %H:%M:%S').strftime('%m-%d') == '01-01',\
+            "The weather file does not start from Jan 1st"
+
+        weather_df = weather_df.iloc[seq_ptr-self.context_len -1 : seq_ptr+self.pred_len -1] # add -1 because the file starts from 01:00:00
+
+        weather_df.columns = ['timestamp', 'temperature', 'humidity', 'wind_speed', 'wind_direction', 'global_horizontal_radiation', 
+                              'direct_normal_radiation', 'diffuse_horizontal_radiation']
+        
+        # convert temperature to fahrenheit
+        weather_df['temperature'] = weather_df['temperature'].apply(lambda x: x * 1.8 + 32) 
+
+        sample.update({
+            'temperature': weather_df.iloc[:, 1].to_numpy()[...,None],
+            'humidity': weather_df.iloc[:, 2].to_numpy()[...,None],
+            'wind_speed': weather_df.iloc[:, 3].to_numpy()[...,None], 
+            'wind_direction': weather_df.iloc[:, 4].to_numpy()[...,None], 
+            'global_horizontal_radiation': weather_df.iloc[:, 5].to_numpy()[...,None], 
+            'direct_normal_radiation': weather_df.iloc[:, 6].to_numpy()[...,None], 
+            'diffuse_horizontal_radiation' : weather_df.iloc[:, 7].to_numpy()[...,None]
+        })
+
         return sample
     
 
