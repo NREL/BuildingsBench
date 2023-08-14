@@ -152,6 +152,8 @@ def main(args, model_args):
     print(f'rank {args.rank} torch cuda get_device_name = ', torch.cuda.get_device_name(0), flush=True)
     print(f'rank {args.rank} torch threads = ', torch.get_num_threads(), flush=True)
 
+    print(f'dataset path = {os.environ.get("BUILDINGS_BENCH", "")}')
+
     checkpoint_dir = SCRIPT_PATH / '..' / 'checkpoints'
     transform_path = Path(os.environ.get('BUILDINGS_BENCH', '')) / 'metadata' / 'transforms'
 
@@ -366,9 +368,13 @@ def main(args, model_args):
                 'val/ppl': val_ppl,
             }, step=step)
             print(f'finished validation at step {step}...')
+        
+        if step == train_steps:
+            # stop training after this many steps/train_tokens
+            break
 
     # save final checkpoint
-    if args.rank == 0 == 0:
+    if args.rank == 0:
         if args.note != '':
             model_name = f'ckpt-step-{step}-{args.note}.pt'
         else:
