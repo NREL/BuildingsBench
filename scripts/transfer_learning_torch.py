@@ -146,16 +146,21 @@ def transfer_learning(args, model_args, results_path: Path):
     target_buildings = []
     if not args.dont_subsample_buildings:
         metadata_dir = Path(os.environ.get('BUILDINGS_BENCH', ''), 'metadata')
-        with open(metadata_dir / 'transfer_learning_commercial_buildings.txt', 'r') as f:
-            target_buildings += f.read().splitlines()
-        with open(metadata_dir / 'transfer_learning_residential_buildings.txt', 'r') as f:
-            target_buildings += f.read().splitlines()
+        if len(args.hyper_opt) > 0:
+            with open(metadata_dir / 'transfer_learning_hyperparameter_tuning.txt', 'r') as f:
+                target_buildings += f.read().splitlines()
+        else:
+            with open(metadata_dir / 'transfer_learning_commercial_buildings.txt', 'r') as f:
+                target_buildings += f.read().splitlines()
+            with open(metadata_dir / 'transfer_learning_residential_buildings.txt', 'r') as f:
+                target_buildings += f.read().splitlines()
 
     for dataset in args.benchmark:
         dataset_generator = load_pandas_dataset(dataset,
                                                 feature_set='transformer',
                                                 apply_scaler_transform=args.apply_scaler_transform,
-                                                scaler_transform_path=transform_path)
+                                                scaler_transform_path=transform_path,
+                                                remove_outliers=args.remove_outliers)
         # Filter to target buildings
         if len(target_buildings) > 0:
             dataset_generator = keep_buildings(dataset_generator, target_buildings)
@@ -200,9 +205,7 @@ def transfer_learning(args, model_args, results_path: Path):
 
             test_set = bldg_df.loc[~bldg_df.index.isin(historical_date_range)]
             test_start_timestamp = test_set.index[0]
-            test_end_timestamp = test_start_timestamp + pd.Timedelta(days=180)
-            #test_date_range = pd.date_range(start=test_start_timestamp, end=test_end_timestamp, freq='H')
-            #test_set = test_set.loc[test_date_range]
+            test_end_timestamp = test_start_timestamp + pd.Timedelta(days=180) # test on subsequent <= 180 days
             test_set = test_set[test_set.index <= test_end_timestamp]
 
             print(f'fine-tune set date range: {training_set_.index[0]} {training_set_.index[-1]}, '
@@ -251,12 +254,12 @@ def transfer_learning(args, model_args, results_path: Path):
                     if args.apply_scaler_transform != '':
                         continuous_targets = inverse_transform(continuous_targets)
                         targets = inverse_transform(targets)
-                        if args.apply_scaler_transform == 'standard':
+                        if not args.ignore_scoring_rules and args.apply_scaler_transform == 'standard':
                             mu = inverse_transform(distribution_params[:,:,0])
                             sigma = load_transform.undo_transform_std(distribution_params[:,:,1])
                             distribution_params = torch.cat([mu.unsqueeze(-1), sigma.unsqueeze(-1)],-1)
                         
-                        elif args.apply_scaler_transform == 'boxcox':
+                        elif not args.ignore_scoring_rules and args.apply_scaler_transform == 'boxcox':
                             ######## approximate Gaussian in unscaled space ########
                             mu = inverse_transform(distribution_params[:,:,0])
                             muplussigma = inverse_transform(torch.sum(distribution_params,-1))
@@ -313,7 +316,7 @@ if __name__ == '__main__':
     parser.add_argument('--benchmark', nargs='+', type=str, default=['all'],
                         help='Which datasets in the benchmark to run. Default is ["all."] '
                              'See the dataset registry in buildings_bench.data.__init__.py for options.')
-    parser.add_argument('--num_workers', type=int, default=2)
+    parser.add_argument('--num_workers', type=int, default=4)
     parser.add_argument('--seed', type=int, default=1)
     parser.add_argument('--ignore_scoring_rules', action='store_true', help='Do not compute a scoring rule')
     parser.add_argument('--variant_name', type=str, default='',
@@ -324,6 +327,12 @@ if __name__ == '__main__':
     parser.add_argument('--apply_scaler_transform', type=str, default='',
                         choices=['', 'standard', 'boxcox'], 
                         help='Apply a scaler transform to the load values.')
+    parser.add_argument('--remove_outliers', action='store_true')
+    parser.add_argument('--hyper_opt', nargs='*', default=[],
+                        help='Tells this script to not override the argparse values for'
+                             ' these hyperparams with values in the config file.'
+                             ' Expects the hyperparameter value to be set via argparse '
+                             ' from the CLI. Example: --hyper_opt batch_size lr')
     
     # Transfer Learning - model
     parser.add_argument('--checkpoint', type=str, default='',
@@ -337,7 +346,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_training_days', type=int, default=180,
                         help='Number of days for fine-tuning (last 30 used for early stopping)')
     parser.add_argument('--dont_subsample_buildings', action='store_true', default=False,
-                        help='Evaluate on all instead of a subsample of 100 res/com buildings')    
+                        help='Evaluate on all instead of a subsample of 100 res/100 com buildings')    
     parser.add_argument('--eval_zero_shot', action='store_true', default=False,
                         help='Evaluate on the test data without fine-tuning, '
                              'useful for getting baseline perf')
@@ -351,7 +360,10 @@ if __name__ == '__main__':
             model_args = toml_args['model']
             if 'transfer_learning' in toml_args:
                 for k,v in toml_args['transfer_learning'].items():
-                    setattr(args, k, v)
+                    if not k in args.hyper_opt:
+                        if hasattr(args, k):
+                            print(f'Overriding argparse default for {k} with {v}')
+                        setattr(args, k, v)
             if not model_args['continuous_loads']:
                 setattr(args, 'apply_scaler_transform', '')
     else:
@@ -359,6 +371,9 @@ if __name__ == '__main__':
 
    
     results_path = Path(args.results_path)
+    if args.remove_outliers:
+        results_path = results_path / 'remove_outliers'
+
     results_path.mkdir(parents=True, exist_ok=True)
 
     transfer_learning(args, model_args, results_path)

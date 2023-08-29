@@ -1,7 +1,7 @@
 [model]
 context_len = 168
 pred_len = 24
-vocab_size = 3506
+vocab_size = 3747
 num_encoder_layers = 3
 num_decoder_layers = 3
 d_model = 512

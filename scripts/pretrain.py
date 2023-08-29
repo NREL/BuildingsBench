@@ -85,7 +85,7 @@ def validation(model, val_dataloader, args, loss, load_transform, transform, inv
                 if args.tokenizer_without_merge else load_transform.merged_centroids
         else:
             centroids = None
-        
+
         metrics_manager(
             continuous_targets,
             predictions,

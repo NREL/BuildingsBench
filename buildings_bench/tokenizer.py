@@ -93,7 +93,7 @@ class LoadQuantizer:
             candidate_index_list += [merge_classes]
             self.merged_centroids = np.array(self.merged_centroids)
             # Create a map from the original centroid index to the new centroid index
-            self.original_order_to_merged_centroid_map = np.zeros(len(index_to_value_map), dtype=np.int)
+            self.original_order_to_merged_centroid_map = np.zeros(len(index_to_value_map), dtype=np.int32)
             for i in range(len(candidate_index_list)):
                 for j in candidate_index_list[i]:
                     self.original_order_to_merged_centroid_map[j] = i
