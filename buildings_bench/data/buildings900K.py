@@ -169,10 +169,7 @@ class Buildings900K(torch.utils.data.Dataset):
         import pandas as pd
         
         # load metadata for mapping county ID
-        lookup_df = pd.read_csv(self.metadata_path / 'spatial_tract_lookup_table.csv')
-        lookup_df = lookup_df[['nhgis_2010_county_gisjoin', 'nhgis_2010_puma_gisjoin']]
-        lookup_df = lookup_df.set_index('nhgis_2010_puma_gisjoin')
-        lookup_df = lookup_df[~lookup_df.index.duplicated()] # remove duplicated indices
+        lookup_df = pd.read_csv(self.metadata_path / 'puma_county_lookup_weather_only.csv', index_col=0)
 
         # get county ID
         county = lookup_df.loc[ts_idx[2]]['nhgis_2010_county_gisjoin']

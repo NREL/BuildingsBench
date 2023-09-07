@@ -22,8 +22,8 @@ def main(args):
     # Each line in the index file indicates a building and n 
     #   <building_type_and_year> <census_region> <puma_id> <building_id> <seq ptr>
     #  e.g. <0-4> <0-4> G17031 23023 65
-    train_idx_file = open(output_dir / f'train_weekly_time1.idx', 'w')
-    val_idx_file = open(output_dir / f'val_weekly_time1.idx', 'w')
+    train_idx_file = open(output_dir / f'train_weekly_weather.idx', 'w')
+    val_idx_file = open(output_dir / f'val_weekly_weather.idx', 'w')
 
     # withhold 1 puma from each census region (all res and com buildingss) for test only
     # midwest, south, northeast, west

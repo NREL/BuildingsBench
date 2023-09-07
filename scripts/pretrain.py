@@ -437,9 +437,12 @@ if __name__ == '__main__':
     parser.add_argument('--apply_scaler_transform', type=str, default='',
                         choices=['', 'standard', 'boxcox'], 
                         help='Apply a scaler transform to the load values.')
-    parser.add_argument('--train_idx_filename', type=str, default='')
-    parser.add_argument('--val_idx_filename', type=str, default='')
-    parser.add_argument('--weather', type=bool, default=False)
+    parser.add_argument('--train_idx_filename', type=str, default='',
+                        help='Name of index files for training')
+    parser.add_argument('--val_idx_filename', type=str, default='',
+                        help='Name of index files for validation')
+    parser.add_argument('--weather', type=bool, default=False, 
+                        help='Use weather data')
         
     experiment_args = parser.parse_args()
 
