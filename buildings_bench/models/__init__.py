@@ -5,7 +5,7 @@ from typing import Callable, Tuple, Dict
 # Import models here
 from buildings_bench.models.dlinear_regression import DLinearRegression
 from buildings_bench.models.linear_regression import LinearRegression
-from buildings_bench.models.transformers import LoadForecastingTransformer
+from buildings_bench.models.transformers import LoadForecastingTransformer, LoadForecastingTransformerWithWeather
 from buildings_bench.models.persistence import *
 
 
@@ -21,6 +21,7 @@ model_registry = {
     'TransformerWithGaussian-L': LoadForecastingTransformer,
     'TransformerWithGaussian-M': LoadForecastingTransformer,
     'TransformerWithGaussian-S': LoadForecastingTransformer,
+    'TransformerWithGaussian-weather-S': LoadForecastingTransformerWithWeather,
     'AveragePersistence': AveragePersistence,
     'CopyLastDayPersistence': CopyLastDayPersistence,
     'CopyLastWeekPersistence': CopyLastWeekPersistence,

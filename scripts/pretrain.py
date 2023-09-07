@@ -199,12 +199,12 @@ def main(args, model_args):
     train_dataset = load_pretraining('buildings-900k-train',
                                      args.num_buildings,
                                      args.apply_scaler_transform,
-                                     transform_path)
+                                     transform_path, weather=args.weather, custom_idx_filename=args.train_idx_filename)
     
     val_dataset = load_pretraining('buildings-900k-val',
                                    args.num_buildings,
                                    args.apply_scaler_transform,
-                                   transform_path)
+                                   transform_path, weather=args.weather, custom_idx_filename=args.val_idx_filename)
 
     train_sampler = torch.utils.data.distributed.DistributedSampler(
                                      dataset=train_dataset,
@@ -437,6 +437,9 @@ if __name__ == '__main__':
     parser.add_argument('--apply_scaler_transform', type=str, default='',
                         choices=['', 'standard', 'boxcox'], 
                         help='Apply a scaler transform to the load values.')
+    parser.add_argument('--train_idx_filename', type=str, default='')
+    parser.add_argument('--val_idx_filename', type=str, default='')
+    parser.add_argument('--weather', type=bool, default=False)
         
     experiment_args = parser.parse_args()
 

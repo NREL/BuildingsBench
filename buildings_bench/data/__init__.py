@@ -56,6 +56,7 @@ def load_pretraining(
         apply_scaler_transform: str = '',
         scaler_transform_path: Path = None,
         weather: bool = False,
+        custom_idx_filename: str = '',
         context_len=168, # week
         pred_len=24) -> torch.utils.data.Dataset:
     r"""
@@ -69,6 +70,7 @@ def load_pretraining(
                                  applies a {boxcox,standard} scaling transform to the load. Default: ''.
         scaler_transform_path (Path): Path to data for transform, e.g., pickled data for BoxCox transform.
         weather (bool): load weather data. Default: False
+        custom_idx_filename (str): customized index filename. Default: ''
         context_len (int): Length of the context. Defaults to 168.
         pred_len (int): Length of the prediction horizon. Defaults to 24.
     
@@ -84,7 +86,7 @@ def load_pretraining(
     else:
         idx_file_suffix = ''
     if name.lower() == 'buildings-900k-train':
-        idx_file = f'train_weekly{idx_file_suffix}.idx'
+        idx_file = f'train_weekly{idx_file_suffix}.idx' if custom_idx_filename == '' else custom_idx_filename
         dataset = Buildings900K(dataset_path,
                                idx_file,
                                context_len=context_len,
@@ -93,7 +95,7 @@ def load_pretraining(
                                scaler_transform_path = scaler_transform_path,
                                weather=weather)
     elif name.lower() == 'buildings-900k-val':
-        idx_file = f'val_weekly{idx_file_suffix}.idx'
+        idx_file = f'val_weekly{idx_file_suffix}.idx' if custom_idx_filename == '' else custom_idx_filename
         dataset = Buildings900K(dataset_path,
                                idx_file,
                                context_len=context_len,
