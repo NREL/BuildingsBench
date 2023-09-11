@@ -111,6 +111,7 @@ def load_torch_dataset(
         dataset_path: Path = None,
         apply_scaler_transform: str = '',
         scaler_transform_path: Path = None,
+        weather: bool = False,
         context_len = 168,
         pred_len = 24
         ) -> Union[TorchBuildingDatasetsFromCSV, TorchBuildingDatasetFromParquet]:
@@ -122,6 +123,7 @@ def load_torch_dataset(
         apply_scaler_transform (str): If not using quantized load or unscaled loads,
                                  applies a {boxcox,standard} scaling transform to the load. Default: ''.
         scaler_transform_path (Path): Path to data for transform, e.g., pickled data for BoxCox transform.
+        weather (bool): load weather data. Default: False
         context_len (int): Length of the context. Defaults to 168.
         pred_len (int): Length of the prediction horizon. Defaults to 24.
     
@@ -152,10 +154,12 @@ def load_torch_dataset(
             elif 'com' in pf:
                 building_types += [BuildingTypes.COMMERCIAL]
         dataset_generator = TorchBuildingDatasetFromParquet(
+                                                         dataset_path,
                                                          puma_files,
                                                          [spatial_lookup.undo_transform( # pass unnormalized lat lon coords
                                                             spatial_lookup.transform(pid)) for pid in puma_ids],
                                                          building_types,
+                                                         weather=weather,
                                                          context_len=context_len,
                                                          pred_len=pred_len,
                                                          apply_scaler_transform=apply_scaler_transform,

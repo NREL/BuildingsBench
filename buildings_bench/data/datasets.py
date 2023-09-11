@@ -23,7 +23,8 @@ class TorchBuildingDataset(torch.utils.data.Dataset):
                 sliding_window: int = 24,
                 apply_scaler_transform: str = '',
                 scaler_transform_path: Path = None,
-                is_leap_year = False):
+                is_leap_year = False,
+                weather_and_transform: (pd.DataFrame, Path) = (None, None)):
         """
         Args:
             dataframe (pd.DataFrame): Pandas DataFrame with a timestamp index and a 'power' column.
@@ -35,6 +36,7 @@ class TorchBuildingDataset(torch.utils.data.Dataset):
             apply_scaler_transform (str, optional): Apply scaler transform {boxcox,standard} to the load. Defaults to ''.
             scaler_transform_path (Path, optional): Path to the pickled data for BoxCox transform. Defaults to None.
             is_leap_year (bool, optional): Is the year a leap year? Defaults to False.
+            weather_and_transform ((pd.DataFrame, Path), optional): Weather dataframe and path to weather transform. Defaults to (None, None).
         """
         self.df = dataframe        
         self.building_type = building_type
@@ -42,6 +44,7 @@ class TorchBuildingDataset(torch.utils.data.Dataset):
         self.pred_len = pred_len
         self.sliding_window = sliding_window
         self.apply_scaler_transform = apply_scaler_transform
+        self.weather_and_transform = weather_and_transform
 
         self.normalized_latlon = transforms.LatLonTransform().transform_latlon(building_latlon)
         self.time_transform = transforms.TimestampTransform(is_leap_year=is_leap_year)
@@ -77,8 +80,25 @@ class TorchBuildingDataset(torch.utils.data.Dataset):
             'building_type': building_features,
             'load': load_features[...,None]
         }
+
+        weather_df, weather_transform_path = self.weather_and_transform
+
+        if weather_df is None:
+            return sample
+        
+        weather_df = weather_df.iloc[seq_ptr-self.context_len: seq_ptr+self.pred_len]
+
+        weather_df.columns = ['timestamp', 'temperature', 'humidity', 'wind_speed', 'wind_direction', 'global_horizontal_radiation', 
+                              'direct_normal_radiation', 'diffuse_horizontal_radiation']
+        
+        # transform
+        weather_transform = StandardScalerTransform()
+        for col in weather_df.columns[1:]:
+            weather_transform.load(weather_transform_path / col)
+            sample.update({col : weather_transform.transform(weather_df[col].to_numpy())[0][...,None]})
+
         return sample
-    
+        
 
 class TorchBuildingDatasetFromParquet:
     """Generate PyTorch Datasets out of Parquet files.
@@ -90,9 +110,11 @@ class TorchBuildingDatasetFromParquet:
         building_datasets (dict): Maps unique building ids to a TorchBuildingDataset.   
     """
     def __init__(self,
+                data_path: Path,
                 parquet_datasets: List[str],
                 building_latlons: List[List[float]],
                 building_types: List[BuildingTypes],
+                weather: bool = False,
                 context_len: int = 168,
                 pred_len: int = 24,
                 sliding_window: int = 24,
@@ -101,9 +123,11 @@ class TorchBuildingDatasetFromParquet:
                 leap_years: List[int] = None):
         """
         Args:
+            data_path (Path): Path to the dataset
             parquet_datasets (List[str]): List of paths to a parquet file, each has a timestamp index and multiple columns, one per building.
             building_latlons (List[List[float]]): List of latlons for each parquet file.
             building_types (List[BuildingTypes]): List of building types for each parquet file.
+            weather (bool): load weather data. Default: False
             context_len (int, optional): Length of context. Defaults to 168.
             pred_len (int, optional): Length of prediction. Defaults to 24.
             sliding_window (int, optional): Stride for sliding window to split timeseries into test samples. Defaults to 24.
@@ -113,7 +137,42 @@ class TorchBuildingDatasetFromParquet:
         """
         self.building_datasets = {}
 
+        weather_df = None
+        weather_transform_path = None
+        if weather: # build a puma-county lookup table
+            metadata_path = data_path / 'metadata'
+            weather_transform_path = metadata_path / 'transforms/weather-900K/'
+            lookup_df = pd.read_csv(metadata_path / 'spatial_tract_lookup_table.csv')
+
+            # select rows that have weather
+            df_has_weather = lookup_df[(lookup_df.weather_file_2012 != 'No weather file') 
+                                       & (lookup_df.weather_file_2015 != 'No weather file') 
+                                       & (lookup_df.weather_file_2016 != 'No weather file') 
+                                       & (lookup_df.weather_file_2017 != 'No weather file') 
+                                       & (lookup_df.weather_file_2018 != 'No weather file') 
+                                       & (lookup_df.weather_file_2019 != 'No weather file')]
+
+            df_has_weather = df_has_weather[['nhgis_2010_county_gisjoin', 'nhgis_2010_puma_gisjoin']]
+            df_has_weather = df_has_weather.set_index('nhgis_2010_puma_gisjoin')
+            lookup_df = df_has_weather[~df_has_weather.index.duplicated()] # remove duplicated indices
+
         for parquet_data, building_latlon, building_type in zip(parquet_datasets, building_latlons, building_types):
+            
+            if weather: # load weather data
+                puma_id = parquet_data.split('puma=')[1]
+                county = lookup_df.loc[puma_id]['nhgis_2010_county_gisjoin']
+
+                # some processing to get the corresponding path for weather data
+                weather_datapath = Path(parquet_data).parents[3] / 'weather/'
+                # load corresponding weather files
+                weather_df = pd.read_csv(weather_datapath / f'{county}.csv')
+
+                # This is assuming that the file always starts from January 1st (ignoring the year)
+                import datetime
+                assert datetime.datetime.strptime(weather_df['date_time'].iloc[0], '%Y-%m-%d %H:%M:%S').strftime('%m-%d') == '01-01',\
+                    "The weather file does not start from Jan 1st"
+
+
             df = pq.read_table(parquet_data)
 
             # Order by timestamp
@@ -121,6 +180,9 @@ class TorchBuildingDatasetFromParquet:
             # Set timestamp as the index
             df.set_index('timestamp', inplace=True)
             df.index = pd.to_datetime(df.index, format='%Y-%m-%d %H:%M:%S')
+
+            if weather:
+                df = df[1:] # remove the first row so that it aligns with weather files (which start from 01:00:00)
 
             # split into multiple dataframes by column, keeping the index
             dfs = np.split(df, df.shape[1], axis=1)
@@ -145,7 +207,8 @@ class TorchBuildingDatasetFromParquet:
                                                                     sliding_window,
                                                                     apply_scaler_transform,
                                                                     scaler_transform_path,
-                                                                    is_leap_year)
+                                                                    is_leap_year,
+                                                                    weather_and_transform=(weather_df, weather_transform_path))
 
         
     def __iter__(self) -> Iterator[Tuple[str, TorchBuildingDataset]]:
