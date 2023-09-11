@@ -29,7 +29,7 @@ def transfer_learning(args, results_path: Path):
     metrics_manager = DatasetMetricsManager()
 
     target_buildings = []
-    if args.subsample_buildings:
+    if not args.dont_subsample_buildings:
         metadata_dir = Path(os.environ.get('BUILDINGS_BENCH', ''), 'metadata')
         with open(metadata_dir / 'transfer_learning_commercial_buildings.txt', 'r') as f:
             target_buildings += f.read().splitlines()
@@ -37,7 +37,8 @@ def transfer_learning(args, results_path: Path):
             target_buildings += f.read().splitlines()
 
     for dataset in args.benchmark:
-        dataset_generator = load_pandas_dataset(dataset, feature_set='engineered')
+        dataset_generator = load_pandas_dataset(dataset, feature_set='engineered',
+                                                remove_outliers=args.remove_outliers)
         # Filter to target buildings
         if len(target_buildings) > 0:
             dataset_generator = keep_buildings(dataset_generator, target_buildings)
@@ -47,9 +48,7 @@ def transfer_learning(args, results_path: Path):
             building_types_mask = (BuildingTypes.COMMERCIAL_INT * torch.ones([1,24,1])).bool()
         else:
             building_types_mask = (BuildingTypes.RESIDENTIAL_INT * torch.ones([1,24,1])).bool()
-        
-
-        
+                
         for building_name, bldg_df in dataset_generator:
 
             # if date range is less than 120 days, skip - 90 days training, 30+ days eval.
@@ -83,7 +82,7 @@ def transfer_learning(args, results_path: Path):
 
             # train the model
             forecaster = ForecasterAutoreg(
-                    regressor        = LGBMRegressor(max_depth=-1, n_estimators=100, n_jobs=24),
+                    regressor        = LGBMRegressor(max_depth=-1, n_estimators=100, n_jobs=24, verbose=-1),
                     lags             = lag
                 )
             forecaster.fit(
@@ -102,7 +101,7 @@ def transfer_learning(args, results_path: Path):
                 predictions = forecaster.predict(
                     steps       = 24,
                     last_window = last_window['power'],
-                    exog        = test_set[[key for key in test_set.keys() if key != 'power']]
+                    exog        = ground_truth[[key for key in test_set.keys() if key != 'power']]
                 )
 
                 metrics_manager(
@@ -134,20 +133,21 @@ if __name__ == '__main__':
     parser.add_argument('--seed', type=int, default=1)
     parser.add_argument('--variant_name', type=str, default='',
                         help='Name of the variant. Optional. Used for results files.')
-
+    parser.add_argument('--remove_outliers', action='store_true')
 
     # Transfer learning - data
     parser.add_argument('--num_training_days', type=int, default=180,
                         help='Number of days for fine-tuning (last 30 used for early stopping)')
-    parser.add_argument('--subsample_buildings', action='store_true', default=False,
-                        help='Evaluate on a random subsample of 100 res/com buildings '
-                        ' (instead of all).')    
+    parser.add_argument('--dont_subsample_buildings', action='store_true', default=False,
+                        help='Evaluate on all instead of a subsample of 100 res/100 com buildings')      
 
     args = parser.parse_args()
     utils.set_seed(args.seed)
     
 
     results_path = Path(args.results_path)
+    if args.remove_outliers:
+        results_path = results_path / 'remove_outliers'
     results_path.mkdir(parents=True, exist_ok=True)
 
     transfer_learning(args, results_path)

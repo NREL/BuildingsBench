@@ -7,7 +7,7 @@ from buildings_bench.models.dlinear_regression import DLinearRegression
 from buildings_bench.models.linear_regression import LinearRegression
 from buildings_bench.models.transformers import LoadForecastingTransformer, LoadForecastingTransformerWithWeather
 from buildings_bench.models.persistence import *
-
+from buildings_bench.models.deep_rnn import DeepAutoregressiveRNN
 
 
 model_registry = {
@@ -16,7 +16,7 @@ model_registry = {
     'TransformerWithTokenizer-S': LoadForecastingTransformer,
     'TransformerWithTokenizer-L-ignore-spatial': LoadForecastingTransformer,
     'TransformerWithTokenizer-L-8192': LoadForecastingTransformer,
-    'TransformerWithTokenizer-L-344': LoadForecastingTransformer,
+    'TransformerWithTokenizer-L-474': LoadForecastingTransformer,
     'TransformerWithMSE': LoadForecastingTransformer,
     'TransformerWithGaussian-L': LoadForecastingTransformer,
     'TransformerWithGaussian-M': LoadForecastingTransformer,
@@ -29,7 +29,7 @@ model_registry = {
     'CopyLastWeekPersistence': CopyLastWeekPersistence,
     'LinearRegression': LinearRegression,
     'DLinearRegression': DLinearRegression,
-
+    'DeepAutoregressiveRNN': DeepAutoregressiveRNN,
     # Register your model here
 }
 

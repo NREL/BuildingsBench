@@ -38,7 +38,10 @@ def zero_shot_learning(args, model_args, results_path: Path):
 
     if args.benchmark[0] == 'all':
         args.benchmark = benchmark_registry
-
+    elif args.benchmark[0] == 'real':
+        y = [x for x in benchmark_registry if x != 'buildings-900k-test']
+        args.benchmark = y
+        
     if args.ignore_scoring_rules:
         metrics_manager = DatasetMetricsManager()
     elif model.continuous_loads:
@@ -52,8 +55,9 @@ def zero_shot_learning(args, model_args, results_path: Path):
     for dataset_name in args.benchmark:
         # Load the dataset generator
         buildings_datasets_generator = load_torch_dataset(dataset_name,
-                                                    apply_scaler_transform=args.apply_scaler_transform,
-                                                    scaler_transform_path=transform_path)
+                                                          apply_scaler_transform=args.apply_scaler_transform,
+                                                          scaler_transform_path=transform_path,
+                                                          remove_outliers=args.remove_outliers)
         # For each building
         for building_name, building_dataset in buildings_datasets_generator:
             print(f'dataset {dataset_name} building-year {building_name} '
@@ -171,6 +175,8 @@ if __name__ == '__main__':
     parser.add_argument('--benchmark', nargs='+', type=str, default=['all'],
                         help='Which datasets in the benchmark to run. Default is ["all."] '
                              'See the dataset registry in buildings_bench.data.__init__.py for options.')
+    parser.add_argument('--remove_outliers', action='store_true',
+                        help='Eval with a filtered variant with certain outliers removed')
     parser.add_argument('--num_workers', type=int, default=4)
     parser.add_argument('--batch_size', type=int, default=360)
     parser.add_argument('--seed', type=int, default=1)
@@ -205,6 +211,9 @@ if __name__ == '__main__':
         raise ValueError(f'Config {args.config}.toml not found.')
 
     results_path = Path(args.results_path)
+    if args.remove_outliers:
+        results_path = results_path / 'remove_outliers'
+
     results_path.mkdir(parents=True, exist_ok=True)
 
     zero_shot_learning(args, model_args, results_path)

@@ -13,11 +13,11 @@ continuous_loads = false
 ignore_spatial = false
 
 [pretrain]
-batch_size = 256
+batch_size = 64
 init_scale = 0.02
 warmup_steps = 10000
 lr = 0.00006
-scheduler_steps = 162760
+train_tokens = 1000000000
 tokenizer_without_merge = true
 
 [zero_shot]
