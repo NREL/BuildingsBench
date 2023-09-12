@@ -10,6 +10,7 @@ from timeit import default_timer as timer
 from socket import gethostname
 from buildings_bench import utils
 from buildings_bench import BuildingTypes
+from buildings_bench.data import g_weather_features
 from buildings_bench import load_pretraining
 from buildings_bench.tokenizer import LoadQuantizer
 from buildings_bench.evaluation.managers import MetricsManager
@@ -188,6 +189,10 @@ def main(args, model_args):
     global_batch_size = args.world_size * args.batch_size
 
     #################### Model setup ####################
+    if args.weather is not None: 
+        if args.weather[0] == 'all':
+            args.weather = g_weather_features
+        model_args['weather_features'] = args.weather
 
     model, loss, predict = model_factory(args.config, model_args)
     model = model.to(local_rank)
@@ -441,10 +446,14 @@ if __name__ == '__main__':
                         help='Name of index files for training')
     parser.add_argument('--val_idx_filename', type=str, default='',
                         help='Name of index files for validation')
-    parser.add_argument('--weather', action='store_true', 
-                        help='Use weather data')
+    parser.add_argument('--use-weather', dest='weather', nargs='*', default=None,
+                        help='Enable loading weather features (they are not used by default). If enabled, all EULP\'s weather features will be loaded. '
+                        'Optionally, specify a list of weather features to use (see `weather_features` in buildings_bench.data.__init__.py for options')
         
     experiment_args = parser.parse_args()
+
+    if experiment_args.weather == []:
+        experiment_args.weather = ['all']
 
     # validate hyperopt args, if any
     for arg in experiment_args.hyper_opt:

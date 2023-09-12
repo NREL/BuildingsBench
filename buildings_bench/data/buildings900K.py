@@ -5,6 +5,7 @@ import pyarrow.parquet as pq
 import buildings_bench.transforms as transforms
 from buildings_bench.transforms import BoxCoxTransform, StandardScalerTransform
 import pandas as pd
+from typing import List
 
 
 class Buildings900K(torch.utils.data.Dataset):
@@ -36,7 +37,7 @@ class Buildings900K(torch.utils.data.Dataset):
                 pred_len: int = 24,
                 apply_scaler_transform: str = '',
                 scaler_transform_path: Path = None,
-                weather: bool = False):
+                weather: List[str] = None):
         """
         Args:
             dataset_path (Path): Path to the pretraining dataset.
@@ -47,7 +48,7 @@ class Buildings900K(torch.utils.data.Dataset):
                 The index file has to be generated with the same pred length.
             apply_scaler_transform (str, optional): Apply a scaler transform to the load. Defaults to ''.
             scaler_transform_path (Path, optional): Path to the scaler transform. Defaults to None.
-            weather (bool): load weather data. Default: False
+            weather (List[str]): list of weather features to use. Default: None.
         """
         self.dataset_path = dataset_path / 'Buildings-900K' / 'end-use-load-profiles-for-us-building-stock' / '2021'
         self.metadata_path = dataset_path / 'metadata'
@@ -178,7 +179,7 @@ class Buildings900K(torch.utils.data.Dataset):
             'load': load_features[...,None]
         }
 
-        if self.weather == False:
+        if self.weather is None:
             return sample
         
         ## Append weather features
@@ -193,11 +194,12 @@ class Buildings900K(torch.utils.data.Dataset):
         import datetime
         assert datetime.datetime.strptime(weather_df['date_time'].iloc[0], '%Y-%m-%d %H:%M:%S').strftime('%m-%d') == '01-01',\
             "The weather file does not start from Jan 1st"
+        
+        weather_df.columns = ['timestamp', 'temperature', 'humidity', 'wind_speed', 'wind_direction', 'global_horizontal_radiation', 
+                        'direct_normal_radiation', 'diffuse_horizontal_radiation']
+        weather_df = weather_df[['timestamp'] + self.weather]
 
         weather_df = weather_df.iloc[seq_ptr-self.context_len -1 : seq_ptr+self.pred_len -1] # add -1 because the file starts from 01:00:00
-
-        weather_df.columns = ['timestamp', 'temperature', 'humidity', 'wind_speed', 'wind_direction', 'global_horizontal_radiation', 
-                              'direct_normal_radiation', 'diffuse_horizontal_radiation']
         
         # convert temperature to fahrenheit (note: keep celsius for now)
         # weather_df['temperature'] = weather_df['temperature'].apply(lambda x: x * 1.8 + 32) 

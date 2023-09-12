@@ -2,6 +2,7 @@ import xarray as xr
 from urllib.request import urlopen
 import cdsapi
 import pandas as pd
+from typing import List
 
 # Longitude and latitude limits of some locations used in BuildingsBench
 area_lonlat = {
@@ -17,10 +18,10 @@ area_lonlat = {
 def get_hourly_weather_pandas(
         start_date: str, 
         end_date: str, 
-        area: list, 
-        variable: list[str] = ['2m_temperature'], 
+        area: List, 
+        variable: List[str] = ['2m_temperature'], 
         download_path: str = None, 
-        columns_name: list[str] = ['temperature']) -> pd.DataFrame:
+        columns_name: List[str] = ['temperature']) -> pd.DataFrame:
     """Download weather data from ERA5 CDS API given a date range as pandas dataframe
 
     Args:

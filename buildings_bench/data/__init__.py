@@ -39,7 +39,10 @@ benchmark_registry = [
     'electricity',
     'smart',
     'lcl'
-]        
+]
+
+g_weather_features = ['temperature', 'humidity', 'wind_speed', 'wind_direction', 'global_horizontal_radiation', 
+                              'direct_normal_radiation', 'diffuse_horizontal_radiation']
 
 def parse_building_years_metadata(datapath: Path, dataset_name: str):
     with open(datapath / 'metadata' / 'building_years.txt', 'r') as f:
@@ -55,7 +58,7 @@ def load_pretraining(
         num_buildings_ablation: int = -1,
         apply_scaler_transform: str = '',
         scaler_transform_path: Path = None,
-        weather: bool = False,
+        weather: List[str] = None,
         custom_idx_filename: str = '',
         context_len=168, # week
         pred_len=24) -> torch.utils.data.Dataset:
@@ -69,7 +72,7 @@ def load_pretraining(
         apply_scaler_transform (str): If not using quantized load or unscaled loads,
                                  applies a {boxcox,standard} scaling transform to the load. Default: ''.
         scaler_transform_path (Path): Path to data for transform, e.g., pickled data for BoxCox transform.
-        weather (bool): load weather data. Default: False
+        weather (List[str]): list of weather features to use. Default: None.
         custom_idx_filename (str): customized index filename. Default: ''
         context_len (int): Length of the context. Defaults to 168.
         pred_len (int): Length of the prediction horizon. Defaults to 24.

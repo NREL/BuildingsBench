@@ -6,6 +6,7 @@ import torch.nn.functional as F
 from torch.nn import Transformer
 import numpy as np
 from buildings_bench.models.base_model import BaseModel
+from buildings_bench.data import g_weather_features
 
 
 class TokenEmbedding(nn.Module):
@@ -371,7 +372,8 @@ class LoadForecastingTransformerWithWeather(BaseModel):
                  activation: str = 'gelu',
                  continuous_loads = False,
                  continuous_head = 'mse',
-                 ignore_spatial = False):
+                 ignore_spatial = False,
+                 weather_features = g_weather_features):
         """
         Args:
             context_len (int): length of the input sequence.
@@ -405,8 +407,7 @@ class LoadForecastingTransformerWithWeather(BaseModel):
                                        activation=activation,
                                        batch_first=True)
 
-        self.weather_features = ['temperature', 'humidity', 'wind_speed', 'wind_direction', 'global_horizontal_radiation', 
-                              'direct_normal_radiation', 'diffuse_horizontal_radiation']
+        self.weather_features = weather_features
         self.weather_embedding = nn.Linear(len(self.weather_features), 64 * s)
         if self.continuous_loads:
             out_dim = 1 if self.continuous_head == 'mse' else 2
