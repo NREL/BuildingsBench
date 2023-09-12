@@ -441,7 +441,7 @@ if __name__ == '__main__':
                         help='Name of index files for training')
     parser.add_argument('--val_idx_filename', type=str, default='',
                         help='Name of index files for validation')
-    parser.add_argument('--weather', type=bool, default=False, 
+    parser.add_argument('--weather', action='store_true', 
                         help='Use weather data')
         
     experiment_args = parser.parse_args()

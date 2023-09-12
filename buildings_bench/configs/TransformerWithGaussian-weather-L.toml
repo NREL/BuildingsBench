@@ -23,6 +23,8 @@ weather = true
 
 [zero_shot]
 apply_scaler_transform = 'boxcox'
+weather = true
 
 [transfer_learning]
 apply_scaler_transform = 'boxcox'
+weather = true

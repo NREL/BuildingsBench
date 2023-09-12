@@ -210,7 +210,10 @@ class TorchBuildingDatasetFromParquet:
                                                                     is_leap_year,
                                                                     weather_and_transform=(weather_df, weather_transform_path))
 
-        
+
+    def __len__(self):
+        return len(self.building_datasets)
+
     def __iter__(self) -> Iterator[Tuple[str, TorchBuildingDataset]]:
         """Generator to iterate over the building datasets.
 
