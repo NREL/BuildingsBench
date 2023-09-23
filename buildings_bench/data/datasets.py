@@ -24,7 +24,7 @@ class TorchBuildingDataset(torch.utils.data.Dataset):
                 apply_scaler_transform: str = '',
                 scaler_transform_path: Path = None,
                 is_leap_year = False,
-                weather_and_transform: (pd.DataFrame, Path) = (None, None)):
+                weather_and_transform: (pd.DataFrame, Path, bool) = (None, None, False)):
         """
         Args:
             dataframe (pd.DataFrame): Pandas DataFrame with a timestamp index and a 'power' column.
@@ -81,23 +81,34 @@ class TorchBuildingDataset(torch.utils.data.Dataset):
             'load': load_features[...,None]
         }
 
-        weather_df, weather_transform_path = self.weather_and_transform
+        weather_df, weather_transform_path, is900k = self.weather_and_transform
 
         if weather_df is None:
             return sample
         
-        weather_df = weather_df.iloc[seq_ptr-self.context_len: seq_ptr+self.pred_len]
+        if is900k:
+            weather_df = weather_df.iloc[seq_ptr-self.context_len: seq_ptr+self.pred_len]
 
-        weather_df.columns = ['timestamp', 'temperature', 'humidity', 'wind_speed', 'wind_direction', 'global_horizontal_radiation', 
-                              'direct_normal_radiation', 'diffuse_horizontal_radiation']
+            weather_df.columns = ['timestamp', 'temperature', 'humidity', 'wind_speed', 'wind_direction', 'global_horizontal_radiation', 
+                                'direct_normal_radiation', 'diffuse_horizontal_radiation']
+            
+            # transform
+            weather_transform = StandardScalerTransform()
+            for col in weather_df.columns[1:]:
+                weather_transform.load(weather_transform_path / col)
+                sample.update({col : weather_transform.transform(weather_df[col].to_numpy())[0][...,None]})
+
+            return sample
         
-        # transform
-        weather_transform = StandardScalerTransform()
-        for col in weather_df.columns[1:]:
-            weather_transform.load(weather_transform_path / col)
-            sample.update({col : weather_transform.transform(weather_df[col].to_numpy())[0][...,None]})
+        else:
+            df = self.df.iloc[seq_ptr-self.context_len: seq_ptr+self.pred_len].join(weather_df)
+            
+            weather_transform = StandardScalerTransform()
+            for col in df.columns[1:]:
+                weather_transform.load(weather_transform_path / col)
+                sample.update({col : weather_transform.transform(df[col].to_numpy())[0][...,None]})
 
-        return sample
+            return sample
         
 
 class TorchBuildingDatasetFromParquet:
@@ -208,7 +219,7 @@ class TorchBuildingDatasetFromParquet:
                                                                     apply_scaler_transform,
                                                                     scaler_transform_path,
                                                                     is_leap_year,
-                                                                    weather_and_transform=(weather_df, weather_transform_path))
+                                                                    weather_and_transform=(weather_df, weather_transform_path, True))
 
 
     def __len__(self):
@@ -237,6 +248,7 @@ class TorchBuildingDatasetsFromCSV:
                 building_year_files: List[str],
                 building_latlon: List[float],
                 building_type: BuildingTypes,
+                weather: bool = False,
                 context_len: int = 168,
                 pred_len: int = 24,
                 sliding_window: int = 24,
@@ -257,6 +269,14 @@ class TorchBuildingDatasetsFromCSV:
         """
         self.building_datasets = {}
         self.building_type = building_type
+
+        weather_df = None
+        weather_transform_path = None
+        if weather:
+            metadata_path = data_path.parent / 'metadata'
+            weather_transform_path = metadata_path / 'transforms/weather-900K/'
+            ds_name = building_year_files[0].split('/')[0]
+            weather_df = pd.read_csv(data_path / (ds_name + f'/weather.csv'), index_col=0, header=0, parse_dates=True)
 
         for building_year_file in building_year_files:
             name = building_year_file.split('_')[0].split('/')[1]
@@ -290,8 +310,11 @@ class TorchBuildingDatasetsFromCSV:
                                                                                 sliding_window,
                                                                                 apply_scaler_transform,
                                                                                 scaler_transform_path,
-                                                                                is_leap_year))]
-                        
+                                                                                is_leap_year,
+                                                                                weather_and_transform=(weather_df, weather_transform_path, False)))]
+    
+    def __len__(self):
+        return len(self.building_datasets)                        
         
     def __iter__(self) -> Iterator[Tuple[str, torch.utils.data.ConcatDataset]]:
         """A Generator for TorchBuildingDataset objects.
@@ -359,7 +382,7 @@ class PandasBuildingDatasetsFromCSV:
         weather_df = None
         if weather:
             ds_name = building_year_files[0].split('/')[0]
-            weather_df = pd.read_csv(data_path / (ds_name + f'/weather_{ds_name.lower()}.csv'), index_col=0, header=0, parse_dates=True)
+            weather_df = pd.read_csv(data_path / (ds_name + f'/weather.csv'), index_col=0, header=0, parse_dates=True)
         
         for building_year_file in building_year_files:
             #fullname = building_year_file.split('_')[0]

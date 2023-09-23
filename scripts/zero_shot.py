@@ -7,6 +7,7 @@ import tomli
 from buildings_bench import load_torch_dataset, benchmark_registry
 from buildings_bench import utils
 from buildings_bench.tokenizer import LoadQuantizer
+from buildings_bench.data import g_weather_features
 from buildings_bench.evaluation.managers import DatasetMetricsManager
 from buildings_bench.models import model_factory
 from buildings_bench.evaluation import scoring_rule_factory
@@ -17,6 +18,9 @@ SCRIPT_PATH = Path(os.path.realpath(__file__)).parent
 @torch.no_grad()
 def zero_shot_learning(args, model_args, results_path: Path):
     device = args.device
+
+    if args.weather: 
+        model_args['weather_features'] = g_weather_features[:2]
 
     model, _, predict = model_factory(args.config, model_args)
     model = model.to(device)
@@ -198,8 +202,8 @@ if __name__ == '__main__':
     parser.add_argument('--apply_scaler_transform', type=str, default='',
                         choices=['', 'standard', 'boxcox'], 
                         help='Apply a scaler transform to the load values.')
-    parser.add_argument('--weather', action='store_true', 
-                        help='Use weather data')
+    parser.add_argument('--use-weather', dest='weather', action='store_true', 
+                        help='Use weather data') # TODO should we use a feature list to match pretrain.py?
     
     args = parser.parse_args()
     utils.set_seed(args.seed)
@@ -210,7 +214,10 @@ if __name__ == '__main__':
         model_args = toml_args['model']
         if 'zero_shot' in toml_args:
             for k,v in toml_args['zero_shot'].items():
-                setattr(args, k, v)
+                if k != 'weather':
+                    setattr(args, k, v)
+                elif v != 'False':
+                    setattr(args, k, True)
         if not model_args['continuous_loads'] or 'apply_scaler_transform' not in args:
             setattr(args, 'apply_scaler_transform', '')
     else:

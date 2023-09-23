@@ -201,7 +201,8 @@ def load_torch_dataset(
                                                          pred_len=pred_len,
                                                          apply_scaler_transform=apply_scaler_transform,
                                                          scaler_transform_path = scaler_transform_path,
-                                                         leap_years=metadata['leap_years']) 
+                                                         leap_years=metadata['leap_years'],
+                                                         weather=weather) 
     
     else:
         raise ValueError(f'Unknown dataset {name}')
