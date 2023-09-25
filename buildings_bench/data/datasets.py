@@ -276,7 +276,9 @@ class TorchBuildingDatasetsFromCSV:
             metadata_path = data_path.parent / 'metadata'
             weather_transform_path = metadata_path / 'transforms/weather-900K/'
             ds_name = building_year_files[0].split('/')[0]
-            weather_df = pd.read_csv(data_path / (ds_name + f'/weather.csv'), index_col=0, header=0, parse_dates=True)
+
+            if ds_name != 'SMART':
+                weather_df = pd.read_csv(data_path / (ds_name + f'/weather.csv'), index_col=0, header=0, parse_dates=True)
 
         for building_year_file in building_year_files:
             name = building_year_file.split('_')[0].split('/')[1]
@@ -294,6 +296,9 @@ class TorchBuildingDatasetsFromCSV:
             else:
                 bldg_names = [name]
                 dfs = [df]
+
+            if weather and ds_name == 'SMART':
+                weather_df = pd.read_csv(data_path / (ds_name + f'/weather_{name}.csv'), index_col=0, header=0, parse_dates=True)
 
             # for each bldg, create a TorchBuildingDatasetFromCSV
             for bldg_name, bldg_df in zip(bldg_names, dfs):
@@ -382,7 +387,8 @@ class PandasBuildingDatasetsFromCSV:
         weather_df = None
         if weather:
             ds_name = building_year_files[0].split('/')[0]
-            weather_df = pd.read_csv(data_path / (ds_name + f'/weather.csv'), index_col=0, header=0, parse_dates=True)
+            if ds_name != 'SMART':
+                weather_df = pd.read_csv(data_path / (ds_name + f'/weather.csv'), index_col=0, header=0, parse_dates=True)
         
         for building_year_file in building_year_files:
             #fullname = building_year_file.split('_')[0]
@@ -405,6 +411,9 @@ class PandasBuildingDatasetsFromCSV:
             else:
                 bldg_names = [name]
                 bldg_dfs = [df]
+
+            if weather and ds_name == 'SMART':
+                weather_df = pd.read_csv(data_path / (ds_name + f'/weather_{name}.csv'), index_col=0, header=0, parse_dates=True)
             
             for bldg_name,df in zip(bldg_names, bldg_dfs):
                 if self.features == 'engineered':
@@ -471,6 +480,8 @@ class PandasBuildingDatasetsFromCSV:
         else:
             self.building_datasets[bldg_name] = [(year,df)]
 
+    def __len__(self):
+        return len(self.building_datasets)  
 
     def __iter__(self) -> Iterator[Tuple[str, pd.DataFrame]]:
         """Generator for iterating over the dataset.

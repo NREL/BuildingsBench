@@ -20,7 +20,7 @@ def main():
                       ('Sceaux', 'sceaux', '2007-01-01', '2010-12-31'), ('Borealis', 'waterloo', '2011-01-01', '2012-12-31'),
                       ('Electricity', 'lisbon', '2011-01-01', '2014-12-31'), ('SMART', 'massachusetts', '2014-01-01', '2016-12-31')] 
  
-    for ds in real_building_ds[5:]:
+    for ds in real_building_ds:
         print('Downloading', ds[0])
         output_dir = real_building_prefix / ds[0]
 

@@ -27,6 +27,7 @@ model_registry = {
     'TransformerWithGaussian-th-S': LoadForecastingTransformerWithWeather,
     'TransformerWithGaussian-th-M': LoadForecastingTransformerWithWeather,
     'TransformerWithGaussian-th-L': LoadForecastingTransformerWithWeather,
+    'TransformerWithGaussian-t-L': LoadForecastingTransformerWithWeather,
     'AveragePersistence': AveragePersistence,
     'CopyLastDayPersistence': CopyLastDayPersistence,
     'CopyLastWeekPersistence': CopyLastWeekPersistence,
