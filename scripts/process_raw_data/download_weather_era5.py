@@ -30,8 +30,8 @@ def main():
         weather['2m_dewpoint_temperature'] = weather['2m_dewpoint_temperature'].apply(lambda x: x-273.15)
 
         weather['humidity'] = weather.apply(lambda x: calc_relative_humidity(x['2m_temperature'], x['2m_dewpoint_temperature']), axis=1)
-        weather = weather.drop(columns=['2m_dewpoint_temperature'])
-        weather.columns = ['temperature', 'humidity']
+        weather.drop(columns=['2m_dewpoint_temperature'], inplace=True)
+        weather.rename(columns={'2m_temperature' : 'temperature'}, inplace=True)
 
         weather.to_csv(output_dir / 'weather.csv')
 

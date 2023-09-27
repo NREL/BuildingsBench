@@ -6,6 +6,7 @@ import buildings_bench.transforms as transforms
 from buildings_bench.transforms import BoxCoxTransform, StandardScalerTransform
 import pandas as pd
 from typing import List
+from buildings_bench.utils import get_puma_county_lookup_table
 
 
 class Buildings900K(torch.utils.data.Dataset):
@@ -75,19 +76,7 @@ class Buildings900K(torch.utils.data.Dataset):
 
         if weather: # build a puma-county lookup table
             # lookup_df = pd.read_csv(self.metadata_path / 'puma_county_lookup_weather_only.csv', index_col=0)
-            lookup_df = pd.read_csv(self.metadata_path / 'spatial_tract_lookup_table.csv')
-
-            # select rows that have weather
-            df_has_weather = lookup_df[(lookup_df.weather_file_2012 != 'No weather file') 
-                                       & (lookup_df.weather_file_2015 != 'No weather file') 
-                                       & (lookup_df.weather_file_2016 != 'No weather file') 
-                                       & (lookup_df.weather_file_2017 != 'No weather file') 
-                                       & (lookup_df.weather_file_2018 != 'No weather file') 
-                                       & (lookup_df.weather_file_2019 != 'No weather file')]
-
-            df_has_weather = df_has_weather[['nhgis_2010_county_gisjoin', 'nhgis_2010_puma_gisjoin']]
-            df_has_weather = df_has_weather.set_index('nhgis_2010_puma_gisjoin')
-            self.lookup_df = df_has_weather[~df_has_weather.index.duplicated()] # remove duplicated indices
+            self.lookup_df = get_puma_county_lookup_table(self.metadata_path)
 
 
     def init_fp(self):

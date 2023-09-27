@@ -7,6 +7,7 @@ import buildings_bench.transforms as transforms
 from buildings_bench.transforms import BoxCoxTransform, StandardScalerTransform
 from buildings_bench import BuildingTypes
 import pyarrow.parquet as pq
+from buildings_bench.utils import get_puma_county_lookup_table
 
 
 class TorchBuildingDataset(torch.utils.data.Dataset):
@@ -153,19 +154,7 @@ class TorchBuildingDatasetFromParquet:
         if weather: # build a puma-county lookup table
             metadata_path = data_path / 'metadata'
             weather_transform_path = metadata_path / 'transforms/weather-900K/'
-            lookup_df = pd.read_csv(metadata_path / 'spatial_tract_lookup_table.csv')
-
-            # select rows that have weather
-            df_has_weather = lookup_df[(lookup_df.weather_file_2012 != 'No weather file') 
-                                       & (lookup_df.weather_file_2015 != 'No weather file') 
-                                       & (lookup_df.weather_file_2016 != 'No weather file') 
-                                       & (lookup_df.weather_file_2017 != 'No weather file') 
-                                       & (lookup_df.weather_file_2018 != 'No weather file') 
-                                       & (lookup_df.weather_file_2019 != 'No weather file')]
-
-            df_has_weather = df_has_weather[['nhgis_2010_county_gisjoin', 'nhgis_2010_puma_gisjoin']]
-            df_has_weather = df_has_weather.set_index('nhgis_2010_puma_gisjoin')
-            lookup_df = df_has_weather[~df_has_weather.index.duplicated()] # remove duplicated indices
+            lookup_df = get_puma_county_lookup_table(metadata_path)
 
         for parquet_data, building_latlon, building_type in zip(parquet_datasets, building_latlons, building_types):
             
@@ -277,7 +266,7 @@ class TorchBuildingDatasetsFromCSV:
             weather_transform_path = metadata_path / 'transforms/weather-900K/'
             ds_name = building_year_files[0].split('/')[0]
 
-            if ds_name != 'SMART':
+            if ds_name != 'SMART' and ds_name != 'BDG-2':
                 weather_df = pd.read_csv(data_path / (ds_name + f'/weather.csv'), index_col=0, header=0, parse_dates=True)
 
         for building_year_file in building_year_files:
@@ -297,7 +286,7 @@ class TorchBuildingDatasetsFromCSV:
                 bldg_names = [name]
                 dfs = [df]
 
-            if weather and ds_name == 'SMART':
+            if weather and (ds_name == 'SMART' or ds_name == 'BDG-2'):
                 weather_df = pd.read_csv(data_path / (ds_name + f'/weather_{name}.csv'), index_col=0, header=0, parse_dates=True)
 
             # for each bldg, create a TorchBuildingDatasetFromCSV
@@ -387,7 +376,7 @@ class PandasBuildingDatasetsFromCSV:
         weather_df = None
         if weather:
             ds_name = building_year_files[0].split('/')[0]
-            if ds_name != 'SMART':
+            if ds_name != 'SMART' and ds_name != 'BDG-2':
                 weather_df = pd.read_csv(data_path / (ds_name + f'/weather.csv'), index_col=0, header=0, parse_dates=True)
         
         for building_year_file in building_year_files:
@@ -412,7 +401,7 @@ class PandasBuildingDatasetsFromCSV:
                 bldg_names = [name]
                 bldg_dfs = [df]
 
-            if weather and ds_name == 'SMART':
+            if weather and (ds_name == 'SMART' or ds_name == 'BDG-2'):
                 weather_df = pd.read_csv(data_path / (ds_name + f'/weather_{name}.csv'), index_col=0, header=0, parse_dates=True)
             
             for bldg_name,df in zip(bldg_names, bldg_dfs):

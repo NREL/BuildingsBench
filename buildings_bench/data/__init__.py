@@ -174,7 +174,7 @@ def load_torch_dataset(
         name, subset = name.lower().split(':')
         dataset_metadata = metadata[name.lower()]
         all_by_files = parse_building_years_metadata(dataset_path, name.lower())
-        all_by_files = filter(lambda by_file: subset in by_file.lower(), all_by_files)
+        all_by_files = [by_file for by_file in all_by_files if subset in by_file.lower()]
         if remove_outliers:
             dataset_path = dataset_path / 'remove_outliers'
         print(f'loading data from {dataset_path}')
@@ -186,7 +186,8 @@ def load_torch_dataset(
                                                          pred_len=pred_len,
                                                          apply_scaler_transform=apply_scaler_transform,
                                                          scaler_transform_path = scaler_transform_path,
-                                                         leap_years=metadata['leap_years']) 
+                                                         leap_years=metadata['leap_years'],
+                                                         weather=weather) 
     elif name.lower() in benchmark_registry:
         dataset_metadata = metadata[name.lower()]
         all_by_files = parse_building_years_metadata(dataset_path, name.lower())
@@ -249,7 +250,7 @@ def load_pandas_dataset(
         name, subset = name.lower().split(':')
         dataset_metadata = metadata[name.lower()]
         all_by_files = parse_building_years_metadata(dataset_path, name.lower())
-        all_by_files = filter(lambda by_file: subset in by_file.lower(), all_by_files)
+        all_by_files = [by_file for by_file in all_by_files if subset in by_file.lower()]
         building_type = dataset_metadata[subset]['building_type']
         building_latlon = dataset_metadata[subset]['latlon']
     else:
