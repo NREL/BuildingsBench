@@ -269,3 +269,8 @@ def load_pandas_dataset(
             apply_scaler_transform = apply_scaler_transform,
             scaler_transform_path = scaler_transform_path,
             leap_years = metadata['leap_years'])
+
+if __name__ == "__main__":
+    dataset = load_torch_dataset("buildings-900k-test")
+    for d in dataset:
+        print(d[0])

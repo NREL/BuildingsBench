@@ -8,7 +8,7 @@ from buildings_bench.models.linear_regression import LinearRegression
 from buildings_bench.models.transformers import LoadForecastingTransformer, LoadForecastingTransformerWithWeather
 from buildings_bench.models.persistence import *
 from buildings_bench.models.deep_rnn import DeepAutoregressiveRNN
-
+from buildings_bench.models.mlp import MLP
 
 model_registry = {
     'TransformerWithTokenizer-L': LoadForecastingTransformer,
@@ -34,6 +34,7 @@ model_registry = {
     'DLinearRegression': DLinearRegression,
     'DeepAutoregressiveRNN': DeepAutoregressiveRNN,
     # Register your model here
+    "MLP": MLP
 }
 
 

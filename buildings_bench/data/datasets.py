@@ -7,7 +7,9 @@ import buildings_bench.transforms as transforms
 from buildings_bench.transforms import BoxCoxTransform, StandardScalerTransform
 from buildings_bench import BuildingTypes
 import pyarrow.parquet as pq
-
+import os
+from sklearn.preprocessing import OneHotEncoder
+from buildings_bench.data.buildings_utils import *
 
 class TorchBuildingDataset(torch.utils.data.Dataset):
     """PyTorch Dataset for a single building's Pandas Dataframe with a timestamp index and a 'power' column.
@@ -24,7 +26,15 @@ class TorchBuildingDataset(torch.utils.data.Dataset):
                 apply_scaler_transform: str = '',
                 scaler_transform_path: Path = None,
                 is_leap_year = False,
-                weather_and_transform: (pd.DataFrame, Path) = (None, None)):
+                weather_and_transform: (pd.DataFrame, Path) = (None, None),
+                building_id = 0,
+                building_char = True,
+                dataset_name: str = '',
+                com_encoder: OneHotEncoder = None,
+                res_encoder: OneHotEncoder = None,
+                com_num: int = 0,
+                res_num: int = 0,
+                meta_df: pd.DataFrame = None):
         """
         Args:
             dataframe (pd.DataFrame): Pandas DataFrame with a timestamp index and a 'power' column.
@@ -37,8 +47,17 @@ class TorchBuildingDataset(torch.utils.data.Dataset):
             scaler_transform_path (Path, optional): Path to the pickled data for BoxCox transform. Defaults to None.
             is_leap_year (bool, optional): Is the year a leap year? Defaults to False.
             weather_and_transform ((pd.DataFrame, Path), optional): Weather dataframe and path to weather transform. Defaults to (None, None).
+            building_char: whether return building characteristics or not, default = True
+            dataset_name: name of the dataset the building belongs to, can only be "comstock_tmy3", "resstock_tmy3", "comstock_amy2018", "resstock_amy2018"
+            building_id: building id (used to identify building within meta_df)
+            com_encoder: one-hot encoder for commercial building characteristics
+            res_encoder: one-hot encoder for residential building characteristics
+            com_num: dimension of one-hot encoded commercial building chars
+            res_num: dimension of one-hot encoded residential building chars
+            meta_df: meta data dataframe
         """
-        self.df = dataframe        
+        self.df = dataframe      
+        self.building_char = building_char  
         self.building_type = building_type
         self.context_len = context_len
         self.pred_len = pred_len
@@ -54,6 +73,18 @@ class TorchBuildingDataset(torch.utils.data.Dataset):
         elif self.apply_scaler_transform == 'standard':
             self.load_transform = StandardScalerTransform()
             self.load_transform.load(scaler_transform_path)
+
+        self.dataset_name = dataset_name
+        self.building_id = int(building_id)
+        self.dataset_id = ["comstock_tmy3", "resstock_tmy3", "comstock_amy2018", "resstock_amy2018"].index(dataset_name)
+        self.metadata_path = Path(os.environ["BUILDINGS_BENCH"]) / 'metadata'
+
+        self.com_encoder = com_encoder
+        self.com_num = com_num
+        self.res_encoder = res_encoder
+        self.res_num = res_num
+
+        self.meta_df = meta_df
         
     def __len__(self):
         return (len(self.df) - self.context_len - self.pred_len) // self.sliding_window
@@ -80,6 +111,20 @@ class TorchBuildingDataset(torch.utils.data.Dataset):
             'building_type': building_features,
             'load': load_features[...,None]
         }
+
+        if self.building_char:
+             # encode meta data characteristics
+            if self.building_type == BuildingTypes.COMMERCIAL:
+                df = self.meta_df
+                ch = df[df.index == self.building_id][com_chars].values
+                ft = np.hstack([self.com_encoder.transform(ch), self.res_encoder.transform([[None] * self.res_num])])
+            else:
+                df = self.meta_df
+                ch = df[df.index == self.building_id][res_chars].values
+                ft = np.hstack([self.com_encoder.transform([[None] * self.com_num]), self.res_encoder.transform(ch)])
+            sample['building_char'] = np.repeat(ft, self.context_len + self.pred_len, axis=0).astype(np.float32)
+            sample['building_id'] = self.building_id
+            sample['dataset_id'] = self.dataset_id
 
         weather_df, weather_transform_path = self.weather_and_transform
 
@@ -111,7 +156,7 @@ class TorchBuildingDatasetFromParquet:
     """
     def __init__(self,
                 data_path: Path,
-                parquet_datasets: List[str],
+                parquet_datasets: List[str], 
                 building_latlons: List[List[float]],
                 building_types: List[BuildingTypes],
                 weather: bool = False,
@@ -120,7 +165,8 @@ class TorchBuildingDatasetFromParquet:
                 sliding_window: int = 24,
                 apply_scaler_transform: str = '',
                 scaler_transform_path: Path = None,
-                leap_years: List[int] = None):
+                leap_years: List[int] = None,
+                building_char = True):
         """
         Args:
             data_path (Path): Path to the dataset
@@ -134,7 +180,9 @@ class TorchBuildingDatasetFromParquet:
             apply_scaler_transform (str, optional): Apply scaler transform {boxcox,standard} to the load. Defaults to ''.
             scaler_transform_path (Path, optional): Path to the pickled data for BoxCox transform. Defaults to None.
             leap_years (List[int], optional): List of leap years. Defaults to None.
+            building_char: whether include building characteristics features, default = False
         """
+        self.building_char = building_char
         self.building_datasets = {}
 
         weather_df = None
@@ -156,8 +204,43 @@ class TorchBuildingDatasetFromParquet:
             df_has_weather = df_has_weather.set_index('nhgis_2010_puma_gisjoin')
             lookup_df = df_has_weather[~df_has_weather.index.duplicated()] # remove duplicated indices
 
+        if self.building_char:
+            metadata_path = data_path / 'metadata'
+             # read categorical meta data characteristics of commercial buildings
+            df1 = pd.read_parquet(metadata_path / "comstock_amy2018.parquet", engine="pyarrow")
+            df2 = pd.read_parquet(metadata_path / "comstock_tmy3.parquet", engine="pyarrow")
+            df = pd.concat([df1, df2])
+            com_encoder = OneHotEncoder(handle_unknown='ignore', sparse=False)
+            com_encoder.fit(df[com_chars].values)
+            com_num = len(com_chars)
+
+            del df1
+            del df2
+
+            # read categorical meta data characteristics of residential buildings
+            df1 = pd.read_parquet(metadata_path / "resstock_amy2018.parquet", engine="pyarrow")
+            df2 = pd.read_parquet(metadata_path / "resstock_tmy3.parquet", engine="pyarrow")
+            df = pd.concat([df1, df2])
+            res_encoder = OneHotEncoder(handle_unknown='ignore', sparse=False)
+            res_encoder.fit(df[res_chars].values)
+            res_num = len(res_chars)
+
+            del df1
+            del df2
+
+            meta_dfs = []
+            for name in ["comstock_tmy3", "resstock_tmy3", "comstock_amy2018", "resstock_amy2018"]:
+                df = pd.read_parquet(metadata_path / f"{name}.parquet", engine="pyarrow")
+                meta_dfs.append(df)
+        else:
+            com_encoder = None
+            res_encoder = None
+            com_num = 0
+            res_num = 0
+            meta_dfs = [None, None, None, None]
+
         for parquet_data, building_latlon, building_type in zip(parquet_datasets, building_latlons, building_types):
-            
+
             if weather: # load weather data
                 puma_id = parquet_data.split('puma=')[1]
                 county = lookup_df.loc[puma_id]['nhgis_2010_county_gisjoin']
@@ -172,14 +255,27 @@ class TorchBuildingDatasetFromParquet:
                 assert datetime.datetime.strptime(weather_df['date_time'].iloc[0], '%Y-%m-%d %H:%M:%S').strftime('%m-%d') == '01-01',\
                     "The weather file does not start from Jan 1st"
 
-
             df = pq.read_table(parquet_data)
-
             # Order by timestamp
             df = df.to_pandas().sort_values(by='timestamp')
             # Set timestamp as the index
             df.set_index('timestamp', inplace=True)
             df.index = pd.to_datetime(df.index, format='%Y-%m-%d %H:%M:%S')
+
+            if building_type == BuildingTypes.COMMERCIAL:
+                if "amy2018" in parquet_data:
+                    dataset_name = "comstock_amy2018"
+                    df_idx = 2
+                else:
+                    dataset_name = "comstock_tmy3"
+                    df_idx = 0
+            else:
+                if "amy2018" in parquet_data:
+                    dataset_name = "resstock_amy2018"
+                    df_idx = 3
+                else:
+                    dataset_name = "resstock_tmy3"
+                    df_idx = 1
 
             if weather:
                 df = df[1:] # remove the first row so that it aligns with weather files (which start from 01:00:00)
@@ -208,7 +304,15 @@ class TorchBuildingDatasetFromParquet:
                                                                     apply_scaler_transform,
                                                                     scaler_transform_path,
                                                                     is_leap_year,
-                                                                    weather_and_transform=(weather_df, weather_transform_path))
+                                                                    weather_and_transform=(weather_df, weather_transform_path),
+                                                                    building_id=int(building_name),
+                                                                    building_char=self.building_char,
+                                                                    dataset_name=dataset_name,
+                                                                    com_encoder=com_encoder,
+                                                                    res_encoder=res_encoder,
+                                                                    com_num=com_num,
+                                                                    res_num=res_num,
+                                                                    meta_df=meta_dfs[df_idx])
 
 
     def __len__(self):

@@ -6,7 +6,10 @@ import buildings_bench.transforms as transforms
 from buildings_bench.transforms import BoxCoxTransform, StandardScalerTransform
 import pandas as pd
 from typing import List
-
+from sklearn.preprocessing import OneHotEncoder
+from buildings_bench.data.buildings_utils import *
+import pickle
+import os
 
 class Buildings900K(torch.utils.data.Dataset):
     r"""This is an indexed dataset for the Buildings-900K dataset.
@@ -72,6 +75,27 @@ class Buildings900K(torch.utils.data.Dataset):
         elif self.apply_scaler_transform == 'standard':
             self.load_transform = StandardScalerTransform()
             self.load_transform.load(scaler_transform_path)
+
+        # read categorical meta data characteristics of commercial buildings
+        df1 = pd.read_parquet(self.metadata_path / "comstock_amy2018.parquet", engine="pyarrow")
+        df2 = pd.read_parquet(self.metadata_path / "comstock_tmy3.parquet", engine="pyarrow")
+        df = pd.concat([df1, df2])
+        self.com_encoder = OneHotEncoder(handle_unknown='ignore', sparse=False)
+        self.com_encoder.fit(df[com_chars].values)
+        self.com_num = len(com_chars)
+
+        # read categorical meta data characteristics of residential buildings
+        df1 = pd.read_parquet(self.metadata_path / "resstock_amy2018.parquet", engine="pyarrow")
+        df2 = pd.read_parquet(self.metadata_path / "resstock_tmy3.parquet", engine="pyarrow")
+        df = pd.concat([df1, df2])
+        self.res_encoder = OneHotEncoder(handle_unknown='ignore', sparse=False)
+        self.res_encoder.fit(df[res_chars].values)
+        self.res_num = len(res_chars)
+
+        self.meta_dfs = []
+        for name in ["comstock_tmy3", "resstock_tmy3", "comstock_amy2018", "resstock_amy2018"]:
+            df = pd.read_parquet(self.metadata_path / f"{name}.parquet", engine="pyarrow")
+            self.meta_dfs.append(df)
 
         if weather: # build a puma-county lookup table
             # lookup_df = pd.read_csv(self.metadata_path / 'puma_county_lookup_weather_only.csv', index_col=0)
@@ -169,6 +193,17 @@ class Buildings900K(torch.utils.data.Dataset):
         # residential = 0 and commercial = 1
         building_features = np.ones((self.context_len + self.pred_len,1), dtype=np.int32) * int(int(ts_idx[0]) % 2 == 0)
 
+        # encode meta data characteristics
+        # if commercial
+        if int(ts_idx[0]) % 2 == 0:
+            df = self.meta_dfs[int(ts_idx[0])]
+            ch = df[df.index == int(bldg_id)][com_chars].values
+            ft = np.hstack([self.com_encoder.transform(ch), self.res_encoder.transform([[None] * self.res_num])])
+        else:
+            df = self.meta_dfs[int(ts_idx[0])]
+            ch = df[df.index == int(bldg_id)][res_chars].values
+            ft = np.hstack([self.com_encoder.transform([[None] * self.com_num]), self.res_encoder.transform(ch)])
+
         sample = {
             'latitude': latlon_features[:, 0][...,None],
             'longitude': latlon_features[:, 1][...,None],
@@ -176,7 +211,12 @@ class Buildings900K(torch.utils.data.Dataset):
             'day_of_week': time_features[:, 1][...,None],
             'hour_of_day': time_features[:, 2][...,None],
             'building_type': building_features,
-            'load': load_features[...,None]
+            'load': load_features[...,None],
+
+            # added building characteristics
+            'building_char': np.repeat(ft, self.context_len + self.pred_len, axis=0).astype(np.float32),
+            'building_id': int(bldg_id),
+            'dataset_id': int(ts_idx[0])
         }
 
         if self.weather is None:
