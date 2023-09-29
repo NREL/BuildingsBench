@@ -18,11 +18,19 @@ def main():
     real_building_prefix = Path(os.environ.get('BUILDINGS_BENCH', ''))
     real_building_ds = [('LCL', 'london', '2011-01-01', '2014-12-31'), ('IDEAL', 'edinburg', '2017-01-01', '2018-12-31'), 
                       ('Sceaux', 'sceaux', '2007-01-01', '2010-12-31'), ('Borealis', 'waterloo', '2011-01-01', '2012-12-31'),
-                      ('Electricity', 'lisbon', '2011-01-01', '2014-12-31'), ('SMART', 'massachusetts', '2014-01-01', '2016-12-31')] 
+                      ('Electricity', 'lisbon', '2011-01-01', '2014-12-31'), ('SMART', 'massachusetts', '2014-01-01', '2016-12-31'),
+                      ('Panther', 'ucf', '2016-01-01', '2017-12-31'), ('Fox', 'asu', '2016-01-01', '2017-12-31'), 
+                      ('Bear', 'uc-b', '2016-01-01', '2017-12-31'), ('Rat', 'dc', '2016-01-01', '2017-12-31')] 
+    
+    BDG = {'Panther', 'Fox', 'Bear', 'Rat'}
  
     for ds in real_building_ds:
         print('Downloading', ds[0])
-        output_dir = real_building_prefix / ds[0]
+
+        if ds[0] in BDG:
+            output_dir = real_building_prefix / 'BDG-2'
+        else:
+            output_dir = real_building_prefix / ds[0]
 
         weather = get_hourly_weather_pandas(ds[2], ds[3], AREA_LONLAT[ds[1]], variable=['2m_temperature','2m_dewpoint_temperature'])
 
@@ -33,7 +41,12 @@ def main():
         weather.drop(columns=['2m_dewpoint_temperature'], inplace=True)
         weather.rename(columns={'2m_temperature' : 'temperature'}, inplace=True)
 
-        weather.to_csv(output_dir / 'weather.csv')
+        if ds[0] in BDG:
+            weather.to_csv(output_dir / f'weather_{ds[0]}_era5.csv')
+            weather.to_csv(real_building_prefix / 'remove_outliers' / 'BDG-2' / f'weather_{ds[0]}_era5.csv')
+        else:
+            weather.to_csv(output_dir / 'weather.csv')
+            weather.to_csv(real_building_prefix / 'remove_outliers' / ds[0] / f'weather.csv')
 
 
    
