@@ -38,7 +38,7 @@ def transfer_learning(args, results_path: Path):
 
     for dataset in args.benchmark:
         dataset_generator = load_pandas_dataset(dataset, feature_set='engineered',
-                                                remove_outliers=args.remove_outliers)
+                                                remove_outliers=not args.include_outliers)
         # Filter to target buildings
         if len(target_buildings) > 0:
             dataset_generator = keep_buildings(dataset_generator, target_buildings)
@@ -133,7 +133,7 @@ if __name__ == '__main__':
     parser.add_argument('--seed', type=int, default=1)
     parser.add_argument('--variant_name', type=str, default='',
                         help='Name of the variant. Optional. Used for results files.')
-    parser.add_argument('--remove_outliers', action='store_true')
+    parser.add_argument('--include_outliers', action='store_true')
 
     # Transfer learning - data
     parser.add_argument('--num_training_days', type=int, default=180,
@@ -146,8 +146,8 @@ if __name__ == '__main__':
     
 
     results_path = Path(args.results_path)
-    if args.remove_outliers:
-        results_path = results_path / 'remove_outliers'
+    if args.include_outliers:
+        results_path = results_path / 'buildingsbench_with_outliers'
     results_path.mkdir(parents=True, exist_ok=True)
 
     transfer_learning(args, results_path)

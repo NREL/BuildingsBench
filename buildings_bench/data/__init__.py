@@ -105,7 +105,7 @@ def load_torch_dataset(
         dataset_path: Path = None,
         apply_scaler_transform: str = '',
         scaler_transform_path: Path = None,
-        remove_outliers: bool = False,
+        include_outliers: bool = False,
         context_len = 168,
         pred_len = 24
         ) -> Union[TorchBuildingDatasetsFromCSV, TorchBuildingDatasetFromParquet]:
@@ -117,7 +117,7 @@ def load_torch_dataset(
         apply_scaler_transform (str): If not using quantized load or unscaled loads,
                                  applies a {boxcox,standard} scaling transform to the load. Default: ''.
         scaler_transform_path (Path): Path to data for transform, e.g., pickled data for BoxCox transform.
-        remove_outliers (bool): Use version of BuildingsBench with some outliers removed.
+        include_outliers (bool): Use version of BuildingsBench with outliers.
         context_len (int): Length of the context. Defaults to 168.
         pred_len (int): Length of the prediction horizon. Defaults to 24.
     
@@ -162,9 +162,8 @@ def load_torch_dataset(
         dataset_metadata = metadata[name.lower()]
         all_by_files = parse_building_years_metadata(dataset_path, name.lower())
         all_by_files = filter(lambda by_file: subset in by_file.lower(), all_by_files)
-        if remove_outliers:
-            dataset_path = dataset_path / 'remove_outliers'
-        print(f'loading data from {dataset_path}')
+        if include_outliers:
+            dataset_path = dataset_path / 'buildingsbench_with_outliers'
         dataset_generator = TorchBuildingDatasetsFromCSV(dataset_path,
                                                          all_by_files,
                                                          dataset_metadata[subset]['latlon'],
@@ -177,9 +176,8 @@ def load_torch_dataset(
     elif name.lower() in benchmark_registry:
         dataset_metadata = metadata[name.lower()]
         all_by_files = parse_building_years_metadata(dataset_path, name.lower())
-        if remove_outliers:
-            dataset_path = dataset_path / 'remove_outliers'
-        print(f'loading data from {dataset_path}')
+        if include_outliers:
+            dataset_path = dataset_path / 'buildingsbench_with_outliers'
         dataset_generator = TorchBuildingDatasetsFromCSV(dataset_path,
                                                          all_by_files,
                                                          dataset_metadata['latlon'],
@@ -202,7 +200,7 @@ def load_pandas_dataset(
         feature_set: str = 'engineered',
         apply_scaler_transform: str = '',
         scaler_transform_path: Path = None,
-        remove_outliers: bool = False) -> PandasBuildingDatasetsFromCSV:
+        include_outliers: bool = False) -> PandasBuildingDatasetsFromCSV:
     """
     Load datasets by name.
 
@@ -213,7 +211,7 @@ def load_pandas_dataset(
         apply_scaler_transform (str): If not using quantized load or unscaled loads,
                                     applies a {boxcox,standard} scaling transform to the load. Default: ''. 
         scaler_transform_path (Path): Path to data for transform, e.g., pickled data for BoxCox transform.
-        remove_outliers (bool): Use version of BuildingsBench with some outliers removed.
+        include_outliers (bool): Use version of BuildingsBench with outliers.
 
     Returns:
         dataset (PandasBuildingDatasetsFromCSV): Generator of Pandas datasets for benchmarking.
@@ -241,8 +239,8 @@ def load_pandas_dataset(
         all_by_files = parse_building_years_metadata(dataset_path, name.lower())
         building_type = dataset_metadata['building_type']
         building_latlon = dataset_metadata['latlon']
-    if remove_outliers:
-        dataset_path = dataset_path / 'remove_outliers'
+    if include_outliers:
+        dataset_path = dataset_path / 'buildingsbench_with_outliers'
 
     return PandasBuildingDatasetsFromCSV(
             dataset_path,

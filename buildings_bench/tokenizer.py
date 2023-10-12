@@ -97,7 +97,7 @@ class LoadQuantizer:
             for i in range(len(candidate_index_list)):
                 for j in candidate_index_list[i]:
                     self.original_order_to_merged_centroid_map[j] = i
-            print('Merged {} centroids to {} centroids'.format(len(index_to_value_map), len(self.merged_centroids)))
+            #print('Merged {} centroids to {} centroids'.format(len(index_to_value_map), len(self.merged_centroids)))
             self.K = len(self.merged_centroids)
             
     def save(self, output_path: Path) -> None:
@@ -132,9 +132,9 @@ class LoadQuantizer:
             self.merged_centroids = np.load(
                 saved_path / "kmeans_merged_centers_K={}.npy".format(self.K), allow_pickle=True)
             
-            print(f'Loaded Kmeans quantizer with K={len(self.merged_centroids)}')
-        else:
-            print(f'Loaded Kmeans quantizer with K={self.K}')
+            #print(f'Loaded Kmeans quantizer with K={len(self.merged_centroids)}')
+        #else:
+        #print(f'Loaded Kmeans quantizer with K={self.K}')
 
         if 'cuda' in self.device:
             local_rank = int(self.device.split(':')[-1])
@@ -150,7 +150,7 @@ class LoadQuantizer:
                 self.merged_centroids = torch.from_numpy(
                     self.merged_centroids).float().to(self.device)
                 self.merged_centroids.squeeze()
-            print(f'Kmeans quantizer moved to GPU: {type(self.kmeans.index)}')
+            #print(f'Kmeans quantizer moved to GPU: {type(self.kmeans.index)}')
 
 
     def transform(self, sample: Union[np.ndarray, torch.Tensor]) -> Union[np.ndarray, torch.Tensor]:

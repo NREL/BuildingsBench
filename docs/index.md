@@ -12,30 +12,9 @@ We provide an index-based PyTorch [Dataset](https://nrel.github.io/BuildingsBenc
 Read more about BuildingsBench in our [paper](https://arxiv.org/abs/2307.00142).
 
 
-### Load a benchmark dataset
+## Getting started 
 
-
-```python
-import torch
-from buildings_bench import load_torch_dataset
-
-# Load a dataset generator for a dataset of buildings
-buildings_dataset_generator = load_torch_dataset('bdg-2:panther')
-
-# Each building is a torch.utils.data.Dataset
-for building_name, building in buildings_dataset_generator:
-    building_dataloader = torch.utils.data.DataLoader(building,
-                                                      batch_size=358,
-                                                      num_workers=4,
-                                                      shuffle=False)
-    for sample in building_dataloader:
-        x = sample['load']
-        # context = x[:, :168], 1 week hourly of context
-        # target = x[:, -24:], 24 hour target prediction
-        # ...
-```
-
-## Installation
+### Installation
 
 If you aren't going to pretrain or evaluate models and just want access to the provided dataloaders, model code, metrics computation, etc., install the package with:
 
@@ -43,7 +22,7 @@ If you aren't going to pretrain or evaluate models and just want access to the p
 pip install buildings_bench
 ```
 
-### Full installation
+#### Full installation
 
 Otherwise, clone this repository and install it in editable mode in a virtual environment or a conda environment.
 
@@ -55,7 +34,7 @@ cd BuildingsBench
 pip install -e ".[benchmark]"
 ```
 
-### Installing faiss-gpu
+#### Installing faiss-gpu
 
 Due to a PyPI limitation, we have to install `faiss-gpu` (for KMeans) by directly downloading the wheel from [https://github.com/kyamagu/faiss-wheels/releases/](https://github.com/kyamagu/faiss-wheels/releases/).
 Download the wheel for the python version you are using, then install it in your environment.
@@ -68,36 +47,13 @@ wget https://github.com/kyamagu/faiss-wheels/releases/download/v1.7.3/faiss_gpu-
 pip install faiss_gpu-1.7.3-cp38-cp38-manylinux2014_x86_64.whl
 ```
 
-### [Optional] Installing LightGBM
+#### [Optional] Installing LightGBM
 
 If running the LightGBM baseline, you will need to install LightGBM.
 Follow instructions [here](https://pypi.org/project/lightgbm/) for your OS. 
 Then, `pip install skforecast`.
 
-## Download the datasets and metadata
-
-The pretraining dataset and evaluation data is available for download [here](https://data.openei.org/submissions/5859) as tar files, or can be accessed via AWS S3 [here](https://data.openei.org/s3_viewer?bucket=oedi-data-lake&prefix=buildings-bench). The benchmark datasets are < 1GB in size in total, but the pretraining data is ~110GB in size.
-
-
-The Buildings-900K pretraining data is divided into 4 tar files:
-
-- `comstock_amy2018.tar.gz`
-- `comstock_tmy3.tar.gz`
-- `resstock_amy2018.tar.gz`
-- `resstock_tmy3.tar.gz`
-
-The evaluation datasets are available in a single file:
-
-- `BuildingsBench.tar.gz`
-
-One tar file for the metadata which has files that are necessary for running pretraining (such as index files for the Buildings-900K PyTorch Dataset) and the benchmark tasks.
-
-- `metadata.tar.gz`
-
-Download and untar all files, which will create a new directory called `BuildingsBench`. **This is the data directory, which is different than the code repository, although both are called "BuildingsBench".**
-See the README file `BuildingsBench/metadata/README.md` (in `metadata.tar.gz`) for more information about how the BuildingsBench dataset directory should be organized.
-
-### Environment variables
+#### Environment variables
 
 Set the environment variable `BUILDINGS_BENCH` to the path where the data directory `BuildingsBench` is located (created when untarring the data files). **This is not the path to the code repository.**
 
@@ -105,7 +61,7 @@ Set the environment variable `BUILDINGS_BENCH` to the path where the data direct
 export BUILDINGS_BENCH=/path/to/BuildingsBench
 ```
 
-#### Wandb 
+##### Wandb 
 
 If using `wandb`, set the following:
 
@@ -120,6 +76,13 @@ Verify your installation by running unit tests:
 ```bash
 python -m unittest
 ```
+
+## Next steps
+
+1. [Download and get familiar with the datasets](https://nrel.github.io/BuildingsBench/datasets/)
+2. [Download a pretrained model and run the two benchmark tasks]()
+3. [Learn how to run a custom model on the benchmark](https://github.com/NREL/BuildingsBench/blob/main/tutorials/registering_your_model_with_the_benchmark.ipynb)
+4. [Computing metrics and interpreting the results](https://github.com/NREL/BuildingsBench/blob/main/tutorials/aggregate_benchmark_results.ipynb)
 
 ## Citation
 
