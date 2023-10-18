@@ -80,9 +80,11 @@ python -m unittest
 ## Next steps
 
 1. [Download and get familiar with the datasets](https://nrel.github.io/BuildingsBench/datasets/)
-2. [Download a pretrained model and run the two benchmark tasks]()
+2. [Learn how to download a pretrained model and run it on a building dataset](https://github.com/NREL/BuildingsBench/blob/main/tutorials/pretrained_models.ipynb)
 3. [Learn how to run a custom model on the benchmark](https://github.com/NREL/BuildingsBench/blob/main/tutorials/registering_your_model_with_the_benchmark.ipynb)
 4. [Computing metrics and interpreting the results](https://github.com/NREL/BuildingsBench/blob/main/tutorials/aggregate_benchmark_results.ipynb)
+
+[List of all tutorials](https://nrel.github.io/BuildingsBench/tutorials/).
 
 ## Citation
 

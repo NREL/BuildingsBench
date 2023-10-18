@@ -161,7 +161,7 @@ def transfer_learning(args, model_args, results_path: Path):
                                                 feature_set='transformer',
                                                 apply_scaler_transform=args.apply_scaler_transform,
                                                 scaler_transform_path=transform_path,
-                                                remove_outliers=not args.include_outliers)
+                                                include_outliers=args.include_outliers)
         # Filter to target buildings
         if len(target_buildings) > 0:
             dataset_generator = keep_buildings(dataset_generator, target_buildings)

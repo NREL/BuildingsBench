@@ -38,7 +38,7 @@ def transfer_learning(args, results_path: Path):
 
     for dataset in args.benchmark:
         dataset_generator = load_pandas_dataset(dataset, feature_set='engineered',
-                                                remove_outliers=not args.include_outliers)
+                                                include_outliers=args.include_outliers)
         # Filter to target buildings
         if len(target_buildings) > 0:
             dataset_generator = keep_buildings(dataset_generator, target_buildings)

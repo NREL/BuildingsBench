@@ -58,7 +58,7 @@ def zero_shot_learning(args, model_args, results_path: Path):
         buildings_datasets_generator = load_torch_dataset(dataset_name,
                                                           apply_scaler_transform=args.apply_scaler_transform,
                                                           scaler_transform_path=transform_path,
-                                                          remove_outliers=not args.include_outliers)
+                                                          include_outliers=args.include_outliers)
         # For each building
         for building_name, building_dataset in buildings_datasets_generator:
             print(f'dataset {dataset_name} building-year {building_name} '
