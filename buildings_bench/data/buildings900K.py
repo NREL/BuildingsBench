@@ -40,7 +40,8 @@ class Buildings900K(torch.utils.data.Dataset):
                 pred_len: int = 24,
                 apply_scaler_transform: str = '',
                 scaler_transform_path: Path = None,
-                weather: List[str] = None):
+                weather: List[str] = None,
+                use_text_embedding: bool = False):
         """
         Args:
             dataset_path (Path): Path to the pretraining dataset.
@@ -54,7 +55,7 @@ class Buildings900K(torch.utils.data.Dataset):
             weather (List[str]): list of weather features to use. Default: None.
         """
         self.dataset_path = dataset_path / 'Buildings-900K' / 'end-use-load-profiles-for-us-building-stock' / '2021'
-        self.metadata_path = dataset_path / 'metadata'
+        self.metadata_path = dataset_path / 'metadata_dev'
         self.context_len = context_len
         self.pred_len = pred_len
         self.building_type_and_year = ['comstock_tmy3_release_1',
@@ -69,6 +70,8 @@ class Buildings900K(torch.utils.data.Dataset):
         self.time_transform = transforms.TimestampTransform()
         self.spatial_transform = transforms.LatLonTransform()
         self.apply_scaler_transform = apply_scaler_transform
+        self.use_text_embedding = use_text_embedding
+
         if self.apply_scaler_transform == 'boxcox':
             self.load_transform = BoxCoxTransform()
             self.load_transform.load(scaler_transform_path)
@@ -83,6 +86,7 @@ class Buildings900K(torch.utils.data.Dataset):
         self.com_encoder = OneHotEncoder(handle_unknown='ignore', sparse=False)
         self.com_encoder.fit(df[com_chars].values)
         self.com_num = len(com_chars)
+        self.com_dim = self.com_encoder.transform([[None] * self.com_num]).shape
 
         # read categorical meta data characteristics of residential buildings
         df1 = pd.read_parquet(self.metadata_path / "resstock_amy2018.parquet", engine="pyarrow")
@@ -91,11 +95,14 @@ class Buildings900K(torch.utils.data.Dataset):
         self.res_encoder = OneHotEncoder(handle_unknown='ignore', sparse=False)
         self.res_encoder.fit(df[res_chars].values)
         self.res_num = len(res_chars)
+        self.res_dim = self.res_encoder.transform([[None] * self.res_num]).shape
 
         self.meta_dfs = []
-        for name in ["comstock_tmy3", "resstock_tmy3", "comstock_amy2018", "resstock_amy2018"]:
+        self.meta_dataset_names = ["comstock_tmy3", "resstock_tmy3", "comstock_amy2018", "resstock_amy2018"]
+        for name in self.meta_dataset_names:
             df = pd.read_parquet(self.metadata_path / f"{name}.parquet", engine="pyarrow")
             self.meta_dfs.append(df)
+
 
         if weather: # build a puma-county lookup table
             # lookup_df = pd.read_csv(self.metadata_path / 'puma_county_lookup_weather_only.csv', index_col=0)
@@ -193,16 +200,26 @@ class Buildings900K(torch.utils.data.Dataset):
         # residential = 0 and commercial = 1
         building_features = np.ones((self.context_len + self.pred_len,1), dtype=np.int32) * int(int(ts_idx[0]) % 2 == 0)
 
-        # encode meta data characteristics
+        # one-hot encode meta data characteristics
+        # text embedding
+        df = self.meta_dfs[int(ts_idx[0])]
         # if commercial
         if int(ts_idx[0]) % 2 == 0:
-            df = self.meta_dfs[int(ts_idx[0])]
+            # df = self.meta_dfs[int(ts_idx[0])]
             ch = df[df.index == int(bldg_id)][com_chars].values
-            ft = np.hstack([self.com_encoder.transform(ch), self.res_encoder.transform([[None] * self.res_num])])
+            ft = np.hstack([self.com_encoder.transform(ch), np.zeros(self.res_dim)])
+            bd_subtype = df[df.index == int(bldg_id)]["in.building_type"].values[0]
+            bd_subtype = list(self.com_encoder.categories_[1]).index(bd_subtype)
         else:
-            df = self.meta_dfs[int(ts_idx[0])]
+            # df = self.meta_dfs[int(ts_idx[0])]
             ch = df[df.index == int(bldg_id)][res_chars].values
-            ft = np.hstack([self.com_encoder.transform([[None] * self.com_num]), self.res_encoder.transform(ch)])
+            ft = np.hstack([np.zeros(self.com_dim), self.res_encoder.transform(ch)])
+            bd_subtype = -1
+
+        # overwrite ft if use text embedding
+        if self.use_text_embedding:
+            ft = np.load(self.metadata_path / "simcap" / self.meta_dataset_names[int(ts_idx[0])] / f"{bldg_id}_emb.npy")
+            ft = np.expand_dims(ft, axis=0)
 
         sample = {
             'latitude': latlon_features[:, 0][...,None],
@@ -216,7 +233,8 @@ class Buildings900K(torch.utils.data.Dataset):
             # added building characteristics
             'building_char': np.repeat(ft, self.context_len + self.pred_len, axis=0).astype(np.float32),
             'building_id': int(bldg_id),
-            'dataset_id': int(ts_idx[0])
+            'dataset_id': int(ts_idx[0]),
+            "building_subtype": bd_subtype
         }
 
         if self.weather is None:

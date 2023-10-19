@@ -61,7 +61,8 @@ def load_pretraining(
         weather: List[str] = None,
         custom_idx_filename: str = '',
         context_len=168, # week
-        pred_len=24) -> torch.utils.data.Dataset:
+        pred_len=24,
+        use_text_embedding=False) -> torch.utils.data.Dataset:
     r"""
     Pre-training datasets: buildings-900k-train, buildings-900k-val
 
@@ -106,6 +107,36 @@ def load_pretraining(
                                apply_scaler_transform=apply_scaler_transform,
                                scaler_transform_path = scaler_transform_path,
                                weather=weather)
+    elif name.lower() == 'simcap-10k-train':
+        idx_file = f'train_simcap.idx' if custom_idx_filename == '' else custom_idx_filename
+        dataset = Buildings900K(dataset_path,
+                               idx_file,
+                               context_len=context_len,
+                               pred_len=pred_len,
+                               apply_scaler_transform=apply_scaler_transform,
+                               scaler_transform_path = scaler_transform_path,
+                               weather=weather,
+                               use_text_embedding=use_text_embedding)
+    elif name.lower() == 'simcap-10k-val':
+        idx_file = f'val_simcap.idx' if custom_idx_filename == '' else custom_idx_filename
+        dataset = Buildings900K(dataset_path,
+                               idx_file,
+                               context_len=context_len,
+                               pred_len=pred_len,
+                               apply_scaler_transform=apply_scaler_transform,
+                               scaler_transform_path = scaler_transform_path,
+                               weather=weather,
+                               use_text_embedding=use_text_embedding)
+    elif name.lower() == 'simcap-10k-test':
+        idx_file = f'test_simcap.idx' if custom_idx_filename == '' else custom_idx_filename
+        dataset = Buildings900K(dataset_path,
+                               idx_file,
+                               context_len=context_len,
+                               pred_len=pred_len,
+                               apply_scaler_transform=apply_scaler_transform,
+                               scaler_transform_path = scaler_transform_path,
+                               weather=weather,
+                               use_text_embedding=use_text_embedding)
     return dataset
         
     

@@ -18,6 +18,38 @@ from buildings_bench.evaluation.metrics import MetricType
 from buildings_bench.evaluation import metrics_factory
 from buildings_bench.evaluation import scoring_rule_factory
 from buildings_bench.data import load_torch_dataset
+from buildings_bench.data import g_weather_features
+import numpy as np
+import math
+import pickle
+
+class statsTracker:
+    def __init__(self):
+        self.counter = None
+        self.average = None
+    
+    def update(self, x):
+        if self.counter is None:
+            self.counter = x.size(0)
+            self.average = x.mean(dim=0)
+        else:
+            self.average = x.sum(dim=0) + self.average * self.counter
+            self.counter += x.size(0)
+            self.average = self.average / self.counter
+
+    def get(self):
+        return self.average
+
+class uniqueTracker:
+    def __init__(self):
+        self.unique = set()
+
+    def update(self, x):
+        for row in x:
+            self.unique.add((row[0], row[1]))
+
+    def get(self):
+        return len(self.unique)
 
 SCRIPT_PATH = Path(os.path.realpath(__file__)).parent
 
@@ -164,12 +196,14 @@ def aggregate_eval(args, model_args, testset="val"):
     #         new_state_dict[name] = v
     
     #     return new_state_dict
+    if args.weather is not None and args.weather[0] == 'all':
+        args.weather = g_weather_features
 
     model, loss, predict = model_factory(args.config, model_args)
     model = model.to(local_rank)
     model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[local_rank], output_device=local_rank)
     model.load_state_dict(
-        torch.load("checkpoints/ckpt-step-162760.pt", map_location=f'cuda:{local_rank}')["model"]
+        torch.load("checkpoints/ckpt-step-100000-loss-1607.982.pt", map_location=f'cuda:{local_rank}')["model"]
     )
     
     print(f'rank {args.rank} number of trainable parameters is '\
@@ -178,17 +212,25 @@ def aggregate_eval(args, model_args, testset="val"):
     #################### Dataset setup ####################
 
     if testset == "val":
-        test_dataset = load_pretraining('buildings-900k-val',
+        test_dataset = load_pretraining('simcap-10k-val',
                                    args.num_buildings,
                                    args.apply_scaler_transform,
-                                   transform_path, weather=args.weather, custom_idx_filename=args.val_idx_filename,
+                                   transform_path, 
+                                   weather=args.weather, 
+                                   custom_idx_filename=args.val_idx_filename,
+                                   use_text_embedding=args.use_text_embedding
                                 )
         test_dataset_gen = [["val", test_dataset]]
     else:
-        test_dataset_gen = load_torch_dataset("buildings-900k-test",
-                                                apply_scaler_transform=args.apply_scaler_transform,
-                                                scaler_transform_path=transform_path,
-                                                weather=args.weather)
+        test_dataset = load_pretraining('simcap-10k-test',
+                                   args.num_buildings,
+                                   args.apply_scaler_transform,
+                                   transform_path, 
+                                   weather=args.weather, 
+                                   custom_idx_filename=args.val_idx_filename,
+                                   use_text_embedding=args.use_text_embedding
+                                )
+        test_dataset_gen = [["test", test_dataset]]
     
     if not model.module.continuous_loads:
         load_transform = LoadQuantizer(
@@ -216,34 +258,6 @@ def aggregate_eval(args, model_args, testset="val"):
     model.eval()
     step = 0
 
-    class statsTracker:
-        def __init__(self):
-            self.counter = None
-            self.average = None
-        
-        def update(self, x):
-            if self.counter is None:
-                self.counter = x.size(0)
-                self.average = x.mean(dim=0)
-            else:
-                self.average = x.sum(dim=0) + self.average * self.counter
-                self.counter += x.size(0)
-                self.average = self.average / self.counter
-
-        def get(self):
-            return self.average
-
-    class uniqueTracker:
-        def __init__(self):
-            self.unique = set()
-
-        def update(self, x):
-            for row in x:
-                self.unique.add((row[0], row[1]))
-
-        def get(self):
-            return len(self.unique)
-
     bd_types = ['FullServiceRestaurant', 'Hospital', 'LargeHotel', 'LargeOffice',
        'MediumOffice', 'Outpatient', 'PrimarySchool',
        'QuickServiceRestaurant', 'RetailStandalone', 'RetailStripmall',
@@ -266,7 +280,9 @@ def aggregate_eval(args, model_args, testset="val"):
             shuffle=(val_sampler is None), num_workers=args.num_workers, pin_memory=True)
 
         for batch in val_dataloader:   
-            building_types_mask = batch['building_type'][:,0,0] == 1
+            # building_types_mask = batch['building_type'][:,0,0] == 1
+            building_types_mask = batch['building_subtype'] != -1
+            building_types_mask = building_types_mask.cpu()
 
             for k,v in batch.items():
                 batch[k] = v.to(model.device)
@@ -321,7 +337,8 @@ def aggregate_eval(args, model_args, testset="val"):
             bd_ids = torch.cat((batch["dataset_id"].unsqueeze(1), batch["building_id"].unsqueeze(1)), dim=1).long()
 
             for i in range(14):
-                mask = bd_char[:, 10+i] == 1
+                mask = batch['building_subtype'] == i
+                mask = mask.cpu()
                 if mask.any():
                     idx = time[mask, :].argmin(dim=1)
 
@@ -333,6 +350,9 @@ def aggregate_eval(args, model_args, testset="val"):
                     stats[i][0].update(p.double())
                     stats[i][1].update(t.double())
                     stats[i][2].update(bd_ids[mask, :])
+
+    with open('stats_mlptext.pickle', 'wb') as handle:
+        pickle.dump(stats, handle, protocol=pickle.HIGHEST_PROTOCOL)
         
     import matplotlib.pyplot as plt
     fig=plt.figure(figsize=(12,8), dpi= 100, facecolor='w', edgecolor='k')
@@ -347,7 +367,7 @@ def aggregate_eval(args, model_args, testset="val"):
 
         plt.plot(p, label="prediction")
         plt.plot(t, label="target")
-        plt.title(bd_types[i] + f" {n}" )
+        plt.title(bd_types[i])
         plt.legend()
         plt.tight_layout()
 
@@ -434,6 +454,8 @@ def main(args, model_args):
     global_batch_size = args.world_size * args.batch_size
 
     #################### Model setup ####################
+    if args.weather is not None and args.weather[0] == 'all':
+        args.weather = g_weather_features
 
     model, loss, predict = model_factory(args.config, model_args)
     model = model.to(local_rank)
@@ -441,16 +463,28 @@ def main(args, model_args):
           f'= {sum(p.numel() for p in model.parameters())}', flush=True)
 
     #################### Dataset setup ####################
+    if "simcap" in args.train_idx_filename:
+        train_dataset_name = "simcap-10k-train"
+        val_dataset_name = "simcap-10k-val"
+    else:
+        train_dataset_name = "buildings-900k-train"
+        val_dataset_name = "buildings-900k-val"
 
-    train_dataset = load_pretraining('buildings-900k-train',
+    train_dataset = load_pretraining(train_dataset_name,
                                      args.num_buildings,
                                      args.apply_scaler_transform,
-                                     transform_path, weather=args.weather, custom_idx_filename=args.train_idx_filename)
+                                     transform_path, 
+                                     weather=args.weather, 
+                                     custom_idx_filename=args.train_idx_filename,
+                                     use_text_embedding=args.use_text_embedding)
     
-    val_dataset = load_pretraining('buildings-900k-val',
+    val_dataset = load_pretraining(val_dataset_name,
                                    args.num_buildings,
                                    args.apply_scaler_transform,
-                                   transform_path, weather=args.weather, custom_idx_filename=args.val_idx_filename)
+                                   transform_path, 
+                                   weather=args.weather, 
+                                   custom_idx_filename=args.val_idx_filename,
+                                   use_text_embedding=args.use_text_embedding)
 
     train_sampler = torch.utils.data.distributed.DistributedSampler(
                                      dataset=train_dataset,
@@ -502,7 +536,7 @@ def main(args, model_args):
     print(f'rank {args.rank} wrapped model in DDP', flush=True)
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr,
                                   betas=(0.9, 0.98), eps=1e-9, weight_decay=0.01)
-    train_steps = args.train_tokens // (global_batch_size * model.module.pred_len )
+    train_steps = args.train_tokens // (global_batch_size * model.module.pred_len)
 
     scheduler = transformers.get_cosine_schedule_with_warmup(optimizer,
                             num_warmup_steps=args.warmup_steps,
@@ -534,94 +568,97 @@ def main(args, model_args):
     model.train()
     start_time = timer()
 
-    for batch in train_dataloader:
-        start_time = timer()
-        optimizer.zero_grad()
+    num_epochs = 10
 
-        for k,v in batch.items():
-            batch[k] = v.to(model.device)
-        
-        # Apply transform to load if needed
-        batch['load'] = transform(batch['load'])
-        
-        # backwards is called in here
-        with torch.cuda.amp.autocast():
-            preds = model(batch)    
-            targets = batch['load'][:, :model.module.context_len]                
-            # preds are [bsz_sz, pred_len, vocab_size] if logits
-            # preds are [bsz_sz, pred_len, 2] if Gaussian
-            # preds are [bsz_sz, pred_len, 1] if MSE
-            # targets is [bsz_sz, pred_len, 1]
-            batch_loss = loss(preds, targets)
-        
-        # Scale Gradients
-        scaler.scale(batch_loss).backward()
-        
-        # Update Optimizer
-        scaler.step(optimizer)
-        scaler.update()
-        scheduler.step()
-        end_time = timer()
+    for epoch in range(num_epochs):
+        for batch in train_dataloader:
+            start_time = timer()
+            optimizer.zero_grad()
 
-        secs_per_step = end_time - start_time
-        # world_size * batch_size = global batch size with DDP training
-        seen_tokens += (global_batch_size * model.module.pred_len)
-        step += 1
+            for k,v in batch.items():
+                batch[k] = v.to(model.device)
+            
+            # Apply transform to load if needed
+            batch['load'] = transform(batch['load'])
+            
+            # backwards is called in here
+            with torch.cuda.amp.autocast():
+                preds = model(batch) 
+                targets = batch['load'][:, :model.module.context_len, :]   
+                # preds are [bsz_sz, pred_len, vocab_size] if logits
+                # preds are [bsz_sz, pred_len, 2] if Gaussian
+                # preds are [bsz_sz, pred_len, 1] if MSE
+                # targets is [bsz_sz, pred_len, 1]
+                batch_loss = loss(preds, targets)
+            
+            # Scale Gradients
+            scaler.scale(batch_loss).backward()
+            
+            # Update Optimizer
+            scaler.step(optimizer)
+            scaler.update()
+            scheduler.step()
+            end_time = timer()
 
-        ppl = torch.exp(batch_loss.detach())
+            secs_per_step = end_time - start_time
+            # world_size * batch_size = global batch size with DDP training
+            seen_tokens += (global_batch_size * model.module.pred_len)
+            step += 1
 
-        if args.rank == 0 and step % 500 == 0:
-            wandb.log({
-                'train/loss': batch_loss,
-                'train/batch_ppl': ppl,
-                'train/seen_tokens (M)': seen_tokens / 1000000,
-                'train/secs_per_step': secs_per_step,
-                'train/lr': optimizer.param_groups[0]['lr']
-            }, step=step)
+            ppl = torch.exp(batch_loss.detach())
 
-        if args.rank == 0 and step % 10000 == 0:
-            print(f'started validation at step {step}...')
+            if args.rank == 0 and step % 500 == 0:
+                wandb.log({
+                    'train/loss': batch_loss,
+                    'train/batch_ppl': ppl,
+                    'train/seen_tokens (M)': seen_tokens / 1000000,
+                    'train/secs_per_step': secs_per_step,
+                    'train/lr': optimizer.param_groups[0]['lr']
+                }, step=step)
 
-            val_loss, val_ppl, val_metrics = validation(model, val_dataloader, args, loss, load_transform,
-                                                        transform, inverse_transform, predict)
-            # only rank 0 needs to save model
-            if val_loss < best_val_loss:
-                # delete old checkpoint
-                if args.note != '':
-                    for f in checkpoint_dir.glob(f'ckpt-step-*-{args.note}-loss-{best_val_loss:.3f}.pt'):
-                        f.unlink()
-                else:
-                    for f in checkpoint_dir.glob(f'ckpt-step-*-loss-{best_val_loss:.3f}.pt'):
-                        f.unlink()
+            if args.rank == 0 and step % 10000 == 0:
+                print(f'started validation at step {step}...')
 
-                best_val_loss = val_loss
-                if args.note != '':
-                    model_name = f'ckpt-step-{step}-{args.note}-loss-{best_val_loss:.3f}.pt'
-                else:
-                    model_name = f'ckpt-step-{step}-loss-{best_val_loss:.3f}.pt'
-                utils.save_model_checkpoint(model, optimizer, scheduler, step, checkpoint_dir / model_name)
-            for building_type in [BuildingTypes.RESIDENTIAL, BuildingTypes.COMMERCIAL]:
-                for metric_name, metric_result in val_metrics[building_type].items():
-                    if metric_result.type == MetricType.SCALAR:
-                        wandb.log({f'val/{building_type}/{metric_name}' : metric_result.value }, step=step)
+                val_loss, val_ppl, val_metrics = validation(model, val_dataloader, args, loss, load_transform,
+                                                            transform, inverse_transform, predict)
+                # only rank 0 needs to save model
+                if val_loss < best_val_loss:
+                    # delete old checkpoint
+                    if args.note != '':
+                        for f in checkpoint_dir.glob(f'ckpt-step-*-{args.note}-loss-{best_val_loss:.3f}.pt'):
+                            f.unlink()
                     else:
-                        # Create a wandb.Table for each hour of day metric then plot a line plot
-                        table = wandb.Table(columns=['time (hour)', metric_name])
-                        multi_hour_value = metric_result.value
-                        for row_idx in range(multi_hour_value.shape[0]):
-                            table.add_data(row_idx, multi_hour_value[row_idx].item())
-                        wandb.log({f'val/{building_type}/{metric_name}' : wandb.plot.line(
-                            table, "time (hour)", metric_name, title=f"Time vs {metric_name}")}, step=step)
-                    
-            wandb.log({
-                'val/loss': val_loss,
-                'val/ppl': val_ppl,
-            }, step=step)
-            print(f'finished validation at step {step}...')
+                        for f in checkpoint_dir.glob(f'ckpt-step-*-loss-{best_val_loss:.3f}.pt'):
+                            f.unlink()
+
+                    best_val_loss = val_loss
+                    if args.note != '':
+                        model_name = f'ckpt-step-{step}-{args.note}-loss-{best_val_loss:.3f}.pt'
+                    else:
+                        model_name = f'ckpt-step-{step}-loss-{best_val_loss:.3f}.pt'
+                    utils.save_model_checkpoint(model, optimizer, scheduler, step, checkpoint_dir / model_name)
+                for building_type in [BuildingTypes.RESIDENTIAL, BuildingTypes.COMMERCIAL]:
+                    for metric_name, metric_result in val_metrics[building_type].items():
+                        if metric_result.type == MetricType.SCALAR:
+                            wandb.log({f'val/{building_type}/{metric_name}' : metric_result.value }, step=step)
+                        else:
+                            # Create a wandb.Table for each hour of day metric then plot a line plot
+                            table = wandb.Table(columns=['time (hour)', metric_name])
+                            multi_hour_value = metric_result.value
+                            for row_idx in range(multi_hour_value.shape[0]):
+                                table.add_data(row_idx, multi_hour_value[row_idx].item())
+                            wandb.log({f'val/{building_type}/{metric_name}' : wandb.plot.line(
+                                table, "time (hour)", metric_name, title=f"Time vs {metric_name}")}, step=step)
+                        
+                wandb.log({
+                    'val/loss': val_loss,
+                    'val/ppl': val_ppl,
+                }, step=step)
+                print(f'finished validation at step {step}...')
         
-        if step == train_steps:
-            # stop training after this many steps/train_tokens
-            break
+            if step == train_steps:
+                # stop training after this many steps/train_tokens
+                break
 
     # save final checkpoint
     if args.rank == 0:
@@ -696,7 +733,9 @@ if __name__ == '__main__':
     parser.add_argument('--use-weather', dest='weather', nargs='*', default=None,
                     help='Enable loading weather features (they are not used by default). If enabled, all EULP\'s weather features will be loaded. '
                     'Optionally, specify a list of weather features to use (see `weather_features` in buildings_bench.data.__init__.py for options')
-        
+    parser.add_argument('--use_text_embedding', default=False, 
+                    help="Whether to use text embeddings of building descriptions. If false, use one-hot encoded features instead. Default is False.")
+
     experiment_args = parser.parse_args()
 
     if experiment_args.weather == []:
