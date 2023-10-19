@@ -8,22 +8,21 @@ except:
 from pyspark import SparkContext, SparkConf
 from pyspark.sql import SparkSession
 import pyspark.sql.functions as F
+from pyspark.sql.types import TimestampNTZType
 import os
 import glob
 
-conf = SparkConf().setMaster("local[*]").setAppName("pytorch")
+conf = SparkConf().setMaster("local[*]").setAppName("pytorch2")
 conf.set("spark.executor.memory", "2g")
 conf.set("spark.driver.memory", "64G")
 conf.set("spark.executor.cores", "96")
 conf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
 conf.set("spark.default.parallelism", "96")
-conf.set("spark.local.dir", "/tmp/scratch/tmp")
+conf.set("spark.local.dir", "/tmp/scratch/tmp2")
 sc =  SparkContext.getOrCreate(conf=conf)
 spark = SparkSession(sc)
 # Set the environment variable SPARK_LOCAL_DIRS
-os.environ['SPARK_LOCAL_DIRS'] = '/tmp/scratch/tmp'
-# Set the environment variable LOCAL_DIRS
-os.environ['SPARK_LOCAL_DIRS'] = '/tmp/scratch/tmp'
+os.environ['SPARK_LOCAL_DIRS'] = '/tmp/scratch/tmp2'
 
 
 def main(args):
@@ -32,7 +31,7 @@ def main(args):
     output_dir = args.output_dir
 
     census_regions = ['by_puma_midwest', 'by_puma_northeast', 'by_puma_south', 'by_puma_west'] 
-    years = ['tmy3', 'amy2018']
+    years = ['amy2018', 'tmy3']
     
     for cr in census_regions:
 
@@ -61,15 +60,18 @@ def main(args):
                     else:
                         print(f'{target_puma_path} already exists. Skipping...')
                         continue
+                    
+                    # reads every individual building timeseries in a single puma
+                    df = spark.read.parquet(puma_id).select(['`out.site_energy.total.energy_consumption`', 'timestamp', 'bldg_id'])
+                    # electricity only
+                    #df = spark.read.parquet(puma_id).select(['`out.electricity.total.energy_consumption`', 'timestamp', 'bldg_id'])
 
-                    df = spark.read.parquet(puma_id)
+                    # Sum 15 min out.site_energy.total.energy_consumption by hour for each bldg_id
+                    df = df.withColumn('timestamp', df.timestamp - F.expr('INTERVAL 15 minutes'))
+                    df = df.withColumn('timestamp', F.date_trunc('hour', df['timestamp']).cast(TimestampNTZType()))
 
-                    # Just the datapoints we need  
-                    df = df.select(['`out.site_energy.total.energy_consumption`', 'timestamp', 'bldg_id'])
-
-                    # Average 15 min out.site_energy.total.energy_consumption by hour for each bldg_id
-                    df = df.withColumn('timestamp', F.date_trunc('hour', df['timestamp']))
-                    df = df.groupBy('timestamp', 'bldg_id').agg(F.avg('`out.site_energy.total.energy_consumption`').alias('total_energy_consumption'))
+                    df = df.groupBy('timestamp', 'bldg_id').agg(F.sum('`out.site_energy.total.energy_consumption`').alias('total_energy_consumption'))
+                    #df = df.groupBy('timestamp', 'bldg_id').agg(F.sum('`out.electricity.total.energy_consumption`').alias('total_energy_consumption'))
 
                     # Group by timestamp and create a new column for each bldg_id
                     df = df.groupBy('timestamp').pivot('bldg_id').agg(F.first('total_energy_consumption'))
@@ -88,7 +90,7 @@ if __name__ == '__main__':
                         help='Path to raw EULP data.')
     args.add_argument('--output_dir', type=str, required=True,
                         help='Path to store the processed data.')
-
+    
     args = args.parse_args()
 
     main(args)

@@ -1,23 +1,18 @@
 [model]
 context_len = 168
 pred_len = 24
-num_encoder_layers = 12
-num_decoder_layers = 12
-nhead = 12
-dim_feedforward = 2048
-d_model = 768
-dropout = 0.0
-activation = 'gelu'
+lstm_layers = 3
+hidden_size = 40
+continuous_head = 'gaussian_nll'
 continuous_loads = true
-ignore_spatial = false
-continuous_head = 'mse'
+for_pretraining = false
 
 [pretrain]
-batch_size = 256
+batch_size = 64
 init_scale = 0.02
 warmup_steps = 10000
 lr = 0.00006
-scheduler_steps = 162760
+train_tokens = 1000000000
 apply_scaler_transform = 'boxcox'
 
 [zero_shot]
@@ -25,3 +20,5 @@ apply_scaler_transform = 'boxcox'
 
 [transfer_learning]
 apply_scaler_transform = 'boxcox'
+lr = 1e-4
+max_epochs = 100

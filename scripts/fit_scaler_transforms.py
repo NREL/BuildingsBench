@@ -13,7 +13,7 @@ def main(args):
     random.seed(args.seed)
     np.random.seed(args.seed)
 
-    output_dir = Path(os.environ.get('BUILDINGS_BENCH', ''), 'metadata')
+    output_dir = Path(os.environ.get('BUILDINGS_BENCH', ''), 'metadata', 'transforms')
     # training set dir
     time_series_dir = Path(os.environ.get('BUILDINGS_BENCH', ''), 'Buildings-900K', 'end-use-load-profiles-for-us-building-stock', '2021')
     building_years = ['comstock_tmy3_release_1', 'resstock_tmy3_release_1', 'comstock_amy2018_release_1', 'resstock_amy2018_release_1'] 
