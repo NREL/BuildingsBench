@@ -642,9 +642,11 @@ Download the wheel for the python version you are using, then install it in your
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>pip<span class="w"> </span>install<span class="w"> </span>faiss_gpu-1.7.3-cp38-cp38-manylinux2014_x86_64.whl
 </span></code></pre></div>
 <h4 id="optional-installing-lightgbm">[Optional] Installing LightGBM<a class="headerlink" href="#optional-installing-lightgbm" title="Permanent link"></a></h4>
-<p>If running the LightGBM baseline, you will need to install LightGBM.
-Follow instructions <a href="https://pypi.org/project/lightgbm/">here</a> for your OS. 
-Then, <code>pip install skforecast</code>.</p>
+<p>If running the LightGBM baseline, you will need to install LightGBM.</p>
+<ol>
+<li>Follow instructions <a href="https://pypi.org/project/lightgbm/">here</a> for your OS. </li>
+<li>Then install <code>skforecast</code> with <code>pip install skforecast==0.8.1</code>.</li>
+</ol>
 <h4 id="environment-variables">Environment variables<a class="headerlink" href="#environment-variables" title="Permanent link"></a></h4>
 <p>Set the environment variable <code>BUILDINGS_BENCH</code> to the path where the data directory <code>BuildingsBench</code> is located (created when untarring the data files). <strong>This is not the path to the code repository.</strong></p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">export</span><span class="w"> </span><span class="nv">BUILDINGS_BENCH</span><span class="o">=</span>/path/to/BuildingsBench

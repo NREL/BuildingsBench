@@ -623,7 +623,7 @@
 
   <h1>Datasets</h1>
 
-<p>The pretraining dataset and evaluation data is available for download <a href="https://data.openei.org/submissions/5859">here</a> as tar files, or can be accessed via AWS S3 <a href="https://data.openei.org/s3_viewer?bucket=oedi-data-lake&amp;prefix=buildings-bench">here</a>. The benchmark datasets are &lt; 1GB in size in total, but the pretraining data is ~110GB in size. </p>
+<p>The pretraining dataset and evaluation data is available for download <a href="https://data.openei.org/submissions/5859">here</a> as tar files, or can be accessed via AWS S3 <a href="https://data.openei.org/s3_viewer?bucket=oedi-data-lake&amp;prefix=buildings-bench">here</a>. The benchmark datasets are &lt; 1GB in size in total and the pretraining data is ~110GB in size. </p>
 <p>The pretraining data is divided into 4 compressed files</p>
 <ul>
 <li><code>comstock_amy2018.tar.gz</code>: ~21GB</li>
@@ -633,17 +633,17 @@
 </ul>
 <p>and one compressed file for the metadata</p>
 <ul>
-<li><code>metadata.tar.gz</code>: ~3GB</li>
+<li><code>metadata.tar.gz</code></li>
 </ul>
 <p>The evaluation datasets are compressed into a single file</p>
 <ul>
-<li><code>BuildingsBench.tar.gz</code>: ~300MB</li>
+<li><code>BuildingsBench.tar.gz</code></li>
 </ul>
 <p>Download all files to a folder on a storage device with at least 250GB of free space. Then, decompress all of the downloaded files. There will be a new subdirectory called <code>BuildingsBench</code>. <strong>This is the data directory, which is different than the Github code repository, although both folders are named "BuildingsBench".</strong></p>
 <h2 id="data-directory-organization">Data directory organization<a class="headerlink" href="#data-directory-organization" title="Permanent link"></a></h2>
 <ul>
 <li><code>BuildingsBench/</code><ul>
-<li><code>Buildings-900K/end-use-load-profiles-for-us-building-stock/2021/</code>: The Buildings-900K training and validation data.<ul>
+<li><code>Buildings-900K/end-use-load-profiles-for-us-building-stock/2021/</code>: The Buildings-900K pretraining and validation data.<ul>
 <li><code>comstock_amy2018_release_1/</code><ul>
 <li><code>timeseries_individual_buildings/</code><ul>
 <li><code>by_puma_midwest</code><ul>
@@ -676,12 +676,21 @@
 <li><code>...</code>: Other datasets            </li>
 </ul>
 </li>
-<li><code>BDG-2/</code>: The .csv files for the BDG-2 dataset<ul>
+<li><code>BDG-2/</code>: Building Data Genome Project 2 BuildingsBench evaluation data <em>with outliers removed</em>. <ul>
 <li><code>{building_id}={year}.csv</code>: The .csv files for the BDG-2 dataset.</li>
 <li><code>...</code>: Other buildings</li>
 </ul>
 </li>
-<li><code>...</code>: Other datasets</li>
+<li><code>...</code>: Other evaluation datasets (Borealis, Electricity, etc.)</li>
+<li><code>buildingsbench_with_outliers</code>: The BuildingsBench evaluation data <em>with outliers</em>.<ul>
+<li><code>BDG-2/</code>: Buildings Data Genome Project 2 BuildingsBench evaluation data <em>with outliers</em>. <ul>
+<li><code>{building_id}={year}.csv</code>: The .csv files for the BDG-2 dataset.</li>
+<li><code>...</code>: Other buildings</li>
+</ul>
+</li>
+<li><code>...</code>: Other evaluation datasets (Borealis, Electricity, etc.)</li>
+</ul>
+</li>
 <li><code>LICENSES/</code>: Licenses for each evaluation dataset redistributed in BuildingsBench. </li>
 <li><code>metadata/</code>: Metadata for the evaluation suite.<ul>
 <li><code>benchmark.toml</code>: Metadata for the benchmark. For each dataset, we specify:<ul>
@@ -700,6 +709,7 @@
 <li><code>oov.txt</code>: List of buildings that are OOV for the Buildings-900K tokenizer.</li>
 <li><code>transfer_learning_commercial_buildings.txt</code>: List of 100 commercial buildings from the benchmark we use for evaluating transfer learning.</li>
 <li><code>transfer_learning_residential_buildings.txt</code>: List of 100 residential buildings from the benchmark we use for evaluating transfer learning.</li>
+<li><code>transfer_learning_hyperparameter_tuning.txt</code>: List of 2 held out buildings (1 commercial, 1 residential) that can be used for hyperparameter tuning.</li>
 <li><code>train*.idx</code>: Index files for fast dataloading of Buildings-900K. This file uncompressed is 16GB. </li>
 <li><code>val*.idx</code>: Index files for fast dataloading of Buildings-900K.</li>
 <li><code>transforms</code>: Directory for storing data transform info.</li>
