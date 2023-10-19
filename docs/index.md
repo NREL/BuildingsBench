@@ -71,8 +71,9 @@ pip install faiss_gpu-1.7.3-cp38-cp38-manylinux2014_x86_64.whl
 ### [Optional] Installing LightGBM
 
 If running the LightGBM baseline, you will need to install LightGBM.
-Follow instructions [here](https://pypi.org/project/lightgbm/) for your OS. 
-Then, `pip install skforecast`.
+
+1. Follow instructions [here](https://pypi.org/project/lightgbm/) for your OS. 
+2. Then install `skforecast` with `pip install skforecast==0.8.1`.
 
 ## Download the datasets and metadata
 

@@ -88,11 +88,19 @@ The Buildings-900K pretraining data is divided into 4 tar files:
 - `resstock_amy2018.tar.gz`
 - `resstock_tmy3.tar.gz`
 
+<<<<<<< Updated upstream
 The evaluation datasets are available in a single file:
 - `BuildingsBench.tar.gz`
 
 One tar file for the metadata which has files that are necessary for running pretraining (such as index files for the Buildings-900K PyTorch Dataset) and the benchmark tasks.
 - `metadata.tar.gz`
+=======
+and one compressed file for the metadata
+- `metadata.tar.gz`B
+
+The evaluation datasets are compressed into a single file
+- `BuildingsBench.tar.gz`
+>>>>>>> Stashed changes
 
 Download and untar all files, which will create a new directory called `BuildingsBench`. **This is the data directory, which is different than this code repository, although both are called "BuildingsBench".**
 See the README file `BuildingsBench/metadata/README.md` (in `metadata.tar.gz`) for more information about how the BuildingsBench dataset directory should be organized.
@@ -233,6 +241,7 @@ Metrics:
   - Categorical Discrete Ranked Probability Score for token-based models
 
 PyTorch checkpoint files for all trained models can be downloaded in a single tar file [here](https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.0.0/compressed/checkpoints.tar.gz).
+We provide a tutorial on how to use these pretrained models [here](https://github.com/NREL/BuildingsBench/blob/main/tutorials/pretrained_models.ipynb).
 
 ### Zero-shot STLF
 
