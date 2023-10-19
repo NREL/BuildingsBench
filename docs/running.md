@@ -68,7 +68,7 @@ torchrun \
     --nproc_per_node=$NUM_GPUS \
     --rdzv-backend=c10d \
     --rdzv-endpoint=localhost:0 \
-    scripts/pretrain.py --config TransformerWithGaussian-S --disable_slurm
+    scripts/pretrain.py --model TransformerWithGaussian-S --disable_slurm
 ```
 
 The argument `--disable_slurm` is not needed if you are running this script on a Slurm cluster as a batch job.
@@ -90,7 +90,7 @@ export MASTER_ADDR=$master_addr
 echo "MASTER_ADDR="$MASTER_ADDR
 
 srun python3 scripts/pretrain.py \
-        --config TransformerWithGaussian-S
+        --model TransformerWithGaussian-S
 ```
 
 
@@ -98,8 +98,8 @@ srun python3 scripts/pretrain.py \
 
 This script `scripts/zero_shot.py` and the script for transfer learning `scripts/transfer_learning_torch.py` do not use `DistributedDataParallel` so they can be run without `torchrun`.
 
-`python3 scripts/zero_shot.py --config TransformerWithGaussian-S --checkpoint /path/to/checkpoint.pt`
+`python3 scripts/zero_shot.py --model TransformerWithGaussian-S --checkpoint /path/to/checkpoint.pt`
 
 ### Transfer Learning for STLF
 
-`python3 scripts/transfer_learning_torch.py --config TransformerWithGaussian-S --checkpoint /path/to/checkpoint.pt`  
+`python3 scripts/transfer_learning_torch.py --model TransformerWithGaussian-S --checkpoint /path/to/checkpoint.pt`  

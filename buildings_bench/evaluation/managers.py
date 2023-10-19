@@ -2,7 +2,7 @@ import torch
 from buildings_bench.evaluation import metrics_factory
 from buildings_bench.evaluation.metrics import Metric, MetricType
 from buildings_bench.evaluation.scoring_rules import ScoringRule
-from typing import List
+from typing import List, Optional
 import pandas as pd
 from copy import deepcopy
 
@@ -250,11 +250,27 @@ class DatasetMetricsManager:
     def __init__(self, 
                  metrics: List[Metric] = default_metrics,
                  scoring_rule: ScoringRule = None):
+        """
+        Args:
+            metrics (List[Metric]): A list of metrics to compute for each
+                building type.
+            scoring_rule (ScoringRule): A scoring rule to compute for each
+                building type.
+        """
         self.metrics_list = metrics
         self.scoring_rule = scoring_rule
         self._metrics = {}
 
-    def get_building_from_dataset(self, dataset_name: str, building_id: str) -> None:
+    def get_building_from_dataset(self, dataset_name: str, building_id: str) -> Optional[MetricsManager]:
+        """If the dataset and building exist, return the MetricsManager for the building.
+
+        Args:
+            dataset_name (str): The name of the dataset.
+            building_id (str): The unique building identifier.
+        
+        Returns:
+            A MetricsManager if the dataset and building exist, otherwise None.
+        """
         # Check if dataset exists
         if dataset_name not in self._metrics:
             return None
@@ -264,6 +280,12 @@ class DatasetMetricsManager:
         return self._metrics[dataset_name][building_id]
     
     def add_building_to_dataset_if_missing(self, dataset_name: str, building_id: str) -> None:
+        """If the building does not exist, add a new MetricsManager for the building.
+
+        Args:
+            dataset_name (str): The name of the dataset.
+            building_id (str): The unique building identifier.
+        """
         # Check if dataset exists
         if dataset_name not in self._metrics:
             self._metrics[dataset_name] = {}

@@ -12,14 +12,15 @@ def main(args):
     random.seed(args.seed)
     np.random.seed(args.seed)
 
-    output_dir = Path(os.environ.get('BUILDINGS_BENCH', ''), 'metadata')
+    output_dir = Path(os.environ.get('BUILDINGS_BENCH', ''), 'metadata', 'transforms')
     time_series_dir = Path(os.environ.get('BUILDINGS_BENCH', ''), 'Buildings-900K', 'end-use-load-profiles-for-us-building-stock', '2021')    
     building_years = ['comstock_tmy3_release_1', 'resstock_tmy3_release_1', 'comstock_amy2018_release_1', 'resstock_amy2018_release_1'] 
     pumas = ['by_puma_midwest', 'by_puma_south', 'by_puma_northeast', 'by_puma_west']
 
     all_buildings = []
     num_buildings = 0
-
+    
+    print('loading buildings...')
     for by in building_years:
         by_path = time_series_dir / by / 'timeseries_individual_buildings'
         for pum in pumas:

@@ -25,8 +25,6 @@ class Buildings900K(torch.utils.data.Dataset):
     Each dataloader worker has its own file pointer to the index file. This is to avoid
     weird multiprocessing errors from sharing a file pointer. We 'seek' to the correct
     line in the index file for random access.
-
-    With 4 workers, data loading with an indexed dataset requires about 30GB of RAM.
     """
     def __init__(self, 
                 dataset_path: Path,
@@ -101,7 +99,7 @@ class Buildings900K(torch.utils.data.Dataset):
             first_line = fp.readline()
             self.chunk_size = len(first_line)
         
-        print(f'Counted {self.num_time_series} indices in index file.')
+        #print(f'Counted {self.num_time_series} indices in index file.')
 
     def __del__(self):
         if self.index_fp:

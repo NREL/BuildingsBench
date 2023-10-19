@@ -333,7 +333,7 @@ class PandasBuildingDatasetsFromCSV:
         df["hour_of_day"] = df.index.hour
         df["month_of_year"] = df.index.month
         df["weekend"] = df.index.weekday.isin([5,6])
-        df= pd.get_dummies(df, columns=["day_of_week", "hour_of_day", "month_of_year", "weekend"])
+        df= pd.get_dummies(df, columns=["day_of_week", "hour_of_day", "month_of_year", "weekend"], dtype=np.int32)
 
         if bldg_name in self.building_datasets:
             self.building_datasets[bldg_name] += [(year,df)]

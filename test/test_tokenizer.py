@@ -14,9 +14,9 @@ class TestTokenizer(unittest.TestCase):
         transform_path = Path(os.environ.get('BUILDINGS_BENCH', '')) \
                               / 'metadata' / 'transforms'
 
-        load_quantizer = tokenizer.LoadQuantizer(with_merge=True, num_centroids=2274, device='cpu')
+        load_quantizer = tokenizer.LoadQuantizer(with_merge=True, num_centroids=3747, device='cpu')
         load_quantizer.load(transform_path)
-        self.assertEqual(load_quantizer.get_vocab_size(), 2274)
+        self.assertEqual(load_quantizer.get_vocab_size(), 3747)
 
 
     def test_transform_cpu(self):
@@ -25,7 +25,7 @@ class TestTokenizer(unittest.TestCase):
         transform_path = Path(os.environ.get('BUILDINGS_BENCH', '')) \
                               / 'metadata' / 'transforms'
 
-        load_quantizer = tokenizer.LoadQuantizer(with_merge=True, num_centroids=2274, device='cpu')
+        load_quantizer = tokenizer.LoadQuantizer(with_merge=True, num_centroids=3747, device='cpu')
         load_quantizer.load(transform_path)
 
         x = np.array([[100.234], [0.234], [55.523]])

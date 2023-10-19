@@ -11,6 +11,7 @@
 - `./process_raw_data`
   - `create_buildings900K.py`: Launch a PySpark job to process the raw EULP database and save the Buildings-900K Parquet files.
   - `download_and_process_buildingsbench.py`: Replicate the preprocessing applied to the BuildingsBench evaluation datasets.
+  - `split_buildings900K_train_test.py`: Split the Buildings-900K dataset into training and test sets.
 - `create_index_files.py`: Create index files for the Buildings-900K PyTorch Dataset.
 - `create_index_files_with_less_buildings.py`: Create index files for the minified Buildings-900K datasets with less buildings for analytical studies on data scaling.
 - `fit_tokenizer.py`: Train a new tokenizer. Requires `faiss-gpu` to be installed.
