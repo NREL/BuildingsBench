@@ -79,3 +79,43 @@ def return_aggregate_median(model_list,
                 result_dict[building_type][metric], aggregate_func, reps=reps)
             result_dict[building_type][metric] = (aggregate_scores, aggregate_score_cis)
     return result_dict
+
+
+def pretty_print_aggregates(results_dict) -> None:
+    """Pretty print the aggregate results. 
+    
+    `model_name building_type metric_name: value (CI)`
+
+    Args:
+        result_dict (Dict): Dictionary of aggregate metrics for residential and commercial buildings.
+    """
+    print('model name\t building type\t metric name\t value (95% C.I.)')
+    print('==========================================================')
+
+    for building_type, v in results_dict.items():
+        for metric_name, vv in v.items():
+            agg_scores, agg_cis = vv
+            for model_name, metric_value in agg_scores.items():
+                cis = agg_cis[model_name]
+                if metric_name in ['nrmse', 'nmae', 'nmbe', 'cvrmse']:
+                    metric_value = metric_value[0]*100
+                else:
+                    metric_value = metric_value[0]
+                print(f'{model_name} {building_type} {metric_name}: {metric_value:.3f} ({cis[0][0]:.3f},{cis[1][0]:.3f})')
+
+
+if __name__ == '__main__':
+
+    import os
+
+    oov = []
+    with open(Path(os.environ.get('BUILDINGS_BENCH', '')) / 'metadata' / 'oov.txt', 'r') as f:
+        for l in f:
+            oov += [l.strip().split(' ')[1]]
+
+    results_dir = '/data/local/projects/foundation/NREL/BuildingsBench/results/remove_outliers'
+
+    pretty_print_aggregates(return_aggregate_median(['AveragePersistence', 'TransformerWithGaussian-L'],
+                             results_dir,
+                             experiment='zero_shot',
+                             oov_list = oov))
