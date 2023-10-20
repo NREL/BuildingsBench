@@ -20,7 +20,7 @@ def zero_shot_learning(args, model_args, results_path: Path):
     device = args.device
 
     if args.weather: 
-        model_args['weather_features'] = g_weather_features[:2]
+        model_args['weather_features'] = g_weather_features[:1]
 
     model, _, predict = model_factory(args.config, model_args)
     model = model.to(device)

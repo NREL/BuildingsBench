@@ -262,12 +262,12 @@ class TorchBuildingDatasetsFromCSV:
         weather_df = None
         weather_transform_path = None
         if weather:
-            metadata_path = data_path.parent / 'metadata'
+            metadata_path = data_path / 'metadata'
             weather_transform_path = metadata_path / 'transforms/weather-900K/'
             ds_name = building_year_files[0].split('/')[0]
 
             if ds_name != 'SMART' and ds_name != 'BDG-2':
-                weather_df = pd.read_csv(data_path / (ds_name + f'/weather.csv'), index_col=0, header=0, parse_dates=True)
+                weather_df = pd.read_csv(data_path / (ds_name + f'/weather_era5.csv'), index_col=0, header=0, parse_dates=True) #TODO finalize the weather source
 
         for building_year_file in building_year_files:
             name = building_year_file.split('_')[0].split('/')[1]
@@ -377,7 +377,7 @@ class PandasBuildingDatasetsFromCSV:
         if weather:
             ds_name = building_year_files[0].split('/')[0]
             if ds_name != 'SMART' and ds_name != 'BDG-2':
-                weather_df = pd.read_csv(data_path / (ds_name + f'/weather.csv'), index_col=0, header=0, parse_dates=True)
+                weather_df = pd.read_csv(data_path / (ds_name + f'/weather_era5.csv'), index_col=0, header=0, parse_dates=True) #TODO finalize the weather source
         
         for building_year_file in building_year_files:
             #fullname = building_year_file.split('_')[0]
