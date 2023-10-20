@@ -58,10 +58,14 @@ def zero_shot_learning(args, model_args, results_path: Path):
         buildings_datasets_generator = load_torch_dataset(dataset_name,
                                                           apply_scaler_transform=args.apply_scaler_transform,
                                                           scaler_transform_path=transform_path,
-                                                          include_outliers=args.include_outliers)
+                                                          include_outliers=args.include_outliers,
+                                                          weather=args.weather)
+        
+        num_of_buildings = len(buildings_datasets_generator)
+        print(f'dataset {dataset_name}: {num_of_buildings} buildings')
         # For each building
-        for building_name, building_dataset in buildings_datasets_generator:
-            print(f'dataset {dataset_name} building-year {building_name} '
+        for count, (building_name, building_dataset) in enumerate(buildings_datasets_generator, start=1):
+            print(f'dataset {dataset_name} {count}/{num_of_buildings} building-year {building_name} '
                     f'day-ahead forecasts {len(building_dataset)}')
 
             metrics_manager.add_building_to_dataset_if_missing(
@@ -231,6 +235,8 @@ if __name__ == '__main__':
     parser.add_argument('--apply_scaler_transform', type=str, default='',
                         choices=['', 'standard', 'boxcox'], 
                         help='Apply a scaler transform to the load values.')
+    parser.add_argument('--weather', action='store_true', 
+                        help='Use weather data')
     
     args = parser.parse_args()
     utils.set_seed(args.seed)

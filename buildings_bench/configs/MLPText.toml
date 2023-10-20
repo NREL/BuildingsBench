@@ -1,0 +1,9 @@
+[model]
+context_len = 24
+pred_len = 24
+hidden_dim = 256
+continuous_head = 'mse'
+continuous_loads = true
+
+[pretrain]
+init_scale = 0.02

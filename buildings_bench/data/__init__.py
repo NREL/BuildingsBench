@@ -39,7 +39,10 @@ benchmark_registry = [
     'electricity',
     'smart',
     'lcl'
-]        
+]
+
+g_weather_features = ['temperature', 'humidity', 'wind_speed', 'wind_direction', 'global_horizontal_radiation', 
+                              'direct_normal_radiation', 'diffuse_horizontal_radiation']
 
 def parse_building_years_metadata(datapath: Path, dataset_name: str):
     with open(datapath / 'metadata' / 'building_years.txt', 'r') as f:
@@ -55,8 +58,11 @@ def load_pretraining(
         num_buildings_ablation: int = -1,
         apply_scaler_transform: str = '',
         scaler_transform_path: Path = None,
+        weather: List[str] = None,
+        custom_idx_filename: str = '',
         context_len=168, # week
-        pred_len=24) -> torch.utils.data.Dataset:
+        pred_len=24,
+        use_text_embedding=False) -> torch.utils.data.Dataset:
     r"""
     Pre-training datasets: buildings-900k-train, buildings-900k-val
 
@@ -67,6 +73,8 @@ def load_pretraining(
         apply_scaler_transform (str): If not using quantized load or unscaled loads,
                                  applies a {boxcox,standard} scaling transform to the load. Default: ''.
         scaler_transform_path (Path): Path to data for transform, e.g., pickled data for BoxCox transform.
+        weather (List[str]): list of weather features to use. Default: None.
+        custom_idx_filename (str): customized index filename. Default: ''
         context_len (int): Length of the context. Defaults to 168.
         pred_len (int): Length of the prediction horizon. Defaults to 24.
     
@@ -82,21 +90,53 @@ def load_pretraining(
     else:
         idx_file_suffix = ''
     if name.lower() == 'buildings-900k-train':
-        idx_file = f'train_weekly{idx_file_suffix}.idx'
+        idx_file = f'train_weekly{idx_file_suffix}.idx' if custom_idx_filename == '' else custom_idx_filename
         dataset = Buildings900K(dataset_path,
                                idx_file,
                                context_len=context_len,
                                pred_len=pred_len,
                                apply_scaler_transform=apply_scaler_transform,
-                               scaler_transform_path = scaler_transform_path)
+                               scaler_transform_path = scaler_transform_path,
+                               weather=weather)
     elif name.lower() == 'buildings-900k-val':
-        idx_file = f'val_weekly{idx_file_suffix}.idx'
+        idx_file = f'val_weekly{idx_file_suffix}.idx' if custom_idx_filename == '' else custom_idx_filename
         dataset = Buildings900K(dataset_path,
                                idx_file,
                                context_len=context_len,
                                pred_len=pred_len,
                                apply_scaler_transform=apply_scaler_transform,
-                               scaler_transform_path = scaler_transform_path)
+                               scaler_transform_path = scaler_transform_path,
+                               weather=weather)
+    elif name.lower() == 'simcap-10k-train':
+        idx_file = f'train_simcap.idx' if custom_idx_filename == '' else custom_idx_filename
+        dataset = Buildings900K(dataset_path,
+                               idx_file,
+                               context_len=context_len,
+                               pred_len=pred_len,
+                               apply_scaler_transform=apply_scaler_transform,
+                               scaler_transform_path = scaler_transform_path,
+                               weather=weather,
+                               use_text_embedding=use_text_embedding)
+    elif name.lower() == 'simcap-10k-val':
+        idx_file = f'val_simcap.idx' if custom_idx_filename == '' else custom_idx_filename
+        dataset = Buildings900K(dataset_path,
+                               idx_file,
+                               context_len=context_len,
+                               pred_len=pred_len,
+                               apply_scaler_transform=apply_scaler_transform,
+                               scaler_transform_path = scaler_transform_path,
+                               weather=weather,
+                               use_text_embedding=use_text_embedding)
+    elif name.lower() == 'simcap-10k-test':
+        idx_file = f'test_simcap.idx' if custom_idx_filename == '' else custom_idx_filename
+        dataset = Buildings900K(dataset_path,
+                               idx_file,
+                               context_len=context_len,
+                               pred_len=pred_len,
+                               apply_scaler_transform=apply_scaler_transform,
+                               scaler_transform_path = scaler_transform_path,
+                               weather=weather,
+                               use_text_embedding=use_text_embedding)
     return dataset
         
     
@@ -105,6 +145,7 @@ def load_torch_dataset(
         dataset_path: Path = None,
         apply_scaler_transform: str = '',
         scaler_transform_path: Path = None,
+        weather: bool = False,
         include_outliers: bool = False,
         context_len = 168,
         pred_len = 24
@@ -117,6 +158,7 @@ def load_torch_dataset(
         apply_scaler_transform (str): If not using quantized load or unscaled loads,
                                  applies a {boxcox,standard} scaling transform to the load. Default: ''.
         scaler_transform_path (Path): Path to data for transform, e.g., pickled data for BoxCox transform.
+        weather (bool): load weather data. Default: False
         include_outliers (bool): Use version of BuildingsBench with outliers.
         context_len (int): Length of the context. Defaults to 168.
         pred_len (int): Length of the prediction horizon. Defaults to 24.
@@ -148,10 +190,12 @@ def load_torch_dataset(
             elif 'com' in pf:
                 building_types += [BuildingTypes.COMMERCIAL]
         dataset_generator = TorchBuildingDatasetFromParquet(
+                                                         dataset_path,
                                                          puma_files,
                                                          [spatial_lookup.undo_transform( # pass unnormalized lat lon coords
                                                             spatial_lookup.transform(pid)) for pid in puma_ids],
                                                          building_types,
+                                                         weather=weather,
                                                          context_len=context_len,
                                                          pred_len=pred_len,
                                                          apply_scaler_transform=apply_scaler_transform,
@@ -198,6 +242,7 @@ def load_pandas_dataset(
         name: str,
         dataset_path: Path = None,
         feature_set: str = 'engineered',
+        weather: bool = False,
         apply_scaler_transform: str = '',
         scaler_transform_path: Path = None,
         include_outliers: bool = False) -> PandasBuildingDatasetsFromCSV:
@@ -208,6 +253,7 @@ def load_pandas_dataset(
         name (str): Name of the dataset to load.
         dataset_path (Path): Path to the benchmark data. Optional.
         feature_set (str): Feature set to use. Default: 'engineered'.
+        weather (bool): load weather data. Default: False
         apply_scaler_transform (str): If not using quantized load or unscaled loads,
                                     applies a {boxcox,standard} scaling transform to the load. Default: ''. 
         scaler_transform_path (Path): Path to data for transform, e.g., pickled data for BoxCox transform.
@@ -247,7 +293,13 @@ def load_pandas_dataset(
             all_by_files,
             building_latlon,
             building_type,
+            weather=weather,
             features=feature_set,
             apply_scaler_transform = apply_scaler_transform,
             scaler_transform_path = scaler_transform_path,
             leap_years = metadata['leap_years'])
+
+if __name__ == "__main__":
+    dataset = load_torch_dataset("buildings-900k-test")
+    for d in dataset:
+        print(d[0])
