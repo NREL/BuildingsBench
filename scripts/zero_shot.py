@@ -9,6 +9,7 @@ from buildings_bench import utils
 from buildings_bench.tokenizer import LoadQuantizer
 from buildings_bench.data import g_weather_features
 from buildings_bench.evaluation.managers import DatasetMetricsManager
+from buildings_bench.evaluation import aggregate
 from buildings_bench.models import model_factory
 from buildings_bench.evaluation import scoring_rule_factory
 
@@ -22,7 +23,7 @@ def zero_shot_learning(args, model_args, results_path: Path):
     if args.weather: 
         model_args['weather_features'] = g_weather_features[:1]
 
-    model, _, predict = model_factory(args.config, model_args)
+    model, _, predict = model_factory(args.model, model_args)
     model = model.to(device)
 
     transform_path = Path(os.environ.get('BUILDINGS_BENCH', '')) \
@@ -61,7 +62,7 @@ def zero_shot_learning(args, model_args, results_path: Path):
         buildings_datasets_generator = load_torch_dataset(dataset_name,
                                                           apply_scaler_transform=args.apply_scaler_transform,
                                                           scaler_transform_path=transform_path,
-                                                          remove_outliers=args.remove_outliers,
+                                                          include_outliers=args.include_outliers,
                                                           weather=args.weather)
         
         num_of_buildings = len(buildings_datasets_generator)
@@ -154,8 +155,8 @@ def zero_shot_learning(args, model_args, results_path: Path):
                 )
     print('Generating summaries...')
     variant_name = f':{args.variant_name}' if args.variant_name != '' else ''
-    metrics_file = results_path / f'metrics_{args.config}{variant_name}.csv'
-    scoring_rule_file = results_path / f'scoring_rule_{args.config}{variant_name}.csv'
+    metrics_file = results_path / f'metrics_{args.model}{variant_name}.csv'
+    scoring_rule_file = results_path / f'scoring_rule_{args.model}{variant_name}.csv'
 
     if not args.ignore_scoring_rules:
         metrics_df, scoring_rule_df = metrics_manager.summary()    
@@ -174,16 +175,52 @@ def zero_shot_learning(args, model_args, results_path: Path):
         else:
             metrics_df.to_csv(metrics_file, index=False)
 
+    # Compute and display aggregate statistics
+    with open(Path(os.environ.get('BUILDINGS_BENCH', '')) / 'metadata' / 'oov.txt', 'r') as f:
+        for line in f:
+            oov_bldgs += [line.strip().split(' ')[1]]
+
+        metric_names = [m.name for m in metrics_manager.metrics_list]
+        if metrics_manager.scoring_rule:
+            metric_names += [metrics_manager.scoring_rule.name]
+
+        # Returns a dictionary with the median of the nrmse (cv-rmse)
+        # and crps metrics for the model with boostrapped 95% confidence intervals
+        print('BuildingsBench (real)')
+        results_dict = aggregate.return_aggregate_median(
+                            model_list = [f'{args.model}{variant_name}'],
+                            results_dir = str(results_path),
+                            experiment = 'zero_shot',
+                            metrics = metric_names,
+                            exclude_simulated=True,
+                            oov_list = oov_bldgs
+                        )
+        aggregate.pretty_print_aggregates(results_dict)
+        print('Buildings-900K-test (synth)')
+        results_dict = aggregate.return_aggregate_median(
+                            model_list = [f'{args.model}{variant_name}'],
+                            results_dir = str(results_path),
+                            experiment = 'zero_shot',
+                            metrics = metric_names,
+                            exclude_simulated=False,
+                            only_simulated=True,
+                            oov_list = oov_bldgs
+                        )
+        aggregate.pretty_print_aggregates(results_dict)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--results_path', type=str, default='results/')
-    parser.add_argument('--config', type=str, default='', required=True)
+    parser.add_argument('--model', type=str, default='', required=True,
+                        help='Name of your model. Should match the config'
+                             ' filename without .toml extension.'
+                             ' Example: "TransformerWithTokenizer-S"')
     parser.add_argument('--benchmark', nargs='+', type=str, default=['all'],
                         help='Which datasets in the benchmark to run. Default is ["all."] '
                              'See the dataset registry in buildings_bench.data.__init__.py for options.')
-    parser.add_argument('--remove_outliers', action='store_true',
+    parser.add_argument('--include_outliers', action='store_true',
                         help='Eval with a filtered variant with certain outliers removed')
     parser.add_argument('--num_workers', type=int, default=4)
     parser.add_argument('--batch_size', type=int, default=360)
@@ -209,8 +246,8 @@ if __name__ == '__main__':
     utils.set_seed(args.seed)
     
     config_path = SCRIPT_PATH  / '..' / 'buildings_bench' / 'configs'
-    if (config_path / f'{args.config}.toml').exists():
-        toml_args = tomli.load(( config_path / f'{args.config}.toml').open('rb'))
+    if (config_path / f'{args.model}.toml').exists():
+        toml_args = tomli.load(( config_path / f'{args.model}.toml').open('rb'))
         model_args = toml_args['model']
         if 'zero_shot' in toml_args:
             for k,v in toml_args['zero_shot'].items():
@@ -221,11 +258,11 @@ if __name__ == '__main__':
         if not model_args['continuous_loads'] or 'apply_scaler_transform' not in args:
             setattr(args, 'apply_scaler_transform', '')
     else:
-        raise ValueError(f'Config {args.config}.toml not found.')
+        raise ValueError(f'Config {args.model}.toml not found.')
 
     results_path = Path(args.results_path)
-    if args.remove_outliers:
-        results_path = results_path / 'remove_outliers'
+    if args.include_outliers:
+        results_path = results_path / 'buildingsbench_with_outliers'
 
     results_path.mkdir(parents=True, exist_ok=True)
 

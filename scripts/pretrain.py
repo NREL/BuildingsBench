@@ -194,7 +194,7 @@ def main(args, model_args):
             args.weather = g_weather_features
         model_args['weather_features'] = args.weather
 
-    model, loss, predict = model_factory(args.config, model_args)
+    model, loss, predict = model_factory(args.model, model_args)
     model = model.to(local_rank)
     print(f'rank {args.rank} number of trainable parameters is '\
           f'= {sum(p.numel() for p in model.parameters())}', flush=True)
@@ -395,7 +395,7 @@ if __name__ == '__main__':
 
     # Experiment args. If provided in config file, these will be overridden.
     # Use arg `hyper_opt` to avoid overriding the argparse args with the config file.
-    parser.add_argument('--config', type=str, default='', required=True,
+    parser.add_argument('--model', type=str, default='', required=True,
                         help='Name of your model. Should match the config'
                              ' filename without .toml extension.'
                              ' Example: "TransformerWithTokenizer-S"')
@@ -462,8 +462,8 @@ if __name__ == '__main__':
         
     config_path = SCRIPT_PATH  / '..' / 'buildings_bench' / 'configs'
     
-    if (config_path / f'{experiment_args.config}.toml').exists():
-        toml_args = tomli.load(( config_path / f'{experiment_args.config}.toml').open('rb'))
+    if (config_path / f'{experiment_args.model}.toml').exists():
+        toml_args = tomli.load(( config_path / f'{experiment_args.model}.toml').open('rb'))
         model_args = toml_args['model']
         if 'pretrain' in toml_args:
             for k,v in toml_args['pretrain'].items():
@@ -476,7 +476,7 @@ if __name__ == '__main__':
         if not model_args['continuous_loads'] or 'apply_scaler_transform' not in experiment_args:
             setattr(experiment_args, 'apply_scaler_transform', '')
     else:
-        raise ValueError(f'Config {experiment_args.config}.toml not found.')
+        raise ValueError(f'Config {experiment_args.model}.toml not found.')
 
     if not torch.cuda.is_available():
         raise ValueError('CUDA is not available for pretraining!')

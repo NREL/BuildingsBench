@@ -1,3 +1,7 @@
+"""
+Process the unfiltered BuildingsBench evaluation data by removing outliers
+and store the filtered data in a subfolder called "remove_outliers"
+"""
 from pathlib import Path 
 import os 
 import numpy as np

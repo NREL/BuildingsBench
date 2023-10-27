@@ -28,7 +28,7 @@ class BoxCoxTransform:
         self.boxcox = preprocessing.PowerTransformer(method='box-cox', standardize=True)
         data = data.flatten().reshape(-1,1)
         if data.shape[0] > self.max_datapoints:
-            print(f'Box-Cox: subsampling {self.max_datapoints} datapoints')
+            #print(f'Box-Cox: subsampling {self.max_datapoints} datapoints')
             data = data[np.random.choice(data.shape[0], self.max_datapoints, replace=False)]
         self.boxcox.fit_transform(1e-6 + data)
 
@@ -102,7 +102,7 @@ class StandardScalerTransform:
         """       
         data = data.flatten().reshape(-1,1)
         if data.shape[0] > self.max_datapoints:
-            print(f'Subsampling {self.max_datapoints} datapoints to fit StandardScalerTransform')
+            #print(f'Subsampling {self.max_datapoints} datapoints to fit the StandardScalerTransform')
             data = data[np.random.choice(data.shape[0], self.max_datapoints, replace=False)]
         self.mean_ = torch.from_numpy(np.array([np.mean(data)])).float().to(self.device)
         self.std_ = torch.from_numpy(np.array([np.std(data)])).float().to(self.device)

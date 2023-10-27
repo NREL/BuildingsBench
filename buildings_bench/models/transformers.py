@@ -240,7 +240,7 @@ class LoadForecastingTransformer(BaseModel):
             else:
                 new_state_dict[k] = v
         self.load_state_dict(new_state_dict)    
-        print(f"Loaded model checkpoint from {checkpoint_path}...")
+        #print(f"Loaded model checkpoint from {checkpoint_path}...")
     
 
     @torch.no_grad()

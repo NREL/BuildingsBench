@@ -14,7 +14,7 @@ def set_seed(seed: int = 42) -> None:
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
     os.environ["PYTHONHASHSEED"] = str(seed)
-    print(f"Random seed set as {seed}")
+    #print(f"Random seed set as {seed}")
 
 
 def save_model_checkpoint(model, optimizer, scheduler, step, path):
@@ -27,7 +27,7 @@ def save_model_checkpoint(model, optimizer, scheduler, step, path):
         'step': step
     }
     torch.save(checkpoint, path)
-    print(f"Saved model checkpoint to {path}...")
+    #print(f"Saved model checkpoint to {path}...")
 
 
 def load_model_checkpoint(path, model, optimizer, scheduler, local_rank):
@@ -38,7 +38,7 @@ def load_model_checkpoint(path, model, optimizer, scheduler, local_rank):
     optimizer.load_state_dict(checkpoint['optimizer'])
     scheduler.load_state_dict(checkpoint['scheduler'])
     step = checkpoint['step']
-    print(f"Loaded model checkpoint from {path}")
+    #print(f"Loaded model checkpoint from {path}")
     return model, optimizer, scheduler, step
 
 
