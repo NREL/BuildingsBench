@@ -1,6 +1,6 @@
 [model]
 pred_len = 1
-hidden_dims = [1005, 512, 128]
+hidden_dims = [1005, 512, 256]
 continuous_head = 'mse'
 continuous_loads = true
 
