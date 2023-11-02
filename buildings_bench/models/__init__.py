@@ -9,6 +9,7 @@ from buildings_bench.models.transformers import LoadForecastingTransformer, Load
 from buildings_bench.models.persistence import *
 from buildings_bench.models.deep_rnn import DeepAutoregressiveRNN
 from buildings_bench.models.mlp import MLP, MLPText
+from buildings_bench.models.resnet import ResNet
 
 model_registry = {
     'TransformerWithTokenizer-L': LoadForecastingTransformer,
@@ -35,7 +36,9 @@ model_registry = {
     'DeepAutoregressiveRNN': DeepAutoregressiveRNN,
     # Register your model here
     "MLP": MLP,
-    "MLPText": MLPText
+    "MLPText": MLPText,
+    "ResNet-S": ResNet,
+    "ResNet-Text-S": ResNet
 }
 
 

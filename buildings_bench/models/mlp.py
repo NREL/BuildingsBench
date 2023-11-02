@@ -16,6 +16,7 @@ class MLP(BaseModel):
                 pred_len=1,
                 continuous_head='mse',
                 continuous_loads=True):
+        
         super(MLP,self).__init__(context_len, pred_len, continuous_loads)
         self.continuous_head = continuous_head
         out_dim = 1 if self.continuous_head == 'mse' else 2

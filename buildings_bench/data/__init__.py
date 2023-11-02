@@ -60,9 +60,10 @@ def load_pretraining(
         scaler_transform_path: Path = None,
         weather: List[str] = None,
         custom_idx_filename: str = '',
-        context_len=168, # week
-        pred_len=24,
-        use_text_embedding=False) -> torch.utils.data.Dataset:
+        context_len: int = 168, # week
+        pred_len: int =24,
+        use_buildings_chars: bool = False,
+        use_text_embedding: bool = False) -> torch.utils.data.Dataset:
     r"""
     Pre-training datasets: buildings-900k-train, buildings-900k-val
 
@@ -77,7 +78,8 @@ def load_pretraining(
         custom_idx_filename (str): customized index filename. Default: ''
         context_len (int): Length of the context. Defaults to 168.
         pred_len (int): Length of the prediction horizon. Defaults to 24.
-    
+        use_buildings_chars (bool): whether include building characteristics
+        use_text_embedding (bool): whether encode building characteristics with text embedding
     Returns:
         torch.utils.data.Dataset: Dataset for pretraining.
     """
@@ -107,8 +109,8 @@ def load_pretraining(
                                apply_scaler_transform=apply_scaler_transform,
                                scaler_transform_path = scaler_transform_path,
                                weather=weather)
-    elif name.lower() == 'simcap-10k-train':
-        idx_file = f'train_simcap.idx' if custom_idx_filename == '' else custom_idx_filename
+    elif "simcap" in name.lower():
+        idx_file = custom_idx_filename
         dataset = Buildings900K(dataset_path,
                                idx_file,
                                context_len=context_len,
@@ -116,27 +118,9 @@ def load_pretraining(
                                apply_scaler_transform=apply_scaler_transform,
                                scaler_transform_path = scaler_transform_path,
                                weather=weather,
-                               use_text_embedding=use_text_embedding)
-    elif name.lower() == 'simcap-10k-val':
-        idx_file = f'val_simcap.idx' if custom_idx_filename == '' else custom_idx_filename
-        dataset = Buildings900K(dataset_path,
-                               idx_file,
-                               context_len=context_len,
-                               pred_len=pred_len,
-                               apply_scaler_transform=apply_scaler_transform,
-                               scaler_transform_path = scaler_transform_path,
-                               weather=weather,
-                               use_text_embedding=use_text_embedding)
-    elif name.lower() == 'simcap-10k-test':
-        idx_file = f'test_simcap.idx' if custom_idx_filename == '' else custom_idx_filename
-        dataset = Buildings900K(dataset_path,
-                               idx_file,
-                               context_len=context_len,
-                               pred_len=pred_len,
-                               apply_scaler_transform=apply_scaler_transform,
-                               scaler_transform_path = scaler_transform_path,
-                               weather=weather,
-                               use_text_embedding=use_text_embedding)
+                               use_buildings_chars=use_buildings_chars,
+                               use_text_embedding=use_text_embedding,
+                               surrogate_mode=True)
     return dataset
         
     

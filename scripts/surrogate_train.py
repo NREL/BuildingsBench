@@ -23,34 +23,6 @@ import numpy as np
 import math
 import pickle
 
-class statsTracker:
-    def __init__(self):
-        self.counter = None
-        self.average = None
-    
-    def update(self, x):
-        if self.counter is None:
-            self.counter = x.size(0)
-            self.average = x.mean(dim=0)
-        else:
-            self.average = x.sum(dim=0) + self.average * self.counter
-            self.counter += x.size(0)
-            self.average = self.average / self.counter
-
-    def get(self):
-        return self.average
-
-class uniqueTracker:
-    def __init__(self):
-        self.unique = set()
-
-    def update(self, x):
-        for row in x:
-            self.unique.add((row[0], row[1]))
-
-    def get(self):
-        return len(self.unique)
-
 SCRIPT_PATH = Path(os.path.realpath(__file__)).parent
 
 @torch.no_grad()
@@ -82,11 +54,9 @@ def validation(model, val_dataloader, args, loss, load_transform, transform, inv
            batch[k] = v.to(model.device)
 
         continuous_load = batch['load'].clone()
-        continuous_targets = continuous_load[:, :model.module.context_len]
 
         # Transform if needed
         batch['load'] = transform(batch['load'])
-        targets = batch['load'][:, :model.module.context_len]
 
         with torch.cuda.amp.autocast():
             preds = model(batch)
@@ -138,240 +108,6 @@ def validation(model, val_dataloader, args, loss, load_transform, transform, inv
     summary = metrics_manager.summary(with_loss=True, with_ppl=True)
 
     return summary['loss'], summary['ppl'], summary
-
-@torch.no_grad()
-def aggregate_eval(args, model_args, testset="val"):
-    utils.set_seed(args.random_seed)
-
-    # When running on the CuDNN backend, two further options must be set
-    torch.backends.cudnn.deterministic = True
-    # Optimize for fixed input sizes
-    torch.backends.cudnn.benchmark = False
-
-    ######################### DDP setup  #########################
-    # SLURM_LOCALID: gpu local rank (=0 as the first gpu of the node)
-    # SLURM_PROCID: gpu global rank (=4 as the fifth gpu among the 8)
-    # MASTER_ADDR and MASTER_PORT env variables should be set when calling this script
-    gpus_per_node = torch.cuda.device_count()    
-    args.world_size    = int(os.environ["WORLD_SIZE"])
-    if args.disable_slurm:
-        local_rank     = int(os.environ["LOCAL_RANK"])
-        args.rank      = local_rank
-    else:
-        args.rank      = int(os.environ["SLURM_PROCID"])
-        print(f"Hello from rank {args.rank} of {args.world_size} on {gethostname()} where there are" \
-            f" {gpus_per_node} allocated GPUs per node.", flush=True)
-
-        local_rank = args.rank - gpus_per_node * (args.rank // gpus_per_node)
-
-    print(f'About to call init_process_group on rank {args.rank} with local rank {local_rank}', flush=True)
-    torch.distributed.init_process_group(backend=args.dist_backend, 
-                                        init_method=args.dist_url,
-                                        world_size=args.world_size,
-                                        rank=args.rank)
-    if args.rank == 0: print(f"Group initialized? {torch.distributed.is_initialized()}", flush=True)
-    torch.cuda.set_device(local_rank)
-
-    print(f'rank {args.rank} torch cuda available = ', torch.cuda.is_available(), flush=True)
-    print(f'rank {args.rank} torch cuda device count = ', torch.cuda.device_count(), flush=True)
-    print(f'rank {args.rank} torch cuda current device = ', torch.cuda.current_device(), flush=True)
-    print(f'rank {args.rank} torch cuda get_device_name = ', torch.cuda.get_device_name(0), flush=True)
-    print(f'rank {args.rank} torch threads = ', torch.get_num_threads(), flush=True)
-
-    print(f'dataset path = {os.environ.get("BUILDINGS_BENCH", "")}')
-
-    checkpoint_dir = SCRIPT_PATH / '..' / 'checkpoints'
-    transform_path = Path(os.environ.get('BUILDINGS_BENCH', '')) / 'metadata' / 'transforms'
-
-    #################### Model setup ####################
-
-    # remove "module" from state_dict keys to load weights without data parallel
-    # source: https://gist.github.com/IAmSuyogJadhav/bc388a871eda982ee0cf781b82227283
-    # from collections import OrderedDict
-    # def remove_data_parallel(old_state_dict):
-    #     new_state_dict = OrderedDict()
-
-    #     for k, v in old_state_dict.items():
-    #         name = k[7:] # remove `module.`
-    #         new_state_dict[name] = v
-    
-    #     return new_state_dict
-    if args.weather is not None and args.weather[0] == 'all':
-        args.weather = g_weather_features
-
-    model, loss, predict = model_factory(args.config, model_args)
-    model = model.to(local_rank)
-    model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[local_rank], output_device=local_rank)
-    model.load_state_dict(
-        torch.load("checkpoints/ckpt-step-100000-loss-1607.982.pt", map_location=f'cuda:{local_rank}')["model"]
-    )
-    
-    print(f'rank {args.rank} number of trainable parameters is '\
-          f'= {sum(p.numel() for p in model.parameters())}', flush=True)
-
-    #################### Dataset setup ####################
-
-    if testset == "val":
-        test_dataset = load_pretraining('simcap-10k-val',
-                                   args.num_buildings,
-                                   args.apply_scaler_transform,
-                                   transform_path, 
-                                   weather=args.weather, 
-                                   custom_idx_filename=args.val_idx_filename,
-                                   use_text_embedding=args.use_text_embedding
-                                )
-        test_dataset_gen = [["val", test_dataset]]
-    else:
-        test_dataset = load_pretraining('simcap-10k-test',
-                                   args.num_buildings,
-                                   args.apply_scaler_transform,
-                                   transform_path, 
-                                   weather=args.weather, 
-                                   custom_idx_filename=args.val_idx_filename,
-                                   use_text_embedding=args.use_text_embedding
-                                )
-        test_dataset_gen = [["test", test_dataset]]
-    
-    if not model.module.continuous_loads:
-        load_transform = LoadQuantizer(
-            with_merge=(not args.tokenizer_without_merge),
-            num_centroids=model.module.vocab_size,
-            device=f'cuda:{local_rank}')
-        load_transform.load(transform_path)
-    # else:
-    #     load_transform = train_dataset.load_transform
-    elif args.apply_scaler_transform != '':
-        load_transform = train_dataset.load_transform
-    else:
-        load_transform = None
-
-    if not model.module.continuous_loads: 
-        transform = load_transform.transform
-        inverse_transform = load_transform.undo_transform
-    elif args.apply_scaler_transform != '':
-        transform = lambda x: x
-        inverse_transform = load_transform.undo_transform
-    else: # Continuous unscaled values
-        transform = lambda x: x
-        inverse_transform = lambda x: x
-
-    model.eval()
-    step = 0
-
-    bd_types = ['FullServiceRestaurant', 'Hospital', 'LargeHotel', 'LargeOffice',
-       'MediumOffice', 'Outpatient', 'PrimarySchool',
-       'QuickServiceRestaurant', 'RetailStandalone', 'RetailStripmall',
-       'SecondarySchool', 'SmallHotel', 'SmallOffice', 'Warehouse']
-
-    stats = [[statsTracker(), statsTracker(), uniqueTracker()] for _ in range(14)]
-
-    for building_name, building_dataset in test_dataset_gen:
-        if "residential" in building_name:
-            continue 
-
-        val_sampler = torch.utils.data.distributed.DistributedSampler(
-                                     dataset=building_dataset,
-                                     num_replicas=args.world_size,
-                                     rank=args.rank, shuffle=False)
-    
-        val_dataloader = torch.utils.data.DataLoader(
-            building_dataset, batch_size=args.batch_size, sampler=val_sampler,
-            drop_last=False, worker_init_fn=utils.worker_init_fn_eulp if testset == "val" else None,
-            shuffle=(val_sampler is None), num_workers=args.num_workers, pin_memory=True)
-
-        for batch in val_dataloader:   
-            # building_types_mask = batch['building_type'][:,0,0] == 1
-            building_types_mask = batch['building_subtype'] != -1
-            building_types_mask = building_types_mask.cpu()
-
-            for k,v in batch.items():
-                batch[k] = v.to(model.device)
-
-            continuous_load = batch['load'].clone()
-            continuous_targets = continuous_load[:, :model.module.context_len]
-
-            # Transform if needed
-            batch['load'] = transform(batch['load'])
-            targets = batch['load'][:, :model.module.context_len]
-
-            with torch.cuda.amp.autocast():
-                preds = model(batch)
-                batch_loss = loss(preds, targets)
-                predictions, distribution_params = predict(batch)
-
-            predictions = inverse_transform(predictions)
-
-            if args.apply_scaler_transform != '':
-                continuous_targets = inverse_transform(continuous_targets)
-                # unscale for crps
-                targets = inverse_transform(targets)
-                if args.apply_scaler_transform == 'standard':
-                    mu = inverse_transform(distribution_params[:,:,0])
-                    sigma = load_transform.undo_transform_std(distribution_params[:,:,1])
-                    distribution_params = torch.cat([mu.unsqueeze(-1), sigma.unsqueeze(-1)],-1)
-                
-                elif args.apply_scaler_transform == 'boxcox':
-                    ######## approximate Gaussian in unscaled space ########
-                    mu = inverse_transform(distribution_params[:,:,0])
-                    muplussigma = inverse_transform(torch.sum(distribution_params,-1))
-                    sigma = muplussigma - mu
-                    muminussigma = inverse_transform(distribution_params[:,:,0] - distribution_params[:,:,1])
-                    sigma = (sigma + (mu - muminussigma)) / 2
-                    distribution_params = torch.cat([mu.unsqueeze(-1), sigma.unsqueeze(-1)],-1)
-            
-            if not model.module.continuous_loads:
-                centroids = load_transform.kmeans.centroids.squeeze() \
-                    if args.tokenizer_without_merge else load_transform.merged_centroids
-            else:
-                centroids = None
-                        
-            step += 1
-            # don't run for too long
-            # if step == 100:
-            #     break
-
-            bd_char = batch["building_char"].cpu()[:, 0, :]
-            pred = predictions.cpu()[:, :, 0]
-            targ = targets.cpu()[:, :, 0]
-            time = batch["hour_of_day"].cpu()[:, -24:, 0]
-            bd_ids = torch.cat((batch["dataset_id"].unsqueeze(1), batch["building_id"].unsqueeze(1)), dim=1).long()
-
-            for i in range(14):
-                mask = batch['building_subtype'] == i
-                mask = mask.cpu()
-                if mask.any():
-                    idx = time[mask, :].argmin(dim=1)
-
-                    p = pred[mask, :].repeat(1, 2)
-                    t = targ[mask, :].repeat(1, 2)
-                    p = torch.cat([p[j, id:id + 24].unsqueeze(0) for j, id in enumerate(idx)])
-                    t = torch.cat([t[j, id:id + 24].unsqueeze(0) for j, id in enumerate(idx)])
-                    
-                    stats[i][0].update(p.double())
-                    stats[i][1].update(t.double())
-                    stats[i][2].update(bd_ids[mask, :])
-
-    with open('stats_mlptext.pickle', 'wb') as handle:
-        pickle.dump(stats, handle, protocol=pickle.HIGHEST_PROTOCOL)
-        
-    import matplotlib.pyplot as plt
-    fig=plt.figure(figsize=(12,8), dpi= 100, facecolor='w', edgecolor='k')
-    for i in range(14):
-        plt.subplot(4, 4, i+1)
-        p = stats[i][0].get()
-        t = stats[i][1].get()
-        n = stats[i][2].get()
-
-        print(bd_types[i])
-        print(p, t, n)
-
-        plt.plot(p, label="prediction")
-        plt.plot(t, label="target")
-        plt.title(bd_types[i])
-        plt.legend()
-        plt.tight_layout()
-
-    plt.savefig('plot.png')
 
 def main(args, model_args):
     """ Main training loop
@@ -463,27 +199,26 @@ def main(args, model_args):
           f'= {sum(p.numel() for p in model.parameters())}', flush=True)
 
     #################### Dataset setup ####################
-    if "simcap" in args.train_idx_filename:
-        train_dataset_name = "simcap-10k-train"
-        val_dataset_name = "simcap-10k-val"
-    else:
-        train_dataset_name = "buildings-900k-train"
-        val_dataset_name = "buildings-900k-val"
-
-    train_dataset = load_pretraining(train_dataset_name,
+    train_dataset = load_pretraining("simcap",
                                      args.num_buildings,
                                      args.apply_scaler_transform,
                                      transform_path, 
                                      weather=args.weather, 
                                      custom_idx_filename=args.train_idx_filename,
+                                     context_len=0,
+                                     pred_len=model.pred_len,
+                                     use_buildings_chars=args.use_buildings_chars,
                                      use_text_embedding=args.use_text_embedding)
     
-    val_dataset = load_pretraining(val_dataset_name,
+    val_dataset = load_pretraining("simcap",
                                    args.num_buildings,
                                    args.apply_scaler_transform,
                                    transform_path, 
                                    weather=args.weather, 
                                    custom_idx_filename=args.val_idx_filename,
+                                   context_len=0,
+                                   pred_len=model.pred_len,
+                                   use_buildings_chars=args.use_buildings_chars,
                                    use_text_embedding=args.use_text_embedding)
 
     train_sampler = torch.utils.data.distributed.DistributedSampler(
@@ -568,9 +303,7 @@ def main(args, model_args):
     model.train()
     start_time = timer()
 
-    num_epochs = 10
-
-    for epoch in range(num_epochs):
+    while step < train_steps:
         for batch in train_dataloader:
             start_time = timer()
             optimizer.zero_grad()
@@ -584,7 +317,7 @@ def main(args, model_args):
             # backwards is called in here
             with torch.cuda.amp.autocast():
                 preds = model(batch) 
-                targets = batch['load'][:, :model.module.context_len, :]   
+                targets = batch['load']
                 # preds are [bsz_sz, pred_len, vocab_size] if logits
                 # preds are [bsz_sz, pred_len, 2] if Gaussian
                 # preds are [bsz_sz, pred_len, 1] if MSE
@@ -656,9 +389,12 @@ def main(args, model_args):
                 }, step=step)
                 print(f'finished validation at step {step}...')
         
-            if step == train_steps:
+            if step >= train_steps:
                 # stop training after this many steps/train_tokens
                 break
+        else:
+            continue # continue if step < train_steps
+        break
 
     # save final checkpoint
     if args.rank == 0:
@@ -728,12 +464,11 @@ if __name__ == '__main__':
                         help='Name of index files for training')
     parser.add_argument('--val_idx_filename', type=str, default='',
                         help='Name of index files for validation')
-    parser.add_argument('--aggregate', type=bool, default=False,
-                        help='evaluate and have aggregated plot instead of train')
     parser.add_argument('--use-weather', dest='weather', nargs='*', default=None,
                     help='Enable loading weather features (they are not used by default). If enabled, all EULP\'s weather features will be loaded. '
                     'Optionally, specify a list of weather features to use (see `weather_features` in buildings_bench.data.__init__.py for options')
-    parser.add_argument('--use_text_embedding', default=False, 
+    parser.add_argument('--use_buildings_chars', default=True, help="Whether include building chars for surrogate training, default = True.")
+    parser.add_argument('--use_text_embedding', action='store_true', default=False, 
                     help="Whether to use text embeddings of building descriptions. If false, use one-hot encoded features instead. Default is False.")
 
     experiment_args = parser.parse_args()
@@ -767,9 +502,5 @@ if __name__ == '__main__':
     if not torch.cuda.is_available():
         raise ValueError('CUDA is not available for pretraining!')
     
-    if experiment_args.aggregate:
-        print("start evaluating")
-        aggregate_eval(experiment_args, model_args)
-    else: 
-        print("start training")
-        main(experiment_args, model_args)
+    print("start training")
+    main(experiment_args, model_args)

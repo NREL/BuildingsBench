@@ -4,6 +4,11 @@
 
 ![A .gif of a load forecast for CONUS](./assets/commercial_forecast.gif)
 
+## ❗️Update for surrogate model training
+- Refactored ```buildings900K.py```. It now supports data loading for surrogate model training, which expects the index file that has one building per row and ignores seq_ptr. It randomly selects a sequence of length = pred_len on the fly, where the starting index is in range [1, 8736 - pred_len], where 8736 is the total number of hours in a year and we skip the first hour of the first day due to missing weather data. More details on creating simcap index files can be found ```script/create_index_files_simcap.py```.
+- Added a ```BaseSurrogateModel``` abstract class and implemented surrogate model class ```ResNet``` that makes prediction on single timestamp with residual connections. Added configuration files for small resnets ```ResNet-S``` and ```ResNet-Text-S``` with text embedding. 
+- Added scripts for caption generation, post processing, BERT embedding generation in parallel.
+
 ## Overview 
 
 BuildingsBench is a platform for
