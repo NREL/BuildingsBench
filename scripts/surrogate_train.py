@@ -53,10 +53,11 @@ def validation(model, val_dataloader, args, loss, load_transform, transform, inv
         for k,v in batch.items():
            batch[k] = v.to(model.device)
 
-        continuous_load = batch['load'].clone()
+        continuous_targets = batch['load'].clone()
 
         # Transform if needed
         batch['load'] = transform(batch['load'])
+        targets = batch['load']
 
         with torch.cuda.amp.autocast():
             preds = model(batch)
