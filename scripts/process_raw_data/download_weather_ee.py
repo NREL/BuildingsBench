@@ -14,7 +14,7 @@ def main():
 
     real_building_ds = [('LCL', '037700', '2011-01-01', '2014-12-31', 0), ('IDEAL', '031660', '2017-01-01', '2018-12-31', 0), 
                       ('Sceaux', '071560', '2006-12-31', '2011-01-01', 1), ('Borealis', '713680', '2010-12-31', '2013-01-01', -5),
-                      ('SMART', '744910', '2013-12-31', '2017-01-01', -5)] 
+                      ('SMART', '744910', '2013-12-31', '2017-01-01', -5), ('Electricity', '085790', '2011-01-01', '2014-12-31', 0)] 
     
     for ds in real_building_ds:
         print('Downloading', ds[0])
@@ -36,7 +36,6 @@ def main():
         weather.index = weather.index + pd.to_timedelta(f'{ds[4]}h')
 
         weather.to_csv(output_dir / 'weather_isd.csv')
-        # weather.to_csv(real_building_prefix / 'remove_outliers' / ds[0] / f'weather_isd.csv')
 
 
    

@@ -8,6 +8,7 @@ from buildings_bench.transforms import BoxCoxTransform, StandardScalerTransform
 from buildings_bench import BuildingTypes
 import pyarrow.parquet as pq
 from buildings_bench.utils import get_puma_county_lookup_table
+import os
 
 
 class TorchBuildingDataset(torch.utils.data.Dataset):
@@ -267,7 +268,7 @@ class TorchBuildingDatasetsFromCSV:
             ds_name = building_year_files[0].split('/')[0]
 
             if ds_name != 'SMART' and ds_name != 'BDG-2':
-                weather_df = pd.read_csv(data_path / (ds_name + f'/weather_era5.csv'), index_col=0, header=0, parse_dates=True) #TODO finalize the weather source
+                weather_df = pd.read_csv(data_path / (ds_name + f'/weather_isd.csv'), index_col=0, header=0, parse_dates=True) #TODO finalize the weather source
 
         for building_year_file in building_year_files:
             name = building_year_file.split('_')[0].split('/')[1]
@@ -375,9 +376,11 @@ class PandasBuildingDatasetsFromCSV:
         
         weather_df = None
         if weather:
+            self.weather_transform_path = data_path / 'metadata/transforms/weather-900K/'
+
             ds_name = building_year_files[0].split('/')[0]
             if ds_name != 'SMART' and ds_name != 'BDG-2':
-                weather_df = pd.read_csv(data_path / (ds_name + f'/weather_era5.csv'), index_col=0, header=0, parse_dates=True) #TODO finalize the weather source
+                weather_df = pd.read_csv(data_path / (ds_name + f'/weather_isd.csv'), index_col=0, header=0, parse_dates=True) #TODO finalize the weather source
         
         for building_year_file in building_year_files:
             #fullname = building_year_file.split('_')[0]
@@ -408,7 +411,7 @@ class PandasBuildingDatasetsFromCSV:
                 if self.features == 'engineered':
                     self._prepare_data_with_engineered_features(bldg_name, df, year, weather_df)
                 elif self.features == 'transformer':
-                    self._prepare_data_transformer(bldg_name, df, year)
+                    self._prepare_data_transformer(bldg_name, df, year, weather_df)
 
 
     def _prepare_data_with_engineered_features(self, bldg_name, df, year, weather_df):
@@ -439,7 +442,7 @@ class PandasBuildingDatasetsFromCSV:
             self.building_datasets[bldg_name] = [(year,df)]
 
 
-    def _prepare_data_transformer(self, bldg_name, df, year):
+    def _prepare_data_transformer(self, bldg_name, df, year, weather_df):
         is_leap_year = True if year in self.leap_years else False            
         time_transform = transforms.TimestampTransform(is_leap_year)
         
@@ -463,6 +466,13 @@ class PandasBuildingDatasetsFromCSV:
         df["day_of_week"] = time_features[:,1] * np.ones(df.shape[0])
         df["hour_of_day"] = time_features[:,2] * np.ones(df.shape[0])
         df["day_of_year"] = time_features[:, 0] * np.ones(df.shape[0])
+
+        if weather_df is not None:
+            weather_df = weather_df.loc[:, ['temperature']]
+            weather_transform = StandardScalerTransform()
+            weather_transform.load(self.weather_transform_path / 'temperature')
+            weather_df['temperature'] = weather_transform.transform(weather_df['temperature'].to_numpy())[0]
+            df = df.join(weather_df)
 
         if bldg_name in self.building_datasets:
             self.building_datasets[bldg_name] += [(year,df)]
@@ -496,18 +506,21 @@ class PandasTransformerDataset(torch.utils.data.Dataset):
                  df: pd.DataFrame,
                  context_len: int = 168,
                  pred_len: int = 24,
-                 sliding_window: int = 24):
+                 sliding_window: int = 24,
+                 weather = False):
         """
         Args:
             df (pd.DataFrame): Pandas DataFrame with columns: load, latitude, longitude, hour of day, day of week, day of year, building type
             context_len (int, optional): Length of context.. Defaults to 168.
             pred_len (int, optional): Length of prediction sequence for the forecasting model. Defaults to 24.
             sliding_window (int, optional): Stride for sliding window to split timeseries into test samples. Defaults to 24.
+            weather (bool, optional): load weather data. Defaults to False.
         """
         self.df = df
         self.context_len = context_len
         self.pred_len = pred_len
         self.sliding_window = sliding_window
+        self.weather = weather
 
     def __len__(self):
         return (len(self.df) - self.context_len - self.pred_len) // self.sliding_window
@@ -527,6 +540,10 @@ class PandasTransformerDataset(torch.utils.data.Dataset):
             'building_type': building_features[...,None],
             'load': load_features[...,None]
         }
+
+        if self.weather:
+            sample.update({'temperature' : self.df['temperature'].iloc[seq_ptr-self.context_len: seq_ptr+self.pred_len].values.astype(np.float32)[...,None]}) 
+
         return sample
 
 

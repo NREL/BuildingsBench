@@ -10,6 +10,7 @@ from copy import deepcopy
 
 from buildings_bench import load_pandas_dataset, benchmark_registry
 from buildings_bench.data.datasets import PandasTransformerDataset
+from buildings_bench.data import g_weather_features
 from buildings_bench.data.datasets import keep_buildings
 from buildings_bench import utils
 from buildings_bench.tokenizer import LoadQuantizer
@@ -23,7 +24,7 @@ SCRIPT_PATH = Path(os.path.realpath(__file__)).parent
 
 
 def train(df_tr, df_val, args, model, transform, loss, lr, device):
-    torch_train_set = PandasTransformerDataset(df_tr, sliding_window=24)
+    torch_train_set = PandasTransformerDataset(df_tr, sliding_window=24, weather=args.weather)
     
     train_dataloader = torch.utils.data.DataLoader(
                                 torch_train_set,
@@ -31,7 +32,7 @@ def train(df_tr, df_val, args, model, transform, loss, lr, device):
                                 num_workers=args.num_workers, 
                                 shuffle=True)
     
-    torch_val_set = PandasTransformerDataset(df_val, sliding_window=24)
+    torch_val_set = PandasTransformerDataset(df_val, sliding_window=24, weather=args.weather)
     val_dataloader = torch.utils.data.DataLoader(
                                 torch_val_set,
                                 batch_size=args.batch_size,
@@ -113,6 +114,9 @@ def transfer_learning(args, model_args, results_path: Path):
     global benchmark_registry
     device = args.device
 
+    if args.weather:
+        model_args['weather_features'] = g_weather_features[:1]
+
     # load and configure the model for transfer learning
     model, loss, _ = model_factory(args.model, model_args)
     model = model.to(args.device)
@@ -161,7 +165,8 @@ def transfer_learning(args, model_args, results_path: Path):
                                                 feature_set='transformer',
                                                 apply_scaler_transform=args.apply_scaler_transform,
                                                 scaler_transform_path=transform_path,
-                                                include_outliers=args.include_outliers)
+                                                include_outliers=args.include_outliers,
+                                                weather=args.weather)
         # Filter to target buildings
         if len(target_buildings) > 0:
             dataset_generator = keep_buildings(dataset_generator, target_buildings)
@@ -178,13 +183,15 @@ def transfer_learning(args, model_args, results_path: Path):
             transform = lambda x: x
             inverse_transform = lambda x: x
         
-        for building_name, bldg_df in dataset_generator:
+        num_of_buildings = len(dataset_generator)
+        print(f'dataset {dataset}: {num_of_buildings} buildings')
+        for count, (building_name, bldg_df) in enumerate(dataset_generator, start=1):
             # if date range is less than 120 days, skip - 90 days training, 30+ days eval.
             if len(bldg_df) < (args.num_training_days+30)*24:
                 print(f'{dataset} {building_name} has too few days {len(bldg_df)}')
                 continue
 
-            print(f'dataset {dataset} building {building_name}')
+            print(f'dataset {dataset} building {building_name} {count}/{num_of_buildings}')
             
             metrics_manager.add_building_to_dataset_if_missing(
                  dataset, building_name,
@@ -222,7 +229,7 @@ def transfer_learning(args, model_args, results_path: Path):
 
             # do the evaluation on the building test data
             torch_test_set = PandasTransformerDataset(test_set,
-                                                      sliding_window=24)
+                                                      sliding_window=24, weather=args.weather)
             test_dataloader = torch.utils.data.DataLoader(
                                         torch_test_set,
                                         batch_size=360,
@@ -308,26 +315,28 @@ def transfer_learning(args, model_args, results_path: Path):
         else:
             metrics_df.to_csv(metrics_file, index=False)
 
-    # Compute and display aggregate statistics
-    with open(Path(os.environ.get('BUILDINGS_BENCH', '')) / 'metadata' / 'oov.txt', 'r') as f:
-        for line in f:
-            oov_bldgs += [line.strip().split(' ')[1]]
+    if len(args.benchmark) == len(benchmark_registry):
+        # Compute and display aggregate statistics
+        oov_bldgs = []
+        with open(Path(os.environ.get('BUILDINGS_BENCH', '')) / 'metadata' / 'oov.txt', 'r') as f:
+            for line in f:
+                oov_bldgs += [line.strip().split(' ')[1]]
 
-        metric_names = [m.name for m in metrics_manager.metrics_list]
-        if metrics_manager.scoring_rule:
-            metric_names += [metrics_manager.scoring_rule.name]
+            metric_names = [m.name for m in metrics_manager.metrics_list]
+            if metrics_manager.scoring_rule:
+                metric_names += [metrics_manager.scoring_rule.name]
 
-        # Returns a dictionary with the median of the nrmse (cv-rmse)
-        # and crps metrics for the model with boostrapped 95% confidence intervals
-        print('BuildingsBench (real)')
-        results_dict = aggregate.return_aggregate_median(
-                            model_list = [f'{args.model}{variant_name}'],
-                            results_dir = str(results_path),
-                            experiment = 'transfer_learning',
-                            metrics = metric_names,
-                            oov_list = oov_bldgs
-                        )
-        aggregate.pretty_print_aggregates(results_dict)
+            # Returns a dictionary with the median of the nrmse (cv-rmse)
+            # and crps metrics for the model with boostrapped 95% confidence intervals
+            print('BuildingsBench (real)')
+            results_dict = aggregate.return_aggregate_median(
+                                model_list = [f'{args.model}{variant_name}'],
+                                results_dir = str(results_path),
+                                experiment = 'transfer_learning',
+                                metrics = metric_names,
+                                oov_list = oov_bldgs
+                            )
+            aggregate.pretty_print_aggregates(results_dict)
 
 
 
@@ -354,6 +363,8 @@ if __name__ == '__main__':
                         choices=['', 'standard', 'boxcox'], 
                         help='Apply a scaler transform to the load values.')
     parser.add_argument('--include_outliers', action='store_true')
+    parser.add_argument('--use-weather', dest='weather', action='store_true', 
+                        help='Use weather data')
     parser.add_argument('--hyper_opt', nargs='*', default=[],
                         help='Tells this script to not override the argparse values for'
                              ' these hyperparams with values in the config file.'

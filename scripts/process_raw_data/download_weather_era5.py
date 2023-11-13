@@ -18,7 +18,7 @@ def main():
     real_building_prefix = Path(os.environ.get('BUILDINGS_BENCH', ''))
     real_building_ds = [('LCL', 'london', '2011-01-01', '2014-12-31', 0), ('IDEAL', 'edinburg', '2017-01-01', '2018-12-31', 0), 
                       ('Sceaux', 'sceaux', '2006-12-31', '2011-01-01', 1), ('Borealis', 'waterloo', '2010-12-31', '2013-01-01', -5),
-                      ('Electricity', 'lisbon', '2011-01-01', '2014-12-31'), ('SMART', 'massachusetts', '2013-12-31', '2017-01-01', -5),
+                      ('Electricity', 'lisbon', '2011-01-01', '2014-12-31', 0), ('SMART', 'massachusetts', '2013-12-31', '2017-01-01', -5),
                       ('Panther', 'ucf', '2015-12-31', '2018-01-01', -5), ('Fox', 'asu', '2015-12-31', '2018-01-01', -7), 
                       ('Bear', 'uc-b', '2015-12-31', '2018-01-01', -8), ('Rat', 'dc', '2015-12-31', '2018-01-01', -5)] 
     
@@ -46,10 +46,8 @@ def main():
 
         if ds[0] in BDG:
             weather.to_csv(output_dir / f'weather_{ds[0]}_era5.csv')
-            # weather.to_csv(real_building_prefix / 'remove_outliers' / 'BDG-2' / f'weather_{ds[0]}_era5.csv')
         else:
             weather.to_csv(output_dir / 'weather_era5.csv')
-            # weather.to_csv(real_building_prefix / 'remove_outliers' / ds[0] / f'weather_era5.csv')
 
 
    
