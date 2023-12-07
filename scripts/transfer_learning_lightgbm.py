@@ -38,7 +38,8 @@ def transfer_learning(args, results_path: Path):
 
     for dataset in args.benchmark:
         dataset_generator = load_pandas_dataset(dataset, feature_set='engineered',
-                                                include_outliers=args.include_outliers)
+                                                include_outliers=args.include_outliers,
+                                                weather=args.weather)
         # Filter to target buildings
         if len(target_buildings) > 0:
             dataset_generator = keep_buildings(dataset_generator, target_buildings)
@@ -48,15 +49,16 @@ def transfer_learning(args, results_path: Path):
             building_types_mask = (BuildingTypes.COMMERCIAL_INT * torch.ones([1,24,1])).bool()
         else:
             building_types_mask = (BuildingTypes.RESIDENTIAL_INT * torch.ones([1,24,1])).bool()
-                
-        for building_name, bldg_df in dataset_generator:
 
+        num_of_buildings = len(dataset_generator)
+        print(f'dataset {dataset}: {num_of_buildings} buildings')
+        for count, (building_name, bldg_df) in enumerate(dataset_generator, start=1):                
             # if date range is less than 120 days, skip - 90 days training, 30+ days eval.
             if len(bldg_df) < (args.num_training_days+30)*24:
                 print(f'{dataset} {building_name} has too few days {len(bldg_df)}')
                 continue
 
-            print(f'dataset {dataset} building {building_name}')
+            print(f'dataset {dataset} building {building_name} {count}/{num_of_buildings}')
             
             metrics_manager.add_building_to_dataset_if_missing(
                  dataset, f'{building_name}',
@@ -139,7 +141,9 @@ if __name__ == '__main__':
     parser.add_argument('--num_training_days', type=int, default=180,
                         help='Number of days for fine-tuning (last 30 used for early stopping)')
     parser.add_argument('--dont_subsample_buildings', action='store_true', default=False,
-                        help='Evaluate on all instead of a subsample of 100 res/100 com buildings')      
+                        help='Evaluate on all instead of a subsample of 100 res/100 com buildings')    
+    parser.add_argument('--use-weather', dest='weather', action='store_true', 
+                        help='Use weather data')  
 
     args = parser.parse_args()
     utils.set_seed(args.seed)
