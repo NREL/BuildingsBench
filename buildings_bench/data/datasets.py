@@ -73,6 +73,9 @@ class TorchBuildingDataset(torch.utils.data.Dataset):
         elif self.building_type == BuildingTypes.COMMERCIAL:
             building_features = BuildingTypes.COMMERCIAL_INT * np.ones((self.context_len + self.pred_len,1), dtype=np.int32)
 
+        # extract year from datetimeindex of pandas dataframe
+        year = self.df.index[seq_ptr].year
+
         sample = {
             'latitude': latlon_features[:, 0][...,None],
             'longitude': latlon_features[:, 1][...,None],
@@ -80,7 +83,8 @@ class TorchBuildingDataset(torch.utils.data.Dataset):
             'day_of_week': time_features[:, 1][...,None],
             'hour_of_day': time_features[:, 2][...,None],
             'building_type': building_features,
-            'load': load_features[...,None]
+            'load': load_features[...,None],
+            'year': year,
         }
 
         weather_df, weather_transform_path, is900k = self.weather_and_transform
@@ -96,7 +100,7 @@ class TorchBuildingDataset(torch.utils.data.Dataset):
             
             # transform
             weather_transform = StandardScalerTransform()
-            for col in weather_df.columns[1:]:
+            for col in weather_df.columns[1:2]:
                 weather_transform.load(weather_transform_path / col)
                 sample.update({col : weather_transform.transform(weather_df[col].to_numpy())[0][...,None]})
 
