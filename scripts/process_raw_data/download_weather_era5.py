@@ -16,7 +16,7 @@ def calc_relative_humidity(temp, dewpoint):
 
 def main():
     real_building_prefix = Path(os.environ.get('BUILDINGS_BENCH', ''))
-    real_building_ds = [('LCL', 'london', '2011-01-01', '2014-12-31', 0), ('IDEAL', 'edinburg', '2017-01-01', '2018-12-31', 0), 
+    real_building_ds = [('LCL', 'london', '2011-01-01', '2014-12-31', 0), ('IDEAL', 'edinburg', '2016-01-01', '2018-12-31', 0), 
                       ('Sceaux', 'sceaux', '2006-12-31', '2011-01-01', 1), ('Borealis', 'waterloo', '2010-12-31', '2013-01-01', -5),
                       ('Electricity', 'lisbon', '2011-01-01', '2014-12-31', 0), ('SMART', 'massachusetts', '2013-12-31', '2017-01-01', -5),
                       ('Panther', 'ucf', '2015-12-31', '2018-01-01', -5), ('Fox', 'asu', '2015-12-31', '2018-01-01', -7), 
