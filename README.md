@@ -13,7 +13,7 @@ BuildingsBench is a platform for
 We provide an index-based PyTorch Dataset for large-scale pretraining, easy data loading for multiple real building energy consumption datasets as PyTorch Tensors or Pandas DataFrames, simple (persistence) to advanced (transformer) baselines, metrics management, and more.
 
 
-Read more about BuildingsBench in our [paper](https://arxiv.org/abs/2307.00142) and [documentation](https://nrel.github.io/BuildingsBench/).
+Read more about BuildingsBench in our [NeurIPS'23 Datasets & Benchmarks paper](https://arxiv.org/abs/2307.00142) and [documentation](https://nrel.github.io/BuildingsBench/).
 
 ## Installation
 
@@ -294,7 +294,7 @@ If you use BuildingsBench in your research, please cite our preprint:
 @article{emami2023buildingsbench,
   title={BuildingsBench: A Large-Scale Dataset of 900K Buildings and Benchmark for Short-Term Load Forecasting},
   author={Emami, Patrick and Sahu, Abhijeet and Graf, Peter},
-  journal={arXiv preprint arXiv:2307.00142},
+  journal={Advances in Neural Information Processing Systems},
   year={2023}
 }
 ```
