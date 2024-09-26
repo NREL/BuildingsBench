@@ -10,7 +10,6 @@ from copy import deepcopy
 
 from buildings_bench import load_pandas_dataset, benchmark_registry
 from buildings_bench.data.datasets import PandasTransformerDataset
-from buildings_bench.data import g_weather_features
 from buildings_bench.data.datasets import keep_buildings
 from buildings_bench import utils
 from buildings_bench.tokenizer import LoadQuantizer
@@ -114,9 +113,6 @@ def transfer_learning(args, model_args, results_path: Path):
     global benchmark_registry
     device = args.device
 
-    if args.weather:
-        model_args['weather_features'] = g_weather_features[:1]
-
     # load and configure the model for transfer learning
     model, loss, _ = model_factory(args.model, model_args)
     model = model.to(args.device)
@@ -166,7 +162,7 @@ def transfer_learning(args, model_args, results_path: Path):
                                                 apply_scaler_transform=args.apply_scaler_transform,
                                                 scaler_transform_path=transform_path,
                                                 include_outliers=args.include_outliers,
-                                                weather=args.weather)
+                                                weather_inputs=model_args['weather_inputs'])
         # Filter to target buildings
         if len(target_buildings) > 0:
             dataset_generator = keep_buildings(dataset_generator, target_buildings)
@@ -363,8 +359,6 @@ if __name__ == '__main__':
                         choices=['', 'standard', 'boxcox'], 
                         help='Apply a scaler transform to the load values.')
     parser.add_argument('--include_outliers', action='store_true')
-    parser.add_argument('--use-weather', dest='weather', action='store_true', 
-                        help='Use weather data')
     parser.add_argument('--hyper_opt', nargs='*', default=[],
                         help='Tells this script to not override the argparse values for'
                              ' these hyperparams with values in the config file.'
@@ -403,10 +397,11 @@ if __name__ == '__main__':
                         setattr(args, k, v)
             if not model_args['continuous_loads']:
                 setattr(args, 'apply_scaler_transform', '')
+            if 'weather_inputs' not in model_args:
+                setattr(model_args, 'weather_inputs', None)                
     else:
         raise ValueError(f'Config {args.model}.toml not found.')
 
-   
     results_path = Path(args.results_path)
     if args.include_outliers:
         results_path = results_path / 'buildingsbench_with_outliers'

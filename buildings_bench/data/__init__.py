@@ -41,9 +41,6 @@ benchmark_registry = [
     'lcl'
 ]
 
-g_weather_features = ['temperature', 'humidity', 'wind_speed', 'wind_direction', 'global_horizontal_radiation', 
-                              'direct_normal_radiation', 'diffuse_horizontal_radiation']
-
 def parse_building_years_metadata(datapath: Path, dataset_name: str):
     with open(datapath / 'metadata' / 'building_years.txt', 'r') as f:
         building_years = f.readlines()
@@ -58,7 +55,7 @@ def load_pretraining(
         num_buildings_ablation: int = -1,
         apply_scaler_transform: str = '',
         scaler_transform_path: Path = None,
-        weather: List[str] = None,
+        weather_inputs: List[str] = None,
         custom_idx_filename: str = '',
         context_len=168, # week
         pred_len=24) -> torch.utils.data.Dataset:
@@ -72,7 +69,7 @@ def load_pretraining(
         apply_scaler_transform (str): If not using quantized load or unscaled loads,
                                  applies a {boxcox,standard} scaling transform to the load. Default: ''.
         scaler_transform_path (Path): Path to data for transform, e.g., pickled data for BoxCox transform.
-        weather (List[str]): list of weather features to use. Default: None.
+        weather_inputs (List[str]): list of weather feature names to use as additional inputs. Default: None.
         custom_idx_filename (str): customized index filename. Default: ''
         context_len (int): Length of the context. Defaults to 168.
         pred_len (int): Length of the prediction horizon. Defaults to 24.
@@ -96,7 +93,7 @@ def load_pretraining(
                                pred_len=pred_len,
                                apply_scaler_transform=apply_scaler_transform,
                                scaler_transform_path = scaler_transform_path,
-                               weather=weather)
+                               weather_inputs=weather_inputs)
     elif name.lower() == 'buildings-900k-val':
         idx_file = f'val_weekly{idx_file_suffix}.idx' if custom_idx_filename == '' else custom_idx_filename
         dataset = Buildings900K(dataset_path,
@@ -105,7 +102,7 @@ def load_pretraining(
                                pred_len=pred_len,
                                apply_scaler_transform=apply_scaler_transform,
                                scaler_transform_path = scaler_transform_path,
-                               weather=weather)
+                               weather_inputs=weather_inputs)
     return dataset
         
     
@@ -114,7 +111,7 @@ def load_torch_dataset(
         dataset_path: Path = None,
         apply_scaler_transform: str = '',
         scaler_transform_path: Path = None,
-        weather: bool = False,
+        weather_inputs: List[str] = None,
         include_outliers: bool = False,
         context_len = 168,
         pred_len = 24
@@ -127,7 +124,7 @@ def load_torch_dataset(
         apply_scaler_transform (str): If not using quantized load or unscaled loads,
                                  applies a {boxcox,standard} scaling transform to the load. Default: ''.
         scaler_transform_path (Path): Path to data for transform, e.g., pickled data for BoxCox transform.
-        weather (bool): load weather data. Default: False
+        weather_inputs (List[str]): list of weather feature names to use as additional inputs. Default: None.
         include_outliers (bool): Use version of BuildingsBench with outliers.
         context_len (int): Length of the context. Defaults to 168.
         pred_len (int): Length of the prediction horizon. Defaults to 24.
@@ -164,7 +161,7 @@ def load_torch_dataset(
                                                          [spatial_lookup.undo_transform( # pass unnormalized lat lon coords
                                                             spatial_lookup.transform(pid)) for pid in puma_ids],
                                                          building_types,
-                                                         weather=weather,
+                                                         weather_inputs=weather_inputs,
                                                          context_len=context_len,
                                                          pred_len=pred_len,
                                                          apply_scaler_transform=apply_scaler_transform,
@@ -186,7 +183,7 @@ def load_torch_dataset(
                                                          apply_scaler_transform=apply_scaler_transform,
                                                          scaler_transform_path = scaler_transform_path,
                                                          leap_years=metadata['leap_years'],
-                                                         weather=weather) 
+                                                         weather_inputs=weather_inputs) 
     elif name.lower() in benchmark_registry:
         dataset_metadata = metadata[name.lower()]
         all_by_files = parse_building_years_metadata(dataset_path, name.lower())
@@ -201,7 +198,7 @@ def load_torch_dataset(
                                                          apply_scaler_transform=apply_scaler_transform,
                                                          scaler_transform_path = scaler_transform_path,
                                                          leap_years=metadata['leap_years'],
-                                                         weather=weather) 
+                                                         weather_inputs=weather_inputs) 
     
     else:
         raise ValueError(f'Unknown dataset {name}')
@@ -213,7 +210,7 @@ def load_pandas_dataset(
         name: str,
         dataset_path: Path = None,
         feature_set: str = 'engineered',
-        weather: bool = False,
+        weather_inputs: List[str] = None,
         apply_scaler_transform: str = '',
         scaler_transform_path: Path = None,
         include_outliers: bool = False) -> PandasBuildingDatasetsFromCSV:
@@ -224,7 +221,7 @@ def load_pandas_dataset(
         name (str): Name of the dataset to load.
         dataset_path (Path): Path to the benchmark data. Optional.
         feature_set (str): Feature set to use. Default: 'engineered'.
-        weather (bool): load weather data. Default: False
+        weather_inputs (List[str]): list of weather feature names to use as additional inputs. Default: None.
         apply_scaler_transform (str): If not using quantized load or unscaled loads,
                                     applies a {boxcox,standard} scaling transform to the load. Default: ''. 
         scaler_transform_path (Path): Path to data for transform, e.g., pickled data for BoxCox transform.
@@ -264,7 +261,7 @@ def load_pandas_dataset(
             all_by_files,
             building_latlon,
             building_type,
-            weather=weather,
+            weather_inputs=weather_inputs,
             features=feature_set,
             apply_scaler_transform = apply_scaler_transform,
             scaler_transform_path = scaler_transform_path,

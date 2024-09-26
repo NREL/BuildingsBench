@@ -13,7 +13,7 @@ def main(args):
     random.seed(args.seed)
     np.random.seed(args.seed)
 
-    output_dir = Path(os.environ.get('BUILDINGS_BENCH', ''), 'metadata', 'transforms', 'weather-900K')
+    output_dir = Path(os.environ.get('BUILDINGS_BENCH', ''), 'metadata', 'transforms', 'weather')
     # training set dir
     time_series_dir = Path(os.environ.get('BUILDINGS_BENCH', ''), 'Buildings-900K', 'end-use-load-profiles-for-us-building-stock', '2021')
     building_years = ['comstock_tmy3_release_1', 'resstock_tmy3_release_1', 'comstock_amy2018_release_1', 'resstock_amy2018_release_1'] 
@@ -54,7 +54,6 @@ def main(args):
 if __name__ == '__main__':
     args = argparse.ArgumentParser()
 
-    os.environ['BUILDINGS_BENCH'] = '/data/local/projects/foundation/v1.1.0/BuildingsBench'
     args.add_argument('--seed', type=int, default=1, required=False,
                         help='Random seed shuffling. Default: 1')
 

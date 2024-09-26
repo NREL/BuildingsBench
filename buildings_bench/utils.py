@@ -76,7 +76,11 @@ def time_features_to_datetime(time_features: np.ndarray,
                     for doy, hod in zip(day_of_year, hour_of_day)])   
 
 def get_puma_county_lookup_table(metadata_dir : Path) -> pd.DataFrame:
-    """Build a puma-county lookup table (select only county with weather files)
+    """Build a puma-county lookup table.
+     
+    The weather files are organized by U.S. county. We need to map
+    counties to PUMAs and ensure we drop counties without weather data 
+    (only done when using weather).
 
     Args:
         metadata_dir (Path): Path to the metadata folder of BuildingsBench

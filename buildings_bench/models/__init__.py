@@ -5,7 +5,7 @@ from typing import Callable, Tuple, Dict
 # Import models here
 from buildings_bench.models.dlinear_regression import DLinearRegression
 from buildings_bench.models.linear_regression import LinearRegression
-from buildings_bench.models.transformers import LoadForecastingTransformer, LoadForecastingTransformerWithWeather
+from buildings_bench.models.transformers import LoadForecastingTransformer
 from buildings_bench.models.persistence import *
 from buildings_bench.models.deep_rnn import DeepAutoregressiveRNN
 
@@ -21,15 +21,15 @@ model_registry = {
     'TransformerWithGaussian-L': LoadForecastingTransformer,
     'TransformerWithGaussian-M': LoadForecastingTransformer,
     'TransformerWithGaussian-S': LoadForecastingTransformer,
-    'TransformerWithGaussian-weather-S': LoadForecastingTransformerWithWeather,
-    'TransformerWithGaussian-weather-M': LoadForecastingTransformerWithWeather,
-    'TransformerWithGaussian-weather-L': LoadForecastingTransformerWithWeather,
-    'TransformerWithGaussian-th-S': LoadForecastingTransformerWithWeather,
-    'TransformerWithGaussian-th-M': LoadForecastingTransformerWithWeather,
-    'TransformerWithGaussian-th-L': LoadForecastingTransformerWithWeather,
-    'TransformerWithGaussian-t-L': LoadForecastingTransformerWithWeather,
-    'TransformerWithGaussian-t-M': LoadForecastingTransformerWithWeather,
-    'TransformerWithGaussian-t-S': LoadForecastingTransformerWithWeather,
+    'TransformerWithGaussian-weather-S': LoadForecastingTransformer,
+    'TransformerWithGaussian-weather-M': LoadForecastingTransformer,
+    'TransformerWithGaussian-weather-L': LoadForecastingTransformer,
+    'TransformerWithGaussian-th-S': LoadForecastingTransformer,
+    'TransformerWithGaussian-th-M': LoadForecastingTransformer,
+    'TransformerWithGaussian-th-L': LoadForecastingTransformer,
+    'TransformerWithGaussian-t-L': LoadForecastingTransformer,
+    'TransformerWithGaussian-t-M': LoadForecastingTransformer,
+    'TransformerWithGaussian-t-S': LoadForecastingTransformer,
     'AveragePersistence': AveragePersistence,
     'CopyLastDayPersistence': CopyLastDayPersistence,
     'CopyLastWeekPersistence': CopyLastWeekPersistence,

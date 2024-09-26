@@ -8,7 +8,7 @@
 - `transfer_learning_lightgbm.py`: Evaluate LightGBM on the BuildingsBench benchmark transfer learning task.
 
 ## Benchmark data creation
-- `./process_raw_data`
+- `data_generation`
   - `create_buildings900K.py`: Launch a PySpark job to process the raw EULP database and save the Buildings-900K Parquet files.
   - `download_and_process_buildingsbench.py`: Replicate the preprocessing applied to the BuildingsBench evaluation datasets.
   - `split_buildings900K_train_test.py`: Split the Buildings-900K dataset into training and test sets.

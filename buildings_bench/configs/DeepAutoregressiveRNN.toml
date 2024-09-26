@@ -5,7 +5,7 @@ lstm_layers = 3
 hidden_size = 40
 continuous_head = 'gaussian_nll'
 continuous_loads = true
-for_pretraining = false
+ignore_exogenous = false
 
 [pretrain]
 batch_size = 64

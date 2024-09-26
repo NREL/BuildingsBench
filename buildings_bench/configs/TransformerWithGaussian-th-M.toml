@@ -11,6 +11,7 @@ activation = 'gelu'
 continuous_loads = true
 ignore_spatial = false
 continuous_head = 'gaussian_nll'
+weather_inputs = ['temperature', 'humidity']
 
 [pretrain]
 batch_size = 64
@@ -19,12 +20,9 @@ warmup_steps = 10000
 lr = 0.00006
 train_tokens = 1000000000
 apply_scaler_transform = 'boxcox'
-weather = ['temperature', 'humidity']
 
 [zero_shot]
 apply_scaler_transform = 'boxcox'
-weather = ['temperature', 'humidity']
 
 [transfer_learning]
 apply_scaler_transform = 'boxcox'
-weather = ['temperature', 'humidity']
