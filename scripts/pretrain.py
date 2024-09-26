@@ -42,7 +42,7 @@ def validation(model, val_dataloader, args, loss, load_transform, transform, inv
             scoring_rule=scoring_rule_factory('rps')
         )
 
-    for batch in val_dataloader:   
+    for batch in val_dataloader:  
         building_types_mask = batch['building_type'][:,0,0] == 1
 
         for k,v in batch.items():
@@ -239,7 +239,7 @@ def main(args, model_args):
         drop_last=False,
         worker_init_fn=utils.worker_init_fn_eulp,
         collate_fn=val_dataset.collate_fn(),
-        shuffle=False,
+        shuffle=True,
         num_workers=args.num_workers, pin_memory=True)
     
     if not model.continuous_loads:

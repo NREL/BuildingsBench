@@ -17,4 +17,5 @@ CUDA_VISIBLE_DEVICES=1 torchrun \
     --disable_slurm \
     --num_workers 20 \
     --train_idx_filename train_weekly_weather.idx \
-    --val_idx_filename val_weekly_weather.idx
+    --val_idx_filename val_weekly_weather.idx \
+    --disable_wandb
