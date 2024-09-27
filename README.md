@@ -294,9 +294,11 @@ If you use BuildingsBench in your research, please cite our preprint:
 
 ```
 @article{emami2023buildingsbench,
-  title={BuildingsBench: A Large-Scale Dataset of 900K Buildings and Benchmark for Short-Term Load Forecasting},
+  title={Buildingsbench: A large-scale dataset of 900k buildings and benchmark for short-term load forecasting},
   author={Emami, Patrick and Sahu, Abhijeet and Graf, Peter},
   journal={Advances in Neural Information Processing Systems},
+  volume={36},
+  pages={19823--19857},
   year={2023}
 }
 ```

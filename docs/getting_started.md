@@ -2,10 +2,10 @@ The pretraining dataset and evaluation data is available for download [here](htt
 
 The pretraining data is divided into 4 compressed files
 
-- `comstock_amy2018.tar.gz`: ~21GB
-- `comstock_tmy3.tar.gz`: ~21GB
-- `resstock_amy2018.tar.gz`: ~33GB
-- `resstock_tmy3.tar.gz`: ~33GB
+- `comstock_amy2018.tar.gz`
+- `comstock_tmy3.tar.gz`
+- `resstock_amy2018.tar.gz`
+- `resstock_tmy3.tar.gz`
 
 and one compressed file for the metadata
 
@@ -31,21 +31,22 @@ Download all files to a folder on a storage device with at least 250GB of free s
                 - `by_puma_south`
                 - `by_puma_west`
             - `weather/`
-                - `amy2018/`
-                    - `{puma_id}_2018.csv`
-                    - ...
+                - `{county_id}.csv`
+                    - `...`
             - `metadata/`
                 - `metadata.parquet`
         - `...`: Other datasets            
     - `BDG-2/`: Building Data Genome Project 2 BuildingsBench evaluation data *with outliers removed*. 
         -  `{building_id}={year}.csv`: The .csv files for the BDG-2 dataset.
-        - `...`: Other buildings
+        - `...`: Other buildings in BDG-2
+        - `weather_{building_id}.csv`: Weather data for each building in BDG-2.
     - `...`: Other evaluation datasets (Borealis, Electricity, etc.)
     - `buildingsbench_with_outliers`: The BuildingsBench evaluation data *with outliers*.
         - `BDG-2/`: Buildings Data Genome Project 2 BuildingsBench evaluation data *with outliers*. 
             -  `{building_id}={year}.csv`: The .csv files for the BDG-2 dataset.
-            - `...`: Other buildings
+            - `...`: Other buildings in BDG-2.
         - `...`: Other evaluation datasets (Borealis, Electricity, etc.)
+        - `weather_{building_id}.csv`: Weather data for each building in BDG-2.
     - `LICENSES/`: Licenses for each evaluation dataset redistributed in BuildingsBench. 
     - `metadata/`: Metadata for the evaluation suite.
         - `benchmark.toml`: Metadata for the benchmark. For each dataset, we specify:
@@ -66,6 +67,7 @@ Download all files to a folder on a storage device with at least 250GB of free s
         - `train*.idx`: Index files for fast dataloading of Buildings-900K. This file uncompressed is 16GB. 
         - `val*.idx`: Index files for fast dataloading of Buildings-900K.
         - `transforms`: Directory for storing data transform info.
+            - `weather`: Directory where weather variable normalization parameters are stored.
 
 ## Exploring the data
 
@@ -107,3 +109,9 @@ Hourly consumption values > 5100 kWh are larger than the maximum values seen dur
 We consider these "out-of-vocab" and remove such buildings from evaluation. 
 This prevents errors due to extrapolation, which is not the focus of this benchmark.
 See `list_oov.py` for the code we use to generate a list of OOV buildings.
+
+## Dataset Updates
+
+- Version 2.0.0:
+    - Added the building attribute metadata files, which contains the specific building attributes for each EnergyPlus building energy model that were used to run the simulations. These can be found in, e.g., the `Buildings-900K/end-use-load-profiles-for-us-building-stock/2021/resstock_amy2018_release_1/metadata/metadata.parquet` file.
+    - Added weather timeseries data. See this [description](https://nrel.github.io/BuildingsBench/running/#weather-timeseries) for more information.

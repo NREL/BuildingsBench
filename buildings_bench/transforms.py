@@ -11,7 +11,7 @@ from typing import Union
 class BoxCoxTransform:
     """A class that computes and applies the Box-Cox transform to data.
     """
-    def __init__(self, max_datapoints=1000000):
+    def __init__(self, max_datapoints: int = 1000000):
         """
         Args:
             max_datapoints (int): If the number of datapoints is greater than this, subsample.
@@ -61,11 +61,11 @@ class BoxCoxTransform:
         """Undo the transformation of a sample via Box-Cox
         
         Args:
-            sample (np.ndarray) or (torch.LongTensor): of shape (n, 1) or (b,n,1). 
+            sample (Union[np.ndarray, torch.LongTensor]): of shape (n, 1) or (b,n,1). 
                 numpy if device is cpu or torch Tensor if device is cuda.
 
         Returns:
-            unscaled_sample (np.ndarray or torch.Tensor): of shape (n, 1) or (b,n,1).
+            unscaled_sample (Union[np.ndarray, torch.LongTensor]): of shape (n, 1) or (b,n,1).
         """
         is_tensor = isinstance(sample, torch.Tensor)
         # if torch.Tensor, convert to numpy first
@@ -126,7 +126,7 @@ class StandardScalerTransform:
         """Transform a sample via StandardScaler
         
         Args:
-            sample (np.ndarray or torch.Tensor): shape (n, 1) or (b,n,1) 
+            sample (Union[np.ndarray, torch.LongTensor]): shape (n, 1) or (b,n,1) 
         Returns:
             transformed_samples (torch.Tensor): shape (n, 1) or (b,n,1)
         """
@@ -244,7 +244,7 @@ class LatLonTransform:
 class TimestampTransform:
     """Extract timestamp features from a Pandas timestamp Series.
     """
-    def __init__(self, is_leap_year: bool = False):
+    def __init__(self, is_leap_year: bool = False) -> None:
         """
         Args:
             is_leap_year (bool): Whether the year of the building data is a leap year or not.
@@ -298,3 +298,4 @@ class TimestampTransform:
         day_of_week = np.round(time_features[:,1] * self.day_of_week_normalization)
         hour_of_day = np.round(time_features[:,2] * self.hour_of_day_normalization)
         return np.stack([day_of_year, day_of_week, hour_of_day], axis=1).astype(np.int32).reshape(init_shape)
+    

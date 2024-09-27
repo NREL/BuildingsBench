@@ -2,9 +2,8 @@
 
 ## Overview 
 
-BuildingsBench is a platform for:
-
 BuildingsBench is a platform for enabling
+
 - Large-scale pretraining with energy timeseries using the synthetic Buildings-900K dataset, on a short-term load forecasting (STLF) task. Buildings-900K is statistically representative of the entire U.S. building stock and is extracted from the NREL [End-Use Load Profiles database](https://www.nrel.gov/buildings/end-use-load-profiles.html).
 - Benchmarking such models on two tasks evaluating difficult generalization challenges: zero-shot STLF and transfer learning for STLF.
 
@@ -95,9 +94,11 @@ If you use BuildingsBench in your research, please cite our preprint:
 
 ```
 @article{emami2023buildingsbench,
-  title={BuildingsBench: A Large-Scale Dataset of 900K Buildings and Benchmark for Short-Term Load Forecasting},
+  title={Buildingsbench: A large-scale dataset of 900k buildings and benchmark for short-term load forecasting},
   author={Emami, Patrick and Sahu, Abhijeet and Graf, Peter},
-  journal={arXiv preprint arXiv:2307.00142},
+  journal={Advances in Neural Information Processing Systems},
+  volume={36},
+  pages={19823--19857},
   year={2023}
 }
 ```
