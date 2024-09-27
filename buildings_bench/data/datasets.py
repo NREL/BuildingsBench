@@ -52,7 +52,6 @@ class TorchBuildingDataset(torch.utils.data.Dataset):
         self.apply_scaler_transform = apply_scaler_transform
         self.weather_df = weather_dataframe
         self.weather_transform_path = weather_transform_path
-
         self.normalized_latlon = transforms.LatLonTransform().transform_latlon(building_latlon)
         self.time_transform = transforms.TimestampTransform(is_leap_year=is_leap_year)
         if self.apply_scaler_transform == 'boxcox':
@@ -88,36 +87,18 @@ class TorchBuildingDataset(torch.utils.data.Dataset):
             'load': load_features[...,None]
         }
 
-        #weather_df, weather_transform_path, is900k = self.weather_and_transform
-
         if self.weather_df is None:
             return sample
         else:
-            # TODO: Test? 
 
-        #if is900k:
-            weather_df = weather_df.iloc[seq_ptr-self.context_len: seq_ptr+self.pred_len]
-
-            # weather_df.columns = ['timestamp', 'temperature', 'humidity', 'wind_speed', 'wind_direction', 'global_horizontal_radiation', 
-            #                     'direct_normal_radiation', 'diffuse_horizontal_radiation']
+            weather_df = self.weather_df.iloc[seq_ptr-self.context_len: seq_ptr+self.pred_len]
             
             # transform
             weather_transform = StandardScalerTransform()
             for col in weather_df.columns[1:]:
                 weather_transform.load(self.weather_transform_path / col)
                 sample.update({col : weather_transform.transform(weather_df[col].to_numpy())[0][...,None]})
-
             return sample
-        
-        #else:
-            # df = self.df.iloc[seq_ptr-self.context_len: seq_ptr+self.pred_len].join(weather_df)
-            
-            # weather_transform = StandardScalerTransform()
-            # for col in df.columns[1:]:
-            #     weather_transform.load(weather_transform_path / col)
-            #     sample.update({col : weather_transform.transform(df[col].to_numpy())[0][...,None]})
-
-            # return sample
         
 
 class TorchBuildingDatasetFromParquet:
@@ -179,9 +160,8 @@ class TorchBuildingDatasetFromParquet:
                 assert datetime.datetime.strptime(weather_df['date_time'].iloc[0], '%Y-%m-%d %H:%M:%S').strftime('%m-%d') == '01-01',\
                     "The weather file does not start from Jan 1st"
                 
-                weather_df.columns = ['timestamp'] + self.weather_inputs 
-                # TODO: ?
-                weather_df = weather_df[['timestamp'] + self.weather_inputs]
+                weather_df.columns = ['timestamp'] + weather_inputs 
+                weather_df = weather_df[['timestamp'] + weather_inputs]
 
             df = pq.read_table(parquet_data)
 

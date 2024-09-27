@@ -37,19 +37,19 @@ def metrics_factory(name: str,
     assert name.lower() in metrics_registry, f'Invalid metric name: {name}'
 
     if name.lower() == 'rmse':
-        return [ Metric(f'{name.lower()}-{type}', type, squared_error, sqrt=True) for type in types ]
+        return [ Metric(f'{name.lower()}', type, squared_error, sqrt=True) for type in types ]
     elif name.lower() == 'mae':
-        return [ Metric(f'{name.lower()}-{type}', type, absolute_error) for type in types ]
+        return [ Metric(f'{name.lower()}', type, absolute_error) for type in types ]
     elif name.lower() == 'nrmse':
-        return [ Metric(f'{name.lower()}-{type}', type, squared_error, normalize=True, sqrt=True) for type in types ]
+        return [ Metric(f'{name.lower()}', type, squared_error, normalize=True, sqrt=True) for type in types ]
     elif name.lower() == 'nmae':
-        return [ Metric(f'{name.lower()}-{type}', type, absolute_error, normalize=True) for type in types ]
+        return [ Metric(f'{name.lower()}', type, absolute_error, normalize=True) for type in types ]
     elif name.lower() == 'mbe':
-        return [ Metric(f'{name.lower()}-{type}', type, bias_error) for type in types ]
+        return [ Metric(f'{name.lower()}', type, bias_error) for type in types ]
     elif name.lower() == 'nmbe':
-        return [ Metric(f'{name.lower()}-{type}', type, bias_error, normalize=True) for type in types ]
+        return [ Metric(f'{name.lower()}', type, bias_error, normalize=True) for type in types ]
     elif name.lower() == 'cvrmse':
-        return [ Metric(f'{name.lower()}-{type}', type, squared_error, normalize=True, sqrt=True) for type in types ]
+        return [ Metric(f'{name.lower()}', type, squared_error, normalize=True, sqrt=True) for type in types ]
 
 
 def scoring_rule_factory(name: str) -> ScoringRule:

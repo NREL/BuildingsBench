@@ -190,29 +190,30 @@ class LoadForecastingTransformer(BaseModel):
                                    [batch_size, pred_len, 1] if continuous_loads and continuous_head == 'mse', 
                                    [batch_size, pred_len, 2] if continuous_loads and continuous_head == 'gaussian_nll'.
         """
-        time_series_inputs = [
-            self.lat_embedding(x['latitude']),
-            self.lon_embedding(x['longitude']),
-            self.building_embedding(x['building_type']).squeeze(2),
-            self.day_of_year_encoding(x['day_of_year']),
-            self.day_of_week_encoding(x['day_of_week']),
-            self.hour_of_day_encoding(x['hour_of_day']),
-            self.weather_embedding(torch.cat(
-                        [x[ft] for ft in self.weather_features],
-                    dim=2)),
-            self.power_embedding(x['load']).squeeze(2),
-        ]
+        if self.weather_features:
+            time_series_inputs = [
+                self.lat_embedding(x['latitude']),
+                self.lon_embedding(x['longitude']),
+                self.building_embedding(x['building_type']).squeeze(2),
+                self.day_of_year_encoding(x['day_of_year']),
+                self.day_of_week_encoding(x['day_of_week']),
+                self.hour_of_day_encoding(x['hour_of_day']),
+                self.weather_embedding(torch.cat(
+                            [x[ft] for ft in self.weather_features],
+                        dim=2)),
+                self.power_embedding(x['load']).squeeze(2),
+            ]
         
-        # if self.weather_features:
-        #     time_series_inputs += [
-        #             torch.cat(
-        #                 [x[ft] for ft in self.weather_features],
-        #             dim=2)
-        #     ]
-        #     # [batch_size, seq_len, d_model]
-        #     time_series_embed = self.weather_embedding(
-        #         torch.cat(time_series_inputs, dim=2)).squeeze(2)
-        # else:
+        else:
+            time_series_inputs = [
+                self.lat_embedding(x['latitude']),
+                self.lon_embedding(x['longitude']),
+                self.building_embedding(x['building_type']).squeeze(2),
+                self.day_of_year_encoding(x['day_of_year']),
+                self.day_of_week_encoding(x['day_of_week']),
+                self.hour_of_day_encoding(x['hour_of_day']),
+                self.power_embedding(x['load']).squeeze(2)
+            ]
         time_series_embed = torch.cat(time_series_inputs, dim=2)
         # [batch_size, context_len, d_model]
         src_series_inputs = time_series_embed[:, :self.context_len, :]
@@ -287,18 +288,29 @@ class LoadForecastingTransformer(BaseModel):
             predictions (torch.Tensor): of shape [batch_size, pred_len, 1] or shape [batch_size, num_samples, pred_len] if num_samples > 1.
             distribution_parameters (torch.Tensor): of shape [batch_size, pred_len, 1]. Not returned if sampling.
         """
-        time_series_inputs = [
-            self.lat_embedding(x['latitude']),
-            self.lon_embedding(x['longitude']),
-            self.building_embedding(x['building_type']).squeeze(2),
-            self.day_of_year_encoding(x['day_of_year']),
-            self.day_of_week_encoding(x['day_of_week']),
-            self.hour_of_day_encoding(x['hour_of_day']),
-            self.weather_embedding(torch.cat(
-                        [x[ft] for ft in self.weather_features],
-                    dim=2)),
-            self.power_embedding(x['load']).squeeze(2),
-        ]
+        if self.weather_features:
+            time_series_inputs = [
+                self.lat_embedding(x['latitude']),
+                self.lon_embedding(x['longitude']),
+                self.building_embedding(x['building_type']).squeeze(2),
+                self.day_of_year_encoding(x['day_of_year']),
+                self.day_of_week_encoding(x['day_of_week']),
+                self.hour_of_day_encoding(x['hour_of_day']),
+                self.weather_embedding(torch.cat(
+                            [x[ft] for ft in self.weather_features],
+                        dim=2)),
+                self.power_embedding(x['load']).squeeze(2),
+            ]
+        else:
+            time_series_inputs = [
+                self.lat_embedding(x['latitude']),
+                self.lon_embedding(x['longitude']),
+                self.building_embedding(x['building_type']).squeeze(2),
+                self.day_of_year_encoding(x['day_of_year']),
+                self.day_of_week_encoding(x['day_of_week']),
+                self.hour_of_day_encoding(x['hour_of_day']),
+                self.power_embedding(x['load']).squeeze(2)
+            ]
         time_series_embed = torch.cat(time_series_inputs, dim=2)
         # [batch_size, context_len, d_model]
         src_series_inputs = time_series_embed[:, :self.context_len, :]

@@ -32,6 +32,7 @@ benchmark_registry = [
     'sceaux',
     'borealis',
     'ideal',
+    'bdg-2',
     'bdg-2:panther',
     'bdg-2:fox',
     'bdg-2:rat',

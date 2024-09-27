@@ -62,7 +62,7 @@ def train(df_tr, df_val, args, model, transform, loss, lr, device):
             # Apply transform to load if needed
             batch['load'] = transform(batch['load'])
                                 
-            with torch.cuda.amp.autocast():
+            with torch.amp.autocast('cuda'):
                 preds = model(batch)
                 targets = batch['load'][:, model.context_len:]      
                 batch_loss = loss(preds, targets)
@@ -136,6 +136,8 @@ def transfer_learning(args, model_args, results_path: Path):
     benchmark_registry = [b for b in benchmark_registry if b != 'buildings-900k-test']
     if args.benchmark[0] == 'all':
         args.benchmark = benchmark_registry
+    elif args.benchmark[0] == 'bdg-2':
+        args.benchmark = [x for x in benchmark_registry if 'bdg-2:' in x]
 
     if args.ignore_scoring_rules:
         metrics_manager = DatasetMetricsManager()
@@ -398,7 +400,7 @@ if __name__ == '__main__':
             if not model_args['continuous_loads']:
                 setattr(args, 'apply_scaler_transform', '')
             if 'weather_inputs' not in model_args:
-                setattr(model_args, 'weather_inputs', None)                
+                model_args['weather_inputs'] = None
     else:
         raise ValueError(f'Config {args.model}.toml not found.')
 
