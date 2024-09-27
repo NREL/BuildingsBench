@@ -485,7 +485,7 @@ if __name__ == '__main__':
         if not model_args['continuous_loads'] or 'apply_scaler_transform' not in experiment_args:
             setattr(experiment_args, 'apply_scaler_transform', '')
         if 'weather_inputs' not in model_args:
-            setattr(model_args, 'weather_inputs', None)
+            model_args['weather_inputs'] = None
     else:
         raise ValueError(f'Config {experiment_args.model}.toml not found.')
 
