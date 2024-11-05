@@ -15,7 +15,7 @@
         <link rel="canonical" href="https://nrel.github.io/BuildingsBench/running/">
       
       
-        <link rel="prev" href="../datasets/">
+        <link rel="prev" href="../getting_started/">
       
       
         <link rel="next" href="../tutorials/">
@@ -83,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#getting-started" class="md-skip">
+        <a href="#registering-your-model" class="md-skip">
           Skip to content
         </a>
       
@@ -271,8 +271,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../datasets/" class="md-nav__link">
-        Datasets
+      <a href="../getting_started/" class="md-nav__link">
+        Getting Started
       </a>
     </li>
   
@@ -316,8 +316,36 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#getting-started" class="md-nav__link">
-    Getting Started
+  <a href="#registering-your-model" class="md-nav__link">
+    Registering your model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pretraining" class="md-nav__link">
+    Pretraining
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#zero-shot-evaluation" class="md-nav__link">
+    Zero-shot Evaluation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transfer-learning-evaluation" class="md-nav__link">
+    Transfer Learning Evaluation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#weather-timeseries" class="md-nav__link">
+    Weather Timeseries
   </a>
   
 </li>
@@ -588,7 +616,6 @@
 
   <h1>Running the Benchmark</h1>
 
-<h2 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link"></a></h2>
 <p>We provide scripts in the <code>./scripts</code> directory for pretraining and to run the benchmark tasks (zero-shot STLF and transfer learning), either with our provided baselines or your own model.</p>
 <p>PyTorch checkpoint files for our trained models are available for download as a single tar file  <a href="https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.0.0/compressed/checkpoints.tar.gz">here</a> or as individual files on S3 <a href="https://data.openei.org/s3_viewer?bucket=oedi-data-lake&amp;prefix=buildings-bench%2Fv1.0.0%2Fcheckpoints%2F">here</a>.</p>
 <p>Our benchmark assumes each model takes as input a dictionary of torch tensors with the following keys:</p>
@@ -602,8 +629,11 @@
 </span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="s1">&#39;longitude&#39;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">,</span>     <span class="c1"># (batch_size, seq_len, 1)</span>
 </span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>To use these scripts with your model you'll need to register your model with our platform. </p>
-<h3 id="registering-your-model">Registering your model<a class="headerlink" href="#registering-your-model" title="Permanent link"></a></h3>
+<p>As of v2.0.0, models can also optionally take a <code>temperature</code> timeseries tensor as input. </p>
+<p>Arguments for each model are specified in a TOML configuration file in the <code>./buildings_bench/configs</code> directory.
+If you just want to modify the arguments for a provided model type, you can do so either by modifying the provided TOML config file or by creating a new TOML config file.
+To add your own custom model, you'll need to follow a few steps to register your model with our platform.</p>
+<h2 id="registering-your-model">Registering your model<a class="headerlink" href="#registering-your-model" title="Permanent link"></a></h2>
 <p>Please see this <a href="https://github.com/NREL/BuildingsBench/blob/main/tutorials/registering_your_model_with_the_benchmark.ipynb">step-by-step tutorial</a> for a Jupyter Notebook version of the following instructions.</p>
 <p>Make sure to have installed the benchmark in editable mode: <code>pip install -e .[benchmark]</code></p>
 <ol>
@@ -626,7 +656,7 @@
 </span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="c1"># override any of the default transfer_learning argparse args here</span>
 </span></code></pre></div>
 See <code>./buildings_bench/configs/TransformerWithTokenizer-S.toml</code> for an example.</p>
-<h3 id="pretraining">Pretraining<a class="headerlink" href="#pretraining" title="Permanent link"></a></h3>
+<h2 id="pretraining">Pretraining<a class="headerlink" href="#pretraining" title="Permanent link"></a></h2>
 <h4 id="without-slurm">Without SLURM<a class="headerlink" href="#without-slurm" title="Permanent link"></a></h4>
 <p>The script <code>pretrain.py</code> is implemented with PyTorch <code>DistributedDataParallel</code> so it must be launched with <code>torchrun</code> from the command line and the argument <code>--disable_slurm</code> must be passed.
 See <code>./scripts/pretrain.sh</code> for an example.</p>
@@ -658,11 +688,48 @@ See <code>./scripts/pretrain.sh</code> for an example.</p>
 </span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>srun<span class="w"> </span>python3<span class="w"> </span>scripts/pretrain.py<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">        </span>--model<span class="w"> </span>TransformerWithGaussian-S
 </span></code></pre></div>
-<h3 id="zero-shot-stlf">Zero-shot STLF<a class="headerlink" href="#zero-shot-stlf" title="Permanent link"></a></h3>
-<p>This script <code>scripts/zero_shot.py</code> and the script for transfer learning <code>scripts/transfer_learning_torch.py</code> do not use <code>DistributedDataParallel</code> so they can be run without <code>torchrun</code>.</p>
+<h2 id="zero-shot-evaluation">Zero-shot Evaluation<a class="headerlink" href="#zero-shot-evaluation" title="Permanent link"></a></h2>
+<p>The script <code>scripts/zero_shot.py</code> and the script for transfer learning <code>scripts/transfer_learning_torch.py</code> do not use <code>DistributedDataParallel</code> so they can be run without <code>torchrun</code>.</p>
 <p><code>python3 scripts/zero_shot.py --model TransformerWithGaussian-S --checkpoint /path/to/checkpoint.pt</code></p>
-<h3 id="transfer-learning-for-stlf">Transfer Learning for STLF<a class="headerlink" href="#transfer-learning-for-stlf" title="Permanent link"></a></h3>
+<h2 id="transfer-learning-evaluation">Transfer Learning Evaluation<a class="headerlink" href="#transfer-learning-evaluation" title="Permanent link"></a></h2>
 <p><code>python3 scripts/transfer_learning_torch.py --model TransformerWithGaussian-S --checkpoint /path/to/checkpoint.pt</code>  </p>
+<h2 id="weather-timeseries">Weather Timeseries<a class="headerlink" href="#weather-timeseries" title="Permanent link"></a></h2>
+<p>An important data source for forecasting building energy usage is the external weather condition. This significantly impacts energy usage in buildings, for example, when high temperatures lead to increases in cooling demand. In BuildingsBench v2.0.0, we have added weather timeseries data for each building in Buildings-900K and for each test building in the BuildingBench evaluation suite. In particular, we support pretraining and evaluation with a temperature timeseries input. The outdoor <em>temperature</em> is the most impactful weather feature for load forecasting. </p>
+<p>In detail, a forecasting model can be provided with both the past one week of temperature timeseries data as well as the temperature for the 24 hour prediction horizon. We note that some of the building datasets in our benchmark have more variables available beyond just temperature.</p>
+<p>Summary of available weather data: </p>
+<ul>
+<li>
+<p>Buildings-900K weather: For each PUMA and year (<code>amy2018</code>, <code>tmy3</code>), there is a corresponding weather csv file. That is, a residential building in the same PUMA has the same <code>amy2018</code> weather timeseries as a commercial building in that PUMA for <code>amy2018</code>. This file has hourly annual weather data with the following 7 variables: Dry Bulb Temperature (°C), Relative Humidity (%), Wind Speed (m/s), Wind Direction (Deg),Global Horizontal Radiation (W/m2), Direct Normal Radiation (W/m2), Diffuse Horizontal Radiation (W/m2). We note that these weather files are the same ones used by the EnergyPlus simulator to create these synthetic load timeseries. </p>
+</li>
+<li>
+<p>BDG-2 and SMART datasets weather: These datasets provide per-building hourly temperature and humidity timeseries, which we include.  </p>
+</li>
+<li>
+<p>Other BuildingsBench evaluation datasets: The Electricity, Borealis, IDEAL, LCL, Sceaux do not provide weather data. We collected the temperature timeseries ourselves from the National Oceanic and Atmospheric Administration's (NOAA) Integrated Surface Database (ISD), managed by the National Centers for Environmental Information (NCEI).  </p>
+</li>
+</ul>
+<p>An important caveat is that we are <em>not</em> using 24-hour weather <em>forecasts</em> as inputs to our load forecasting model. Rather, we are providing the models with the actual day-ahead weather that was recorded. In reality, we do not know tomorrow's weather and so our models must normally rely on a (potentially inaccurate) weather forecast. </p>
+<h4 id="training-and-evaluation-with-weather-data">Training and evaluation with weather data<a class="headerlink" href="#training-and-evaluation-with-weather-data" title="Permanent link"></a></h4>
+<p>To train or evaluate a model that uses temperature timeseries inputs, create a new model configuration TOML file in the <code>buildings_bench/configs</code> folder to include the <code>weather_inputs</code> key:</p>
+<div class="language-toml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">[model]</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">weather_inputs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="s">&#39;temperature&#39;</span><span class="p">]</span>
+</span></code></pre></div>
+<p>The <code>weather_inputs</code> key is a list of strings that correspond to the weather variables you want to include in your model and load from the corresponding datasets. </p>
+<p>This will automatically add keys to the model's batch dictionary with the same names as the weather variables:</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>    <span class="s1">&#39;load&#39;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span>               <span class="c1"># (batch_size, seq_len, 1)</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>    <span class="s1">&#39;building_type&#39;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">LongTensor</span><span class="p">,</span>  <span class="c1"># (batch_size, seq_len, 1)</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="s1">&#39;day_of_year&#39;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">,</span>   <span class="c1"># (batch_size, seq_len, 1)</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="s1">&#39;hour_of_day&#39;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">,</span>   <span class="c1"># (batch_size, seq_len, 1)</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>    <span class="s1">&#39;day_of_week&#39;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">,</span>   <span class="c1"># (batch_size, seq_len, 1)</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="s1">&#39;latitude&#39;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">,</span>      <span class="c1"># (batch_size, seq_len, 1)</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>    <span class="s1">&#39;longitude&#39;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">,</span>     <span class="c1"># (batch_size, seq_len, 1)</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>    <span class="s1">&#39;temperature&#39;</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">FloatTensor</span><span class="p">,</span>   <span class="c1"># (batch_size, seq_len, 1)</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Then, launch model training in the usual way: </p>
+<p><code>python3 scripts/zero_shot.py --model TransformerWithGaussian-weather-S</code></p>
 
 
 

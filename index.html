@@ -16,7 +16,7 @@
       
       
       
-        <link rel="next" href="datasets/">
+        <link rel="next" href="getting_started/">
       
       <link rel="icon" href="assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.15">
@@ -331,8 +331,8 @@
   
   
     <li class="md-nav__item">
-      <a href="datasets/" class="md-nav__link">
-        Datasets
+      <a href="getting_started/" class="md-nav__link">
+        Getting Started
       </a>
     </li>
   
@@ -611,10 +611,10 @@
 
 <h1 id="welcome-to-buildingsbench">Welcome to BuildingsBench<a class="headerlink" href="#welcome-to-buildingsbench" title="Permanent link"></a></h1>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link"></a></h2>
-<p>BuildingsBench is a platform for:</p>
+<p>BuildingsBench is a platform for enabling</p>
 <ul>
-<li>Large-scale pretraining with the synthetic Buildings-900K dataset for short-term load forecasting (STLF). Buildings-900K is statistically representative of the entire U.S. building stock and is extracted from the NREL <a href="https://www.nrel.gov/buildings/end-use-load-profiles.html">End-Use Load Profiles database</a>.</li>
-<li>Benchmarking on two tasks evaluating generalization: zero-shot STLF and transfer learning for STLF.</li>
+<li>Large-scale pretraining with energy timeseries using the synthetic Buildings-900K dataset, on a short-term load forecasting (STLF) task. Buildings-900K is statistically representative of the entire U.S. building stock and is extracted from the NREL <a href="https://www.nrel.gov/buildings/end-use-load-profiles.html">End-Use Load Profiles database</a>.</li>
+<li>Benchmarking such models on two tasks evaluating difficult generalization challenges: zero-shot STLF and transfer learning for STLF.</li>
 </ul>
 <p>We provide an index-based PyTorch <a href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#the-buildings-900k-pytorch-dataset">Dataset</a> for large-scale pretraining, easy data loading for multiple real building energy consumption datasets as <a href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#torchbuildingdatasetsfromcsv">PyTorch Tensors</a> or <a href="https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#pandasbuildingdatasetsfromcsv">Pandas DataFrames</a>, from simple persistence to advanced transformer baselines, <a href="https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-evaluation/">metrics management</a>, a <a href="https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-tokenizer/">tokenizer</a> based on KMeans for load time series, and more.</p>
 <p>Read more about BuildingsBench in our <a href="https://arxiv.org/abs/2307.00142">paper</a>.</p>
@@ -626,7 +626,7 @@
 <h4 id="full-installation">Full installation<a class="headerlink" href="#full-installation" title="Permanent link"></a></h4>
 <p>Otherwise, clone this repository and install it in editable mode in a virtual environment or a conda environment.</p>
 <ol>
-<li>Create an environment with <code>python&gt;=3.8</code>, for example: <code>conda create -n buildings_bench python=3.8</code>.</li>
+<li>Create an environment with <code>python&gt;=3.9</code>, for example: <code>conda create -n buildings_bench python=3.9</code>.</li>
 <li>Install the package in editable mode with
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/NREL/BuildingsBench.git
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nb">cd</span><span class="w"> </span>BuildingsBench
@@ -659,7 +659,7 @@ Download the wheel for the python version you are using, then install it in your
 </ul>
 <h3 id="run-tests">Run tests<a class="headerlink" href="#run-tests" title="Permanent link"></a></h3>
 <p>Verify your installation by running unit tests:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python<span class="w"> </span>-m<span class="w"> </span>unittest
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>python3<span class="w"> </span>-m<span class="w"> </span>unittest
 </span></code></pre></div>
 <h2 id="next-steps">Next steps<a class="headerlink" href="#next-steps" title="Permanent link"></a></h2>
 <ol>
@@ -672,11 +672,13 @@ Download the wheel for the python version you are using, then install it in your
 <h2 id="citation">Citation<a class="headerlink" href="#citation" title="Permanent link"></a></h2>
 <p>If you use BuildingsBench in your research, please cite our preprint:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>@article{emami2023buildingsbench,
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  title={BuildingsBench: A Large-Scale Dataset of 900K Buildings and Benchmark for Short-Term Load Forecasting},
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>  title={Buildingsbench: A large-scale dataset of 900k buildings and benchmark for short-term load forecasting},
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>  author={Emami, Patrick and Sahu, Abhijeet and Graf, Peter},
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>  journal={arXiv preprint arXiv:2307.00142},
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>  year={2023}
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>}
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>  journal={Advances in Neural Information Processing Systems},
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>  volume={36},
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>  pages={19823--19857},
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>  year={2023}
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>}
 </span></code></pre></div>
 
 

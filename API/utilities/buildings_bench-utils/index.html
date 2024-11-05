@@ -269,8 +269,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../datasets/" class="md-nav__link">
-        Datasets
+      <a href="../../../getting_started/" class="md-nav__link">
+        Getting Started
       </a>
     </li>
   
@@ -796,6 +796,77 @@ for Buildings-900K dataset workers.</p>
           <td>
             <div class="doc-md-description">
               <p>np.array: Array of datetime objects.</p>
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+
+<h5 id="buildings_bench.utils.get_puma_county_lookup_table" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_puma_county_lookup_table</span><span class="p">(</span><span class="n">metadata_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span></code>
+
+</h5>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Build a puma-county lookup table.</p>
+<p>The weather files are organized by U.S. county. We need to map
+counties to PUMAs and ensure we drop counties without weather data 
+(only done when using weather).</p>
+
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>metadata_dir</code></td>
+          <td>
+                <code><span title="pathlib.Path">Path</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>Path to the metadata folder of BuildingsBench</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
+                <code><span title="pandas">pd</span>.<span title="pandas.DataFrame">DataFrame</span></code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>pd.DataFrame: the puma-county lookup table</p>
             </div>
           </td>
         </tr>

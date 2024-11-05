@@ -271,8 +271,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../datasets/" class="md-nav__link">
-        Datasets
+      <a href="../../../getting_started/" class="md-nav__link">
+        Getting Started
       </a>
     </li>
   
@@ -654,7 +654,7 @@
 
 
 <h5 id="buildings_bench.transforms.BoxCoxTransform.__init__" class="doc doc-heading">
-<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">max_datapoints</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">max_datapoints</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1000000</span><span class="p">)</span></code>
 
 </h5>
 
@@ -873,7 +873,7 @@ Not ran on the GPU, so input/output are numpy arrays.</p>
         <tr>
           <td><code>sample</code></td>
           <td>
-                <code>np.ndarray) or (torch.LongTensor</code>
+                <code><span title="typing.Union">Union</span>[<span title="numpy">np</span>.<span title="numpy.ndarray">ndarray</span>, torch.<span title="torch.LongTensor">LongTensor</span>]</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -899,7 +899,7 @@ numpy if device is cpu or torch Tensor if device is cuda.</p>
     <tbody>
         <tr>
 <td><code>unscaled_sample</code></td>          <td>
-                <code>np.ndarray or torch.Tensor</code>
+                <code><span title="typing.Union">Union</span>[<span title="numpy">np</span>.<span title="numpy.ndarray">ndarray</span>, torch.<span title="torch.LongTensor">LongTensor</span>]</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -1122,7 +1122,7 @@ numpy if device is cpu or torch Tensor if device is cuda.</p>
         <tr>
           <td><code>sample</code></td>
           <td>
-                <code>np.ndarray or torch.Tensor</code>
+                <code><span title="typing.Union">Union</span>[<span title="numpy">np</span>.<span title="numpy.ndarray">ndarray</span>, torch.<span title="torch.LongTensor">LongTensor</span>]</code>
           </td>
           <td>
             <div class="doc-md-description">
@@ -1587,7 +1587,7 @@ for each building's PUMA.</p>
 
 
 <h5 id="buildings_bench.transforms.TimestampTransform.__init__" class="doc doc-heading">
-<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">is_leap_year</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="n">is_leap_year</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span></code>
 
 </h5>
 

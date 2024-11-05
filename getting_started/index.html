@@ -12,7 +12,7 @@
         <meta name="author" content="Patrick Emami">
       
       
-        <link rel="canonical" href="https://nrel.github.io/BuildingsBench/datasets/">
+        <link rel="canonical" href="https://nrel.github.io/BuildingsBench/getting_started/">
       
       
         <link rel="prev" href="..">
@@ -25,7 +25,7 @@
     
     
       
-        <title>Datasets - BuildingsBench</title>
+        <title>Getting Started - BuildingsBench</title>
       
     
     
@@ -83,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#data-directory-organization" class="md-skip">
+        <a href="#dataset-directory-organization" class="md-skip">
           Skip to content
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Datasets
+              Getting Started
             
           </span>
         </div>
@@ -279,12 +279,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          Datasets
+          Getting Started
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        Datasets
+        Getting Started
       </a>
       
         
@@ -301,8 +301,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#data-directory-organization" class="md-nav__link">
-    Data directory organization
+  <a href="#dataset-directory-organization" class="md-nav__link">
+    Dataset directory organization
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dataset-updates" class="md-nav__link">
+    Dataset Updates
   </a>
   
 </li>
@@ -621,15 +628,16 @@
   
 
 
-  <h1>Datasets</h1>
+  <h1>Getting Started</h1>
 
 <p>The pretraining dataset and evaluation data is available for download <a href="https://data.openei.org/submissions/5859">here</a> as tar files, or can be accessed via AWS S3 <a href="https://data.openei.org/s3_viewer?bucket=oedi-data-lake&amp;prefix=buildings-bench">here</a>. The benchmark datasets are &lt; 1GB in size in total and the pretraining data is ~110GB in size. </p>
+<p>Test <a href="https://nrel.github.io/BuildingsBench/getting_started">https://nrel.github.io/BuildingsBench/getting_started</a> for more information.</p>
 <p>The pretraining data is divided into 4 compressed files</p>
 <ul>
-<li><code>comstock_amy2018.tar.gz</code>: ~21GB</li>
-<li><code>comstock_tmy3.tar.gz</code>: ~21GB</li>
-<li><code>resstock_amy2018.tar.gz</code>: ~33GB</li>
-<li><code>resstock_tmy3.tar.gz</code>: ~33GB</li>
+<li><code>comstock_amy2018.tar.gz</code></li>
+<li><code>comstock_tmy3.tar.gz</code></li>
+<li><code>resstock_amy2018.tar.gz</code></li>
+<li><code>resstock_tmy3.tar.gz</code></li>
 </ul>
 <p>and one compressed file for the metadata</p>
 <ul>
@@ -640,81 +648,52 @@
 <li><code>BuildingsBench.tar.gz</code></li>
 </ul>
 <p>Download all files to a folder on a storage device with at least 250GB of free space. Then, decompress all of the downloaded files. There will be a new subdirectory called <code>BuildingsBench</code>. <strong>This is the data directory, which is different than the Github code repository, although both folders are named "BuildingsBench".</strong></p>
-<h2 id="data-directory-organization">Data directory organization<a class="headerlink" href="#data-directory-organization" title="Permanent link"></a></h2>
+<h2 id="dataset-directory-organization">Dataset directory organization<a class="headerlink" href="#dataset-directory-organization" title="Permanent link"></a></h2>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">BuildingsBench</span><span class="o">/</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="err">├──</span> <span class="n">Buildings</span><span class="o">-</span><span class="mi">900</span><span class="n">K</span><span class="o">/</span><span class="n">end</span><span class="o">-</span><span class="n">use</span><span class="o">-</span><span class="n">load</span><span class="o">-</span><span class="n">profiles</span><span class="o">-</span><span class="k">for</span><span class="o">-</span><span class="n">us</span><span class="o">-</span><span class="n">building</span><span class="o">-</span><span class="n">stock</span><span class="o">/</span><span class="mi">2021</span><span class="o">/</span> <span class="c1"># Buildings-900K pretraining data.</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="err">├──</span> <span class="n">comstock_amy2018_release_1</span><span class="o">/</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>        <span class="err">├──</span> <span class="n">timeseries_individual_buildings</span><span class="o">/</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>            <span class="err">├──</span> <span class="n">by_puma_midwest</span><span class="o">/</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>                <span class="err">├──</span> <span class="n">upgrade</span><span class="o">=</span><span class="mi">0</span><span class="o">/</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>                    <span class="err">├──</span> <span class="n">puma</span><span class="o">=</span><span class="p">{</span><span class="n">puma_id</span><span class="p">}</span><span class="o">/*.</span><span class="n">parquet</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                    <span class="err">├──</span> <span class="o">...</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>            <span class="err">├──</span> <span class="n">by_puma_northeast</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>            <span class="err">├──</span> <span class="o">...</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        <span class="err">├──</span> <span class="n">weather</span><span class="o">/</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>            <span class="err">├──</span> <span class="p">{</span><span class="n">county_id</span><span class="p">}</span><span class="o">.</span><span class="n">csv</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>            <span class="err">├──</span> <span class="o">...</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>        <span class="err">├──</span> <span class="n">metadata</span><span class="o">/</span> <span class="c1"># Individual building simulation metadata.</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>            <span class="err">├──</span> <span class="n">metadata</span><span class="o">.</span><span class="n">parquet</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>    <span class="err">├──</span> <span class="o">...</span> <span class="c1"># Other pretraining datasets (comstock_tmy3, resstock_amy2018, resstock_tmy3)            </span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="err">├──</span> <span class="n">BDG</span><span class="o">-</span><span class="mi">2</span><span class="o">/</span> <span class="c1"># Building Data Genome Project 2. This is real building smart meter data with outliers removed. </span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    <span class="err">├──</span> <span class="p">{</span><span class="n">building_id</span><span class="p">}</span><span class="o">=</span><span class="p">{</span><span class="n">year</span><span class="p">}</span><span class="o">.</span><span class="n">csv</span> <span class="c1"># The .csv files for the BDG-2 dataset,</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    <span class="err">├──</span> <span class="o">...</span> <span class="c1"># Other buildings in BDG-2.</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>    <span class="err">├──</span> <span class="n">weather_</span><span class="p">{</span><span class="n">building_id</span><span class="p">}</span><span class="o">.</span><span class="n">csv</span> <span class="c1"># Weather data for each building in BDG-2.</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="err">├──</span> <span class="o">...</span> <span class="c1"># Other evaluation datasets (Borealis, Electricity, etc.)</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="err">├──</span> <span class="n">buildingsbench_with_outliers</span><span class="o">/</span> <span class="c1"># Copy of the BuildingsBench smart meter data  *with outliers*</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="err">├──</span> <span class="n">LICENSES</span><span class="o">/</span> <span class="c1"># Licenses for each evaluation dataset redistributed in BuildingsBench. </span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="err">├──</span> <span class="n">metadata</span><span class="o">/</span> <span class="c1"># Metadata for the evaluation suite.</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>    <span class="err">├──</span> <span class="n">benchmark</span><span class="o">.</span><span class="n">toml</span> <span class="c1"># Metadata for the benchmark. For each dataset, we specify: `building_type`: `residential` or `commercial`, `latlon`: a List of two floats representing the location of the building(s), `conus_location`: The name of the county or city in the U.S. where the building is located, or a county/city in the U.S. of similar climate to the building&#39;s true location (N.b. we do not have nor provide the exact location of buildings), `actual_location`: The name of the county/city/country where the building is actually located which is different from `conus_location` when the building is located outside of CONUS (these values are for book-keeping and can be set to dummy values), `url`: The URL where the dataset was obtained from.</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>    <span class="err">├──</span> <span class="n">building_years</span><span class="o">.</span><span class="n">txt</span> <span class="c1"># List of .csv files included in the benchmark. Each line is of the form `{dataset}/{building_id}={year}.csv`.</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>    <span class="err">├──</span> <span class="n">withheld_pumas</span><span class="o">.</span><span class="n">tsv</span> <span class="c1"># List of PUMAs withheld from the training/validation set of Buildings-900K, which we use as synthetic test data.</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>    <span class="err">├──</span> <span class="n">map_of_pumas_in_census_region</span><span class="o">*.</span><span class="n">csv</span> <span class="c1"># Maps PUMA IDs to their geographical centroid (lat/lon).</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    <span class="err">├──</span> <span class="n">spatial_tract_lookup_table</span><span class="o">.</span><span class="n">csv</span> <span class="c1"># Mapping between census tract identifiers and other geographies.</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>    <span class="err">├──</span> <span class="n">list_oov</span><span class="o">.</span><span class="n">py</span> <span class="c1"># Python script to generate a list of buildings that are OOV for the Buildings-900K tokenizer.</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    <span class="err">├──</span> <span class="n">oov</span><span class="o">.</span><span class="n">txt</span> <span class="c1"># List of buildings that are OOV for the Buildings-900K tokenizer.</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    <span class="err">├──</span> <span class="n">transfer_learning_commercial_buildings</span><span class="o">.</span><span class="n">txt</span> <span class="c1"># List of 100 commercial buildings from the benchmark we use for evaluating transfer learning.</span>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>    <span class="err">├──</span> <span class="n">transfer_learning_residential_buildings</span><span class="o">.</span><span class="n">txt</span> <span class="c1"># List of 100 residential buildings from the benchmark we use for evaluating transfer learning.</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>    <span class="err">├──</span> <span class="n">transfer_learning_hyperparameter_tuning</span><span class="o">.</span><span class="n">txt</span> <span class="c1"># List of 2 held out buildings (1 commercial, 1 residential) that can be used for hyperparameter tuning.</span>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>    <span class="err">├──</span> <span class="n">train</span><span class="o">*.</span><span class="n">idx</span> <span class="c1"># Index files for fast dataloading of Buildings-900K. This file uncompressed is ~16GB. </span>
+</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>    <span class="err">├──</span> <span class="n">val</span><span class="o">*.</span><span class="n">idx</span> <span class="c1"># Index files for fast dataloading of Buildings-900K.</span>
+</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>    <span class="err">├──</span> <span class="n">transforms</span> <span class="c1"># Directory for storing data transform info.</span>
+</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>        <span class="err">├──</span> <span class="n">weather</span><span class="o">/</span> <span class="c1"># Directory where weather variable normalization parameters are stored.</span>
+</span></code></pre></div>
+<h2 id="dataset-updates">Dataset Updates<a class="headerlink" href="#dataset-updates" title="Permanent link"></a></h2>
 <ul>
-<li><code>BuildingsBench/</code><ul>
-<li><code>Buildings-900K/end-use-load-profiles-for-us-building-stock/2021/</code>: The Buildings-900K pretraining and validation data.<ul>
-<li><code>comstock_amy2018_release_1/</code><ul>
-<li><code>timeseries_individual_buildings/</code><ul>
-<li><code>by_puma_midwest</code><ul>
-<li><code>upgrade=0</code><ul>
-<li><code>puma={puma_id}/*.parquet</code></li>
-<li><code>...</code></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><code>by_puma_northeast</code></li>
-<li><code>by_puma_south</code></li>
-<li><code>by_puma_west</code></li>
-</ul>
-</li>
-<li><code>weather/</code><ul>
-<li><code>amy2018/</code><ul>
-<li><code>{puma_id}_2018.csv</code></li>
-<li>...</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><code>metadata/</code><ul>
-<li><code>metadata.parquet</code></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><code>...</code>: Other datasets            </li>
-</ul>
-</li>
-<li><code>BDG-2/</code>: Building Data Genome Project 2 BuildingsBench evaluation data <em>with outliers removed</em>. <ul>
-<li><code>{building_id}={year}.csv</code>: The .csv files for the BDG-2 dataset.</li>
-<li><code>...</code>: Other buildings</li>
-</ul>
-</li>
-<li><code>...</code>: Other evaluation datasets (Borealis, Electricity, etc.)</li>
-<li><code>buildingsbench_with_outliers</code>: The BuildingsBench evaluation data <em>with outliers</em>.<ul>
-<li><code>BDG-2/</code>: Buildings Data Genome Project 2 BuildingsBench evaluation data <em>with outliers</em>. <ul>
-<li><code>{building_id}={year}.csv</code>: The .csv files for the BDG-2 dataset.</li>
-<li><code>...</code>: Other buildings</li>
-</ul>
-</li>
-<li><code>...</code>: Other evaluation datasets (Borealis, Electricity, etc.)</li>
-</ul>
-</li>
-<li><code>LICENSES/</code>: Licenses for each evaluation dataset redistributed in BuildingsBench. </li>
-<li><code>metadata/</code>: Metadata for the evaluation suite.<ul>
-<li><code>benchmark.toml</code>: Metadata for the benchmark. For each dataset, we specify:<ul>
-<li><code>building_type</code>: <code>residential</code> or <code>commercial</code>.</li>
-<li><code>latlon</code>: a List of two floats representing the location of the building(s).</li>
-<li><code>conus_location</code>: The name of the county or city in the U.S. where the building is located, or a county/city in the U.S. of similar climate to the building's true location.</li>
-<li><code>actual_location</code>: County/city where the building actually is located. This will be different from <code>conus_location</code> when the building is outside of the CONUS. These values are for book-keeping and can be set to dummy values.</li>
-<li><code>url</code>: The URL where the dataset was obtained from.</li>
-</ul>
-</li>
-<li><code>building_years.txt</code>: List of .csv files included in the benchmark. Each line is of the form <code>{dataset}/{building_id}={year}.csv</code>.</li>
-<li><code>withheld_pumas.tsv</code>: List of PUMAs withheld from the training/validation set of Buildings-900K, which we use as synthetic test data.</li>
-<li><code>map_of_pumas_in_census_region*.csv</code>: Maps PUMA IDs to their geographical centroid (lat/lon).</li>
-<li><code>spatial_tract_lookup_table.csv</code>: Mapping between census tract identifiers and other geographies.</li>
-<li><code>list_oov.py</code>: Python script to generate a list of buildings that are OOV for the Buildings-900K tokenizer.</li>
-<li><code>oov.txt</code>: List of buildings that are OOV for the Buildings-900K tokenizer.</li>
-<li><code>transfer_learning_commercial_buildings.txt</code>: List of 100 commercial buildings from the benchmark we use for evaluating transfer learning.</li>
-<li><code>transfer_learning_residential_buildings.txt</code>: List of 100 residential buildings from the benchmark we use for evaluating transfer learning.</li>
-<li><code>transfer_learning_hyperparameter_tuning.txt</code>: List of 2 held out buildings (1 commercial, 1 residential) that can be used for hyperparameter tuning.</li>
-<li><code>train*.idx</code>: Index files for fast dataloading of Buildings-900K. This file uncompressed is 16GB. </li>
-<li><code>val*.idx</code>: Index files for fast dataloading of Buildings-900K.</li>
-<li><code>transforms</code>: Directory for storing data transform info.</li>
-</ul>
-</li>
+<li>Version 2.0.0:<ul>
+<li>Added the building simulation metadata files, which contain attributes for the EnergyPlus building energy model used to run the simulation. See <code>Buildings-900K/end-use-load-profiles-for-us-building-stock/2021/resstock_amy2018_release_1/metadata/metadata.parquet</code> for an example.</li>
+<li>Added weather timeseries data. See this <a href="https://nrel.github.io/BuildingsBench/running/#weather-timeseries">description</a> for more information.</li>
+<li>Removed the README.md file from the <code>BuildingsBench/metadata</code>, which contained duplicate information from this page.</li>
 </ul>
 </li>
 </ul>
@@ -724,10 +703,10 @@
 <p>The pretraining dataset Buildings-900K is stored as a collection of PUMA-level parquet files.
 Each parquet file in Buildings-900K is stored in a directory named after a unique PUMA ID <code>puma={puma_id}/*.parquet</code>. The first column is the timestamp and each subsequent column is the energy consumption in kWh for a different building in that. These columns are named by building id. The timestamp is in the format <code>YYYY-MM-DD HH:MM:SS</code>. The energy consumption is in kWh.
 The parquet files are compressed with snappy. Sort by the timestamp after loading.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">import</span> <span class="nn">pyarrow.parquet</span> <span class="k">as</span> <span class="nn">pq</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">bldg_id</span> <span class="o">=</span> <span class="s1">&#39;00001&#39;</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">df</span> <span class="o">=</span> <span class="n">pq</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="s1">&#39;puma=</span><span class="si">{puma_id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">,</span> <span class="n">bldg_id</span><span class="p">])</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;timestamp&#39;</span><span class="p">)</span>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">import</span> <span class="nn">pyarrow.parquet</span> <span class="k">as</span> <span class="nn">pq</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">bldg_id</span> <span class="o">=</span> <span class="s1">&#39;00001&#39;</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">df</span> <span class="o">=</span> <span class="n">pq</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="s1">&#39;puma=</span><span class="si">{puma_id}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;timestamp&#39;</span><span class="p">,</span> <span class="n">bldg_id</span><span class="p">])</span><span class="o">.</span><span class="n">to_pandas</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">&#39;timestamp&#39;</span><span class="p">)</span>
 </span></code></pre></div>
 <h2 id="csv-file-format">CSV file format<a class="headerlink" href="#csv-file-format" title="Permanent link"></a></h2>
 <p>Most CSV files in the benchmark are named <code>building_id=year.csv</code> and correspond to a single building's energy consumption time series. The first column is the timestamp (the Pandas index), and the second column is the energy consumption in kWh. The timestamp is in the format <code>YYYY-MM-DD HH:MM:SS</code>. The energy consumption is in kWh. </p>
