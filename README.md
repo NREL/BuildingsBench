@@ -63,10 +63,10 @@ If running the LightGBM baseline, you will need to install LightGBM.
 The pretraining dataset and evaluation data is available for download [here](https://data.openei.org/submissions/5859) as tar files, or can be accessed via AWS S3 [here](https://data.openei.org/s3_viewer?bucket=oedi-data-lake&prefix=buildings-bench). The benchmark datasets are < 1GB in size in total, but the pretraining data is ~110GB in size.
 
 The pretraining data is divided into 4 compressed files
-- `comstock_amy2018.tar.gz`: ~21GB
-- `comstock_tmy3.tar.gz`: ~21GB
-- `resstock_amy2018.tar.gz`: ~33GB
-- `resstock_tmy3.tar.gz`: ~33GB
+- `comstock_amy2018.tar.gz`
+- `comstock_tmy3.tar.gz`
+- `resstock_amy2018.tar.gz`
+- `resstock_tmy3.tar.gz`
 
 and one compressed file for the metadata
 - `metadata.tar.gz`

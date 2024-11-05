@@ -1,7 +1,5 @@
 The pretraining dataset and evaluation data is available for download [here](https://data.openei.org/submissions/5859) as tar files, or can be accessed via AWS S3 [here](https://data.openei.org/s3_viewer?bucket=oedi-data-lake&prefix=buildings-bench). The benchmark datasets are < 1GB in size in total and the pretraining data is ~110GB in size. 
 
-Test [https://nrel.github.io/BuildingsBench/getting_started](https://nrel.github.io/BuildingsBench/getting_started) for more information.
-
 The pretraining data is divided into 4 compressed files
 
 - `comstock_amy2018.tar.gz`
@@ -21,7 +19,7 @@ Download all files to a folder on a storage device with at least 250GB of free s
 
 ## Dataset directory organization
 
-```python
+```bash
 BuildingsBench/
 ├── Buildings-900K/end-use-load-profiles-for-us-building-stock/2021/ # Buildings-900K pretraining data.
     ├── comstock_amy2018_release_1/
@@ -67,16 +65,14 @@ BuildingsBench/
 - Version 2.0.0:
     - Added the building simulation metadata files, which contain attributes for the EnergyPlus building energy model used to run the simulation. See `Buildings-900K/end-use-load-profiles-for-us-building-stock/2021/resstock_amy2018_release_1/metadata/metadata.parquet` for an example.
     - Added weather timeseries data. See this [description](https://nrel.github.io/BuildingsBench/running/#weather-timeseries) for more information.
-    - Removed the README.md file from the `BuildingsBench/metadata`, which contained duplicate information from this page.
 
-## Exploring the data
 
-See our dataset quick start [Jupyter notebook](https://github.com/NREL/BuildingsBench/blob/main/tutorials/dataset_quick_start.ipynb)
+## Buildings-900K parquet file format
 
-## Parquet file format
+The pretraining dataset Buildings-900K is stored as a collection of parquet files. Each parquet file corresponds to a single PUMA, or Public Use Microdata Area, which is a geographic unit used by the U.S. Census Bureau. The parquet file contains the energy timeseries for all buildings assigned to that PUMA.  
+Each PUMA-level parquet file in Buildings-900K is stored in a directory with a unique PUMA ID. For example, all residential buildings with weather-year `amy2018` in the northeast census region and PUMA ID `puma_id` can be found under: `Buildings-900K/end-use-load-profiles-for-us-building-stock/2021/resstock_amy2018_release_1/timeseries-individual-buildings/by_puma_northeast/upgrade=0/puma={puma_id}/*.parquet`. 
 
-The pretraining dataset Buildings-900K is stored as a collection of PUMA-level parquet files.
-Each parquet file in Buildings-900K is stored in a directory named after a unique PUMA ID `puma={puma_id}/*.parquet`. The first column is the timestamp and each subsequent column is the energy consumption in kWh for a different building in that. These columns are named by building id. The timestamp is in the format `YYYY-MM-DD HH:MM:SS`. The energy consumption is in kWh.
+In the parquet file, the first column is the timestamp and each subsequent column is the energy consumption in kWh for a different building in that. These columns are named by building id. The timestamp is in the format `YYYY-MM-DD HH:MM:SS`. The energy consumption is in kWh.
 The parquet files are compressed with snappy. Sort by the timestamp after loading.
 
 ```python
@@ -86,9 +82,13 @@ bldg_id = '00001'
 df = pq.read_table('puma={puma_id}', columns=['timestamp', bldg_id]).to_pandas().sort_values(by='timestamp')
 ```
 
+## Exploring the data
+
+See our dataset quick start [Jupyter notebook](https://github.com/NREL/BuildingsBench/blob/main/tutorials/dataset_quick_start.ipynb)
+
 ## CSV file format
 
-Most CSV files in the benchmark are named `building_id=year.csv` and correspond to a single building's energy consumption time series. The first column is the timestamp (the Pandas index), and the second column is the energy consumption in kWh. The timestamp is in the format `YYYY-MM-DD HH:MM:SS`. The energy consumption is in kWh. 
+We use a simpler CSV file format to store smart meter timeseries data for real buildings, which make up most of the data in the evaluation suite. Most CSV files in the benchmark are named `building_id=year.csv` and correspond to a single building's energy consumption time series. The first column is the timestamp (the Pandas index), and the second column is the energy consumption in kWh. The timestamp is in the format `YYYY-MM-DD HH:MM:SS`. The energy consumption is in kWh. 
 
 Certain datasets have multiple buildings in a single file. In this case, the first column is the timestamp (the Pandas index), and each subsequent column is the energy consumption in kWh for a different building. These columns are named by building id. The timestamp is in the format `YYYY-MM-DD HH:MM:SS`. The energy consumption is in kWh.
 
