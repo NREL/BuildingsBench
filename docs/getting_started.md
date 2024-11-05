@@ -1,5 +1,7 @@
 The pretraining dataset and evaluation data is available for download [here](https://data.openei.org/submissions/5859) as tar files, or can be accessed via AWS S3 [here](https://data.openei.org/s3_viewer?bucket=oedi-data-lake&prefix=buildings-bench). The benchmark datasets are < 1GB in size in total and the pretraining data is ~110GB in size. 
 
+Test [https://nrel.github.io/BuildingsBench/getting_started](https://nrel.github.io/BuildingsBench/getting_started) for more information.
+
 The pretraining data is divided into 4 compressed files
 
 - `comstock_amy2018.tar.gz`
@@ -17,57 +19,55 @@ The evaluation datasets are compressed into a single file
 
 Download all files to a folder on a storage device with at least 250GB of free space. Then, decompress all of the downloaded files. There will be a new subdirectory called `BuildingsBench`. **This is the data directory, which is different than the Github code repository, although both folders are named "BuildingsBench".**
 
-## Data directory organization
+## Dataset directory organization
 
-- `BuildingsBench/`
-    - `Buildings-900K/end-use-load-profiles-for-us-building-stock/2021/`: The Buildings-900K pretraining and validation data.
-        - `comstock_amy2018_release_1/`
-            - `timeseries_individual_buildings/`
-                - `by_puma_midwest`
-                    - `upgrade=0`
-                        - `puma={puma_id}/*.parquet`
-                        - `...`
-                - `by_puma_northeast`
-                - `by_puma_south`
-                - `by_puma_west`
-            - `weather/`
-                - `{county_id}.csv`
-                    - `...`
-            - `metadata/`
-                - `metadata.parquet`
-        - `...`: Other datasets            
-    - `BDG-2/`: Building Data Genome Project 2 BuildingsBench evaluation data *with outliers removed*. 
-        -  `{building_id}={year}.csv`: The .csv files for the BDG-2 dataset.
-        - `...`: Other buildings in BDG-2
-        - `weather_{building_id}.csv`: Weather data for each building in BDG-2.
-    - `...`: Other evaluation datasets (Borealis, Electricity, etc.)
-    - `buildingsbench_with_outliers`: The BuildingsBench evaluation data *with outliers*.
-        - `BDG-2/`: Buildings Data Genome Project 2 BuildingsBench evaluation data *with outliers*. 
-            -  `{building_id}={year}.csv`: The .csv files for the BDG-2 dataset.
-            - `...`: Other buildings in BDG-2.
-        - `...`: Other evaluation datasets (Borealis, Electricity, etc.)
-        - `weather_{building_id}.csv`: Weather data for each building in BDG-2.
-    - `LICENSES/`: Licenses for each evaluation dataset redistributed in BuildingsBench. 
-    - `metadata/`: Metadata for the evaluation suite.
-        - `benchmark.toml`: Metadata for the benchmark. For each dataset, we specify:
-            - `building_type`: `residential` or `commercial`.
-            - `latlon`: a List of two floats representing the location of the building(s).
-            - `conus_location`: The name of the county or city in the U.S. where the building is located, or a county/city in the U.S. of similar climate to the building's true location.
-            - `actual_location`: County/city where the building actually is located. This will be different from `conus_location` when the building is outside of the CONUS. These values are for book-keeping and can be set to dummy values.
-            - `url`: The URL where the dataset was obtained from.
-        - `building_years.txt`: List of .csv files included in the benchmark. Each line is of the form `{dataset}/{building_id}={year}.csv`.
-        - `withheld_pumas.tsv`: List of PUMAs withheld from the training/validation set of Buildings-900K, which we use as synthetic test data.
-        - `map_of_pumas_in_census_region*.csv`: Maps PUMA IDs to their geographical centroid (lat/lon).
-        - `spatial_tract_lookup_table.csv`: Mapping between census tract identifiers and other geographies.
-        - `list_oov.py`: Python script to generate a list of buildings that are OOV for the Buildings-900K tokenizer.
-        - `oov.txt`: List of buildings that are OOV for the Buildings-900K tokenizer.
-        - `transfer_learning_commercial_buildings.txt`: List of 100 commercial buildings from the benchmark we use for evaluating transfer learning.
-        - `transfer_learning_residential_buildings.txt`: List of 100 residential buildings from the benchmark we use for evaluating transfer learning.
-        - `transfer_learning_hyperparameter_tuning.txt`: List of 2 held out buildings (1 commercial, 1 residential) that can be used for hyperparameter tuning.
-        - `train*.idx`: Index files for fast dataloading of Buildings-900K. This file uncompressed is 16GB. 
-        - `val*.idx`: Index files for fast dataloading of Buildings-900K.
-        - `transforms`: Directory for storing data transform info.
-            - `weather`: Directory where weather variable normalization parameters are stored.
+```python
+BuildingsBench/
+├── Buildings-900K/end-use-load-profiles-for-us-building-stock/2021/ # Buildings-900K pretraining data.
+    ├── comstock_amy2018_release_1/
+        ├── timeseries_individual_buildings/
+            ├── by_puma_midwest/
+                ├── upgrade=0/
+                    ├── puma={puma_id}/*.parquet
+                    ├── ...
+            ├── by_puma_northeast
+            ├── ...
+        ├── weather/
+            ├── {county_id}.csv
+            ├── ...
+        ├── metadata/ # Individual building simulation metadata.
+            ├── metadata.parquet
+    ├── ... # Other pretraining datasets (comstock_tmy3, resstock_amy2018, resstock_tmy3)            
+├── BDG-2/ # Building Data Genome Project 2. This is real building smart meter data with outliers removed. 
+    ├── {building_id}={year}.csv # The .csv files for the BDG-2 dataset,
+    ├── ... # Other buildings in BDG-2.
+    ├── weather_{building_id}.csv # Weather data for each building in BDG-2.
+├── ... # Other evaluation datasets (Borealis, Electricity, etc.)
+├── buildingsbench_with_outliers/ # Copy of the BuildingsBench smart meter data  *with outliers*
+├── LICENSES/ # Licenses for each evaluation dataset redistributed in BuildingsBench. 
+├── metadata/ # Metadata for the evaluation suite.
+    ├── benchmark.toml # Metadata for the benchmark. For each dataset, we specify: `building_type`: `residential` or `commercial`, `latlon`: a List of two floats representing the location of the building(s), `conus_location`: The name of the county or city in the U.S. where the building is located, or a county/city in the U.S. of similar climate to the building's true location (N.b. we do not have nor provide the exact location of buildings), `actual_location`: The name of the county/city/country where the building is actually located which is different from `conus_location` when the building is located outside of CONUS (these values are for book-keeping and can be set to dummy values), `url`: The URL where the dataset was obtained from.
+    ├── building_years.txt # List of .csv files included in the benchmark. Each line is of the form `{dataset}/{building_id}={year}.csv`.
+    ├── withheld_pumas.tsv # List of PUMAs withheld from the training/validation set of Buildings-900K, which we use as synthetic test data.
+    ├── map_of_pumas_in_census_region*.csv # Maps PUMA IDs to their geographical centroid (lat/lon).
+    ├── spatial_tract_lookup_table.csv # Mapping between census tract identifiers and other geographies.
+    ├── list_oov.py # Python script to generate a list of buildings that are OOV for the Buildings-900K tokenizer.
+    ├── oov.txt # List of buildings that are OOV for the Buildings-900K tokenizer.
+    ├── transfer_learning_commercial_buildings.txt # List of 100 commercial buildings from the benchmark we use for evaluating transfer learning.
+    ├── transfer_learning_residential_buildings.txt # List of 100 residential buildings from the benchmark we use for evaluating transfer learning.
+    ├── transfer_learning_hyperparameter_tuning.txt # List of 2 held out buildings (1 commercial, 1 residential) that can be used for hyperparameter tuning.
+    ├── train*.idx # Index files for fast dataloading of Buildings-900K. This file uncompressed is ~16GB. 
+    ├── val*.idx # Index files for fast dataloading of Buildings-900K.
+    ├── transforms # Directory for storing data transform info.
+        ├── weather/ # Directory where weather variable normalization parameters are stored.
+```
+
+## Dataset Updates
+
+- Version 2.0.0:
+    - Added the building simulation metadata files, which contain attributes for the EnergyPlus building energy model used to run the simulation. See `Buildings-900K/end-use-load-profiles-for-us-building-stock/2021/resstock_amy2018_release_1/metadata/metadata.parquet` for an example.
+    - Added weather timeseries data. See this [description](https://nrel.github.io/BuildingsBench/running/#weather-timeseries) for more information.
+    - Removed the README.md file from the `BuildingsBench/metadata`, which contained duplicate information from this page.
 
 ## Exploring the data
 
@@ -109,9 +109,3 @@ Hourly consumption values > 5100 kWh are larger than the maximum values seen dur
 We consider these "out-of-vocab" and remove such buildings from evaluation. 
 This prevents errors due to extrapolation, which is not the focus of this benchmark.
 See `list_oov.py` for the code we use to generate a list of OOV buildings.
-
-## Dataset Updates
-
-- Version 2.0.0:
-    - Added the building attribute metadata files, which contains the specific building attributes for each EnergyPlus building energy model that were used to run the simulations. These can be found in, e.g., the `Buildings-900K/end-use-load-profiles-for-us-building-stock/2021/resstock_amy2018_release_1/metadata/metadata.parquet` file.
-    - Added weather timeseries data. See this [description](https://nrel.github.io/BuildingsBench/running/#weather-timeseries) for more information.

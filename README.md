@@ -75,7 +75,7 @@ The evaluation datasets are compressed into a single file
 - `BuildingsBench.tar.gz`
 
 Download all files to a folder on a storage device with at least 250GB of free space. Then, decompress all of the downloaded files. There will be a new subdirectory called `BuildingsBench`. **This is the data directory, which is different than the Github code repository, although both folders are named "BuildingsBench".**
-See the README file `BuildingsBench/metadata/README.md` (in `metadata.tar.gz`) for more information about how the BuildingsBench dataset directory is organized.
+
 
 ### Setting environment variables
 
@@ -126,49 +126,6 @@ for building_name, building in buildings_dataset_generator:
         # ...
 ```
 
-### Running the benchmark
-
-We provide scripts in the `./scripts` directory for pretraining and to run the benchmark tasks (zero-shot STLF and transfer learning), either with [our provided baselines](https://nrel.github.io/BuildingsBench/API/models/buildings_bench-models/) or your own model. To use these scripts with your model you'll need to register your model with our platform.
-
-See this [step-by-step tutorial](https://github.com/NREL/BuildingsBench/blob/main/tutorials/registering_your_model_with_the_benchmark.ipynb) for more details.
-
-Make sure to have installed the benchmark in editable mode: `pip install -e .[benchmark]`
-
-Our benchmark assumes each model takes as input a dictionary of torch tensors with the following keys:
-
-```python
-{
-    'load': torch.Tensor,               # (batch_size, seq_len, 1)
-    'building_type': torch.LongTensor,  # (batch_size, seq_len, 1)
-    'day_of_year': torch.FloatTensor,   # (batch_size, seq_len, 1)
-    'hour_of_day': torch.FloatTensor,   # (batch_size, seq_len, 1)
-    'day_of_week': torch.FloatTensor,   # (batch_size, seq_len, 1)
-    'latitude': torch.FloatTensor,      # (batch_size, seq_len, 1)
-    'longitude': torch.FloatTensor,     # (batch_size, seq_len, 1)
-}
-```
-
-1. Create a file called `your_model.py` with your model's implementation, and make your model a subclass of the base model in `./buildings_bench/models/base_model.py`. Make sure to implement the abstract methods: `forward`, `loss`, `load_from_checkpoint`, `predict`, `unfreeze_and_get_parameters_for_finetuning`.
-2. Place this file under `./buildings_bench/models/your_model.py.`
-3. Import your model class and add your model's name to the `model_registry` dictionary in `./buildings_bench/models/__init__.py`.
-4. Create a TOML config file under `./buildings_bench/configs/your_model.toml` with each keyword argument your model expects in its constructor (i.e., the hyperparameters for your model) and any additional args for the script you want to run.
-
-The TOML config file should look something like this:
-
-```toml
-[model]
-# your model's keyword arguments
-
-[pretrain]
-# override any of the default pretraining argparse args here
-
-[zero_shot]
-# override any of the default zero_shot argparse args here
-
-[transfer_learning]
-# override any of the default transfer_learning argparse args here
-```
-See `./buildings_bench/configs/TransformerWithTokenizer-S.toml` for an example.
 
 ### Pretraining 
 
@@ -235,6 +192,55 @@ The LightGBM baseline:
 ```
 python3 scripts/transfer_learning_lightgbm.py
 ```
+
+### Running the benchmark with your own models
+
+We provide scripts in the `./scripts` directory for pretraining and to run the benchmark tasks (zero-shot STLF and transfer learning), either with [our provided baselines](https://nrel.github.io/BuildingsBench/API/models/buildings_bench-models/) or your own model. To use these scripts with your model you'll need to register your model with our platform.
+
+See this [step-by-step tutorial](https://github.com/NREL/BuildingsBench/blob/main/tutorials/registering_your_model_with_the_benchmark.ipynb) for more details.
+
+Make sure to have installed the benchmark in editable mode: `pip install -e .[benchmark]`
+
+Our benchmark assumes each model takes as input a dictionary of torch tensors with the following keys:
+
+```python
+{
+    'load': torch.Tensor,               # (batch_size, seq_len, 1)
+    'building_type': torch.LongTensor,  # (batch_size, seq_len, 1)
+    'day_of_year': torch.FloatTensor,   # (batch_size, seq_len, 1)
+    'hour_of_day': torch.FloatTensor,   # (batch_size, seq_len, 1)
+    'day_of_week': torch.FloatTensor,   # (batch_size, seq_len, 1)
+    'latitude': torch.FloatTensor,      # (batch_size, seq_len, 1)
+    'longitude': torch.FloatTensor,     # (batch_size, seq_len, 1)
+}
+```
+Models can optionally also take a `temperature` timeseries tensor as input. 
+
+Arguments for each model are specified in a TOML configuration file in the `buildings_bench/configs` directory.
+If you just want to modify the arguments for a provided model type, you can do so either by modifying the provided TOML config file or by creating a new TOML config file.
+To add your own custom model, you'll need to follow a few steps to register your model with our platform.
+
+1. Create a file called `your_model.py` with your model's implementation, and make your model a subclass of the base model in `./buildings_bench/models/base_model.py`. Make sure to implement the abstract methods: `forward`, `loss`, `load_from_checkpoint`, `predict`, `unfreeze_and_get_parameters_for_finetuning`.
+2. Place this file under `./buildings_bench/models/your_model.py.`
+3. Import your model class and add your model's name to the `model_registry` dictionary in `./buildings_bench/models/__init__.py`.
+4. Create a TOML config file under `./buildings_bench/configs/your_model.toml` with each keyword argument your model expects in its constructor (i.e., the hyperparameters for your model) and any additional args for the script you want to run.
+
+The TOML config file should look something like this:
+
+```toml
+[model]
+# your model's keyword arguments
+
+[pretrain]
+# override any of the default pretraining argparse args here
+
+[zero_shot]
+# override any of the default zero_shot argparse args here
+
+[transfer_learning]
+# override any of the default transfer_learning argparse args here
+```
+See `./buildings_bench/configs/TransformerWithTokenizer-S.toml` for an example.
 
 
 ## BuildingsBench Leaderboard

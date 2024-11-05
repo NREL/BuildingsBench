@@ -17,7 +17,11 @@ Our benchmark assumes each model takes as input a dictionary of torch tensors wi
 }
 ```
 
-To use these scripts with your model you'll need to register your model with our platform. 
+Models can optionally also take a `temperature` timeseries tensor as input. 
+
+Arguments for each model are specified in a TOML configuration file in the `./buildings_bench/configs` directory.
+If you just want to modify the arguments for a provided model type, you can do so either by modifying the provided TOML config file or by creating a new TOML config file.
+To add your own custom model, you'll need to follow a few steps to register your model with our platform.
 
 ## Registering your model
 
@@ -94,7 +98,7 @@ srun python3 scripts/pretrain.py \
 
 ## Zero-shot Evaluation
 
-This script `scripts/zero_shot.py` and the script for transfer learning `scripts/transfer_learning_torch.py` do not use `DistributedDataParallel` so they can be run without `torchrun`.
+The script `scripts/zero_shot.py` and the script for transfer learning `scripts/transfer_learning_torch.py` do not use `DistributedDataParallel` so they can be run without `torchrun`.
 
 `python3 scripts/zero_shot.py --model TransformerWithGaussian-S --checkpoint /path/to/checkpoint.pt`
 
@@ -116,7 +120,7 @@ An important caveat is that we are *not* using 24-hour weather *forecasts* as in
 
 #### Training and evaluation with weather data
 
-To train or evaluate a model that uses weather inputs, all you have to do is modify the model's .toml configuration file to include the `weather_inputs` key:
+To train or evaluate a model that uses weather inputs, create a new model configuration TOML file in the `buildings_bench/configs` folder to include the `weather_inputs` key:
 
 ```toml
 [model]
