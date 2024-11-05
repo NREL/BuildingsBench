@@ -17,7 +17,7 @@ Our benchmark assumes each model takes as input a dictionary of torch tensors wi
 }
 ```
 
-Models can optionally also take a `temperature` timeseries tensor as input. 
+As of v2.0.0, models can also optionally take a `temperature` timeseries tensor as input. 
 
 Arguments for each model are specified in a TOML configuration file in the `./buildings_bench/configs` directory.
 If you just want to modify the arguments for a provided model type, you can do so either by modifying the provided TOML config file or by creating a new TOML config file.
@@ -108,23 +108,27 @@ The script `scripts/zero_shot.py` and the script for transfer learning `scripts/
 
 ## Weather Timeseries
 
-An important data source for forecasting building energy usage is the external weather condition. This significantly impacts energy usage in buildings, for example, when high temperatures lead to increases in cooling demand. In BuildingsBench v2.0.0, we have added weather timeseries data for each building in Buildings-900K and for each test building in the BuildingBench evaluation suite. The outdoor *temperature* is the most impactful feature. We support pretraining and evaluation with temperature series. A forecasting model is provided with both the past one week of temperature timeseries data as well as the temperature for the 24 hour prediction horizon. We note that some of the building datasets in our benchmark have more variables available than just temperature. 
+An important data source for forecasting building energy usage is the external weather condition. This significantly impacts energy usage in buildings, for example, when high temperatures lead to increases in cooling demand. In BuildingsBench v2.0.0, we have added weather timeseries data for each building in Buildings-900K and for each test building in the BuildingBench evaluation suite. In particular, we support pretraining and evaluation with a temperature timeseries input. The outdoor *temperature* is the most impactful weather feature for load forecasting. 
+
+In detail, a forecasting model can be provided with both the past one week of temperature timeseries data as well as the temperature for the 24 hour prediction horizon. We note that some of the building datasets in our benchmark have more variables available beyond just temperature.
+
+Summary of available weather data: 
 
 * Buildings-900K weather: For each PUMA and year (`amy2018`, `tmy3`), there is a corresponding weather csv file. That is, a residential building in the same PUMA has the same `amy2018` weather timeseries as a commercial building in that PUMA for `amy2018`. This file has hourly annual weather data with the following 7 variables: Dry Bulb Temperature (°C), Relative Humidity (%), Wind Speed (m/s), Wind Direction (Deg),Global Horizontal Radiation (W/m2), Direct Normal Radiation (W/m2), Diffuse Horizontal Radiation (W/m2). We note that these weather files are the same ones used by the EnergyPlus simulator to create these synthetic load timeseries. 
 
 * BDG-2 and SMART datasets weather: These datasets provide per-building hourly temperature and humidity timeseries, which we include.  
 
-* Other BuildingsBench evaluation datasets: The other datasets (Electricity, Borealis, IDEAL, LCL, Sceaux) did not provide this weather data. We collected the temperature timeseries ourselves from the National Oceanic and Atmospheric Administration's (NOAA) Integrated Surface Database (ISD), managed by the National Centers for Environmental Information (NCEI).  
+* Other BuildingsBench evaluation datasets: The Electricity, Borealis, IDEAL, LCL, Sceaux do not provide weather data. We collected the temperature timeseries ourselves from the National Oceanic and Atmospheric Administration's (NOAA) Integrated Surface Database (ISD), managed by the National Centers for Environmental Information (NCEI).  
 
 An important caveat is that we are *not* using 24-hour weather *forecasts* as inputs to our load forecasting model. Rather, we are providing the models with the actual day-ahead weather that was recorded. In reality, we do not know tomorrow's weather and so our models must normally rely on a (potentially inaccurate) weather forecast. 
 
 #### Training and evaluation with weather data
 
-To train or evaluate a model that uses weather inputs, create a new model configuration TOML file in the `buildings_bench/configs` folder to include the `weather_inputs` key:
+To train or evaluate a model that uses temperature timeseries inputs, create a new model configuration TOML file in the `buildings_bench/configs` folder to include the `weather_inputs` key:
 
 ```toml
 [model]
-# your model's keyword arguments
+
 weather_inputs = ['temperature']
 
 ```
