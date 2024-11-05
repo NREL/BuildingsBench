@@ -42,6 +42,8 @@ def zero_shot_learning(args, model_args, results_path: Path):
     elif args.benchmark[0] == 'real':
         y = [x for x in benchmark_registry if x != 'buildings-900k-test']
         args.benchmark = y
+    elif args.benchmark[0] == 'bdg-2':
+        args.benchmark = [x for x in benchmark_registry if 'bdg-2:' in x]
         
     if args.ignore_scoring_rules:
         metrics_manager = DatasetMetricsManager()
@@ -58,10 +60,14 @@ def zero_shot_learning(args, model_args, results_path: Path):
         buildings_datasets_generator = load_torch_dataset(dataset_name,
                                                           apply_scaler_transform=args.apply_scaler_transform,
                                                           scaler_transform_path=transform_path,
-                                                          include_outliers=args.include_outliers)
+                                                          include_outliers=args.include_outliers,
+                                                          weather_inputs=model_args['weather_inputs'])
+        
+        num_of_buildings = len(buildings_datasets_generator)
+        print(f'dataset {dataset_name}: {num_of_buildings} buildings')
         # For each building
-        for building_name, building_dataset in buildings_datasets_generator:
-            print(f'dataset {dataset_name} building-year {building_name} '
+        for count, (building_name, building_dataset) in enumerate(buildings_datasets_generator, start=1):
+            print(f'dataset {dataset_name} {count}/{num_of_buildings} building-year {building_name} '
                     f'day-ahead forecasts {len(building_dataset)}')
 
             metrics_manager.add_building_to_dataset_if_missing(
@@ -104,7 +110,7 @@ def zero_shot_learning(args, model_args, results_path: Path):
                 targets = batch['load'][:, model.context_len:]
 
                 if args.device == 'cuda':
-                    with torch.cuda.amp.autocast():
+                    with torch.amp.autocast('cuda'):
                         predictions, distribution_params = predict(batch)
                 else:
                     predictions, distribution_params = predict(batch)
@@ -145,6 +151,8 @@ def zero_shot_learning(args, model_args, results_path: Path):
                     y_distribution_params=distribution_params,
                     centroids=centroids
                 )
+            if count == 10:
+                break
     print('Generating summaries...')
     variant_name = f':{args.variant_name}' if args.variant_name != '' else ''
     metrics_file = results_path / f'metrics_{args.model}{variant_name}.csv'
@@ -169,36 +177,41 @@ def zero_shot_learning(args, model_args, results_path: Path):
 
     # Compute and display aggregate statistics
     with open(Path(os.environ.get('BUILDINGS_BENCH', '')) / 'metadata' / 'oov.txt', 'r') as f:
+        oov_bldgs = []
         for line in f:
             oov_bldgs += [line.strip().split(' ')[1]]
 
         metric_names = [m.name for m in metrics_manager.metrics_list]
         if metrics_manager.scoring_rule:
             metric_names += [metrics_manager.scoring_rule.name]
+        
+        if len(args.benchmark) > 1 or \
+                (len(args.benchmark) == 1 and args.benchmark[0] != 'buildings-900k-test'):
+            # Returns a dictionary with the median of the nrmse (cv-rmse)
+            # and crps metrics for the model with boostrapped 95% confidence intervals
+            print('BuildingsBench (real)')
+            results_dict = aggregate.return_aggregate_median(
+                                model_list = [f'{args.model}{variant_name}'],
+                                results_dir = str(results_path),
+                                experiment = 'zero_shot',
+                                metrics = metric_names,
+                                exclude_simulated=True,
+                                oov_list = oov_bldgs
+                            )
+            aggregate.pretty_print_aggregates(results_dict)
 
-        # Returns a dictionary with the median of the nrmse (cv-rmse)
-        # and crps metrics for the model with boostrapped 95% confidence intervals
-        print('BuildingsBench (real)')
-        results_dict = aggregate.return_aggregate_median(
-                            model_list = [f'{args.model}{variant_name}'],
-                            results_dir = str(results_path),
-                            experiment = 'zero_shot',
-                            metrics = metric_names,
-                            exclude_simulated=True,
-                            oov_list = oov_bldgs
-                        )
-        aggregate.pretty_print_aggregates(results_dict)
-        print('Buildings-900K-test (synth)')
-        results_dict = aggregate.return_aggregate_median(
-                            model_list = [f'{args.model}{variant_name}'],
-                            results_dir = str(results_path),
-                            experiment = 'zero_shot',
-                            metrics = metric_names,
-                            exclude_simulated=False,
-                            only_simulated=True,
-                            oov_list = oov_bldgs
-                        )
-        aggregate.pretty_print_aggregates(results_dict)
+        if 'buildings-900k-test' in args.benchmark:
+            print('Buildings-900K-test (synth)')
+            results_dict = aggregate.return_aggregate_median(
+                                model_list = [f'{args.model}{variant_name}'],
+                                results_dir = str(results_path),
+                                experiment = 'zero_shot',
+                                metrics = metric_names,
+                                exclude_simulated=False,
+                                only_simulated=True,
+                                oov_list = oov_bldgs
+                            )
+            aggregate.pretty_print_aggregates(results_dict)
 
 
 if __name__ == '__main__':
@@ -231,7 +244,7 @@ if __name__ == '__main__':
     parser.add_argument('--apply_scaler_transform', type=str, default='',
                         choices=['', 'standard', 'boxcox'], 
                         help='Apply a scaler transform to the load values.')
-    
+
     args = parser.parse_args()
     utils.set_seed(args.seed)
     
@@ -241,9 +254,14 @@ if __name__ == '__main__':
         model_args = toml_args['model']
         if 'zero_shot' in toml_args:
             for k,v in toml_args['zero_shot'].items():
-                setattr(args, k, v)
+                if k != 'weather':
+                    setattr(args, k, v)
+                elif v != 'False':
+                    setattr(args, k, True)
         if not model_args['continuous_loads'] or 'apply_scaler_transform' not in args:
             setattr(args, 'apply_scaler_transform', '')
+        if 'weather_inputs' not in model_args:
+            model_args['weather_inputs'] = None
     else:
         raise ValueError(f'Config {args.model}.toml not found.')
 

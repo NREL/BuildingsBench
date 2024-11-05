@@ -1,17 +1,23 @@
 [model]
 context_len = 168
 pred_len = 24
-lstm_layers = 3
-hidden_size = 40
-continuous_head = 'gaussian_nll'
+num_encoder_layers = 2
+num_decoder_layers = 2
+nhead = 4
+dim_feedforward = 512
+d_model = 256
+dropout = 0.0
+activation = 'gelu'
 continuous_loads = true
-ignore_exogenous = false
+ignore_spatial = false
+continuous_head = 'gaussian_nll'
+weather_inputs = ['temperature', 'humidity']
 
 [pretrain]
-batch_size = 64
+batch_size = 128
 init_scale = 0.02
 warmup_steps = 10000
-lr = 0.00006
+lr = 0.0006
 train_tokens = 1000000000
 apply_scaler_transform = 'boxcox'
 
@@ -20,5 +26,3 @@ apply_scaler_transform = 'boxcox'
 
 [transfer_learning]
 apply_scaler_transform = 'boxcox'
-lr = 1e-4
-max_epochs = 100

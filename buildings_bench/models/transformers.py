@@ -1,6 +1,6 @@
 import math
 import torch
-from typing import Tuple, Dict
+from typing import Tuple, Dict, List
 from torch import nn
 import torch.nn.functional as F
 from torch.nn import Transformer
@@ -113,9 +113,10 @@ class LoadForecastingTransformer(BaseModel):
                  dim_feedforward: int = 256,
                  dropout: float = 0.0,
                  activation: str = 'gelu',
-                 continuous_loads = False,
-                 continuous_head = 'mse',
-                 ignore_spatial = False):
+                 continuous_loads: bool = False,
+                 continuous_head: str = 'mse',
+                 ignore_spatial: bool = False,
+                 weather_inputs: List[str] = None):
         """
         Args:
             context_len (int): length of the input sequence.
@@ -131,6 +132,7 @@ class LoadForecastingTransformer(BaseModel):
             continuous_loads (bool): whether inputs are continuous/to train the model to predict continuous values.
             continuous_head (str): 'mse' or 'gaussian_nll'.
             ignore_spatial (bool): whether to ignore the spatial features.
+            weather_inputs (List[str]): list of weather features to use. Default: None.
         """
         super().__init__(context_len, pred_len, continuous_loads)
         
@@ -138,6 +140,11 @@ class LoadForecastingTransformer(BaseModel):
         self.vocab_size = vocab_size
         self.ignore_spatial = ignore_spatial
         s = d_model // 256
+        self.weather_features = weather_inputs
+        if self.weather_features:
+            self.weather_embedding = nn.Linear(len(self.weather_features), 64)
+            # accounting for the additional weather feature inputs
+            d_model += 64 
 
         self.transformer = Transformer(d_model=d_model,
                                        nhead=nhead,
@@ -168,6 +175,7 @@ class LoadForecastingTransformer(BaseModel):
         self.day_of_week_encoding = TimeSeriesSinusoidalPeriodicEmbedding(32 * s)
         self.hour_of_day_encoding = TimeSeriesSinusoidalPeriodicEmbedding(32 * s)
         
+
     def to(self, device):
         self.tgt_mask = self.tgt_mask.to(device)
         return super().to(device)
@@ -182,16 +190,31 @@ class LoadForecastingTransformer(BaseModel):
                                    [batch_size, pred_len, 1] if continuous_loads and continuous_head == 'mse', 
                                    [batch_size, pred_len, 2] if continuous_loads and continuous_head == 'gaussian_nll'.
         """
-        # [batch_size, seq_len, d_model]
-        time_series_embed = torch.cat([
-            self.lat_embedding(x['latitude']),
-            self.lon_embedding(x['longitude']),
-            self.building_embedding(x['building_type']).squeeze(2),
-            self.day_of_year_encoding(x['day_of_year']),
-            self.day_of_week_encoding(x['day_of_week']),
-            self.hour_of_day_encoding(x['hour_of_day']),
-            self.power_embedding(x['load']).squeeze(2),
-        ], dim=2)
+        if self.weather_features:
+            time_series_inputs = [
+                self.lat_embedding(x['latitude']),
+                self.lon_embedding(x['longitude']),
+                self.building_embedding(x['building_type']).squeeze(2),
+                self.day_of_year_encoding(x['day_of_year']),
+                self.day_of_week_encoding(x['day_of_week']),
+                self.hour_of_day_encoding(x['hour_of_day']),
+                self.weather_embedding(torch.cat(
+                            [x[ft] for ft in self.weather_features],
+                        dim=2)),
+                self.power_embedding(x['load']).squeeze(2),
+            ]
+        
+        else:
+            time_series_inputs = [
+                self.lat_embedding(x['latitude']),
+                self.lon_embedding(x['longitude']),
+                self.building_embedding(x['building_type']).squeeze(2),
+                self.day_of_year_encoding(x['day_of_year']),
+                self.day_of_week_encoding(x['day_of_week']),
+                self.hour_of_day_encoding(x['hour_of_day']),
+                self.power_embedding(x['load']).squeeze(2)
+            ]
+        time_series_embed = torch.cat(time_series_inputs, dim=2)
         # [batch_size, context_len, d_model]
         src_series_inputs = time_series_embed[:, :self.context_len, :]
         # [batch_size, pred_len, d_model]
@@ -265,15 +288,30 @@ class LoadForecastingTransformer(BaseModel):
             predictions (torch.Tensor): of shape [batch_size, pred_len, 1] or shape [batch_size, num_samples, pred_len] if num_samples > 1.
             distribution_parameters (torch.Tensor): of shape [batch_size, pred_len, 1]. Not returned if sampling.
         """
-        time_series_embed = torch.cat([
-            self.lat_embedding(x['latitude']),
-            self.lon_embedding(x['longitude']),
-            self.building_embedding(x['building_type']).squeeze(2),
-            self.day_of_year_encoding(x['day_of_year']),
-            self.day_of_week_encoding(x['day_of_week']),
-            self.hour_of_day_encoding(x['hour_of_day']),
-            self.power_embedding(x['load']).squeeze(2),
-        ], dim=2)
+        if self.weather_features:
+            time_series_inputs = [
+                self.lat_embedding(x['latitude']),
+                self.lon_embedding(x['longitude']),
+                self.building_embedding(x['building_type']).squeeze(2),
+                self.day_of_year_encoding(x['day_of_year']),
+                self.day_of_week_encoding(x['day_of_week']),
+                self.hour_of_day_encoding(x['hour_of_day']),
+                self.weather_embedding(torch.cat(
+                            [x[ft] for ft in self.weather_features],
+                        dim=2)),
+                self.power_embedding(x['load']).squeeze(2),
+            ]
+        else:
+            time_series_inputs = [
+                self.lat_embedding(x['latitude']),
+                self.lon_embedding(x['longitude']),
+                self.building_embedding(x['building_type']).squeeze(2),
+                self.day_of_year_encoding(x['day_of_year']),
+                self.day_of_week_encoding(x['day_of_week']),
+                self.hour_of_day_encoding(x['hour_of_day']),
+                self.power_embedding(x['load']).squeeze(2)
+            ]
+        time_series_embed = torch.cat(time_series_inputs, dim=2)
         # [batch_size, context_len, d_model]
         src_series_inputs = time_series_embed[:, :self.context_len, :]
         tgt_series_inputs = time_series_embed[:, self.context_len-1 : -1, :]
@@ -346,3 +384,4 @@ class LoadForecastingTransformer(BaseModel):
         else:
             # [batch_size, num_samples, pred_len]
             return torch.stack(all_preds,1).reshape(-1, num_samples, self.pred_len)
+    

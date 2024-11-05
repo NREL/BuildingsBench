@@ -1,0 +1,29 @@
+[model]
+context_len = 168
+pred_len = 24
+num_encoder_layers = 12
+num_decoder_layers = 12
+nhead = 12
+dim_feedforward = 2048
+d_model = 768
+dropout = 0.0
+activation = 'gelu'
+continuous_loads = true
+ignore_spatial = false
+continuous_head = 'gaussian_nll'
+weather_inputs = ['temperature', 'humidity', 'wind_speed', 'wind_direction', 'global_horizontal_radiation', 
+                              'direct_normal_radiation', 'diffuse_horizontal_radiation']
+
+[pretrain]
+batch_size = 64
+init_scale = 0.02
+warmup_steps = 10000
+lr = 0.00006
+train_tokens = 1000000000
+apply_scaler_transform = 'boxcox'
+
+[zero_shot]
+apply_scaler_transform = 'boxcox'
+
+[transfer_learning]
+apply_scaler_transform = 'boxcox'

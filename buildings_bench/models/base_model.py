@@ -3,9 +3,9 @@ from typing import Tuple, Dict, Union
 from pathlib import Path
 import torch
 import torch.nn as nn
+from huggingface_hub import PyTorchModelHubMixin
 
-
-class BaseModel(nn.Module, metaclass=abc.ABCMeta):
+class BaseModel(nn.Module, PyTorchModelHubMixin, metaclass=abc.ABCMeta):
     """Base class for all models."""
     def __init__(self, context_len, pred_len, continuous_loads):
         """Init method for BaseModel.

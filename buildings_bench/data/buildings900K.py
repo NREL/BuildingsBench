@@ -4,6 +4,10 @@ from pathlib import Path
 import pyarrow.parquet as pq
 import buildings_bench.transforms as transforms
 from buildings_bench.transforms import BoxCoxTransform, StandardScalerTransform
+import pandas as pd
+from typing import List
+from buildings_bench.utils import get_puma_county_lookup_table
+import datetime
 
 
 class Buildings900K(torch.utils.data.Dataset):
@@ -32,7 +36,8 @@ class Buildings900K(torch.utils.data.Dataset):
                 context_len: int = 168,
                 pred_len: int = 24,
                 apply_scaler_transform: str = '',
-                scaler_transform_path: Path = None):
+                scaler_transform_path: Path = None,
+                weather_inputs: List[str] = None):
         """
         Args:
             dataset_path (Path): Path to the pretraining dataset.
@@ -43,6 +48,7 @@ class Buildings900K(torch.utils.data.Dataset):
                 The index file has to be generated with the same pred length.
             apply_scaler_transform (str, optional): Apply a scaler transform to the load. Defaults to ''.
             scaler_transform_path (Path, optional): Path to the scaler transform. Defaults to None.
+            weather_inputs (List[str]): list of weather features to use. Default: None.
         """
         self.dataset_path = dataset_path / 'Buildings-900K' / 'end-use-load-profiles-for-us-building-stock' / '2021'
         self.metadata_path = dataset_path / 'metadata'
@@ -56,6 +62,7 @@ class Buildings900K(torch.utils.data.Dataset):
         self.index_file = self.metadata_path / index_file
         self.index_fp = None
         self.__read_index_file(self.index_file)
+        self.weather_inputs = weather_inputs
         self.time_transform = transforms.TimestampTransform()
         self.spatial_transform = transforms.LatLonTransform()
         self.apply_scaler_transform = apply_scaler_transform
@@ -66,6 +73,12 @@ class Buildings900K(torch.utils.data.Dataset):
             self.load_transform = StandardScalerTransform()
             self.load_transform.load(scaler_transform_path)
 
+        if self.weather_inputs: # build a puma-county lookup table
+            self.lookup_df = get_puma_county_lookup_table(self.metadata_path)
+            self.weather_transforms = []           
+            for col in self.weather_inputs:
+                self.weather_transforms += [ StandardScalerTransform() ]
+                self.weather_transforms[-1].load(self.metadata_path / 'transforms' / 'weather' / col)
 
     def init_fp(self):
         """Each worker needs to open its own file pointer to avoid 
@@ -155,6 +168,75 @@ class Buildings900K(torch.utils.data.Dataset):
             'building_type': building_features,
             'load': load_features[...,None]
         }
-        return sample
-    
 
+        if self.weather_inputs is None:
+            return sample
+        else:
+            ## Append weather features
+
+            # get county ID
+            county = self.lookup_df.loc[ts_idx[2]]['nhgis_2010_county_gisjoin']
+            # load corresponding weather files
+            weather_df = pd.read_csv(self.dataset_path / self.building_type_and_year[int(ts_idx[0])] / 'weather' / f'{county}.csv')
+
+            # This is assuming that the file always starts from January 1st (ignoring the year)
+            assert datetime.datetime.strptime(weather_df['date_time'].iloc[0], '%Y-%m-%d %H:%M:%S').strftime('%m-%d') == '01-01',\
+                "The weather file does not start from Jan 1st"
+            
+            weather_df.columns = ['timestamp'] + self.weather_inputs 
+            weather_df = weather_df[['timestamp'] + self.weather_inputs]
+            #weather_df = weather_df.iloc[:-1] # remove last hour to align with load data
+
+
+            # TODO: At test time, I think we are removing a row from the DF. Make sure these are the same.
+            # add -1 because the file starts from 01:00:00
+            weather_df = weather_df.iloc[seq_ptr-self.context_len-1 : seq_ptr+self.pred_len -1] 
+            
+            # convert temperature to fahrenheit (note: keep celsius for now)
+            # weather_df['temperature'] = weather_df['temperature'].apply(lambda x: x * 1.8 + 32) 
+
+            # transform
+            for idx,col in enumerate(weather_df.columns[1:]):
+                ## WARNING: CONVERTS TO TORCH FROM NUMPY AUTOMATICALLY
+                sample.update({col : self.weather_transforms[idx].transform(
+                    weather_df[col].to_numpy())[0][...,None] })
+
+            return sample
+    
+    def collate_fn(self):
+        """Returns a function taking only one argument (the list of items to be batched).
+        """
+        def _collate(samples):
+            batch = {
+                'latitude': torch.stack([torch.from_numpy(s['latitude']) for s in samples]).float(),
+                'longitude': torch.stack([torch.from_numpy(s['longitude']) for s in samples]).float(),
+                'building_type': torch.stack([torch.from_numpy(s['building_type']) for s in samples]).long(),
+                'day_of_year': torch.stack([torch.from_numpy(s['day_of_year']) for s in samples]).float(),
+                'day_of_week': torch.stack([torch.from_numpy(s['day_of_week']) for s in samples]).float(),
+                'hour_of_day': torch.stack([torch.from_numpy(s['hour_of_day']) for s in samples]).float(),
+                'load': torch.stack([torch.from_numpy(s['load']) for s in samples]).float(),
+            }
+            if self.weather_inputs:
+                for w in self.weather_inputs:
+                    batch[w] = torch.stack([s[w] for s in samples]).float()
+
+            return batch
+
+        return _collate
+
+
+if __name__ == '__main__':
+    import os 
+
+    dataset_path = Path(os.environ.get('BUILDINGS_BENCH', ''))
+    index_file = 'train_weekly.idx'
+    context_len = 168
+    pred_len = 24
+    apply_scaler_transform = 'boxcox'
+    scaler_transform_path =  dataset_path / 'metadata' / 'transforms'
+    weather_inputs = ['temperature', 'humidity', 'wind_speed', 'wind_direction', 'global_horizontal_radiation', 
+                      'direct_normal_radiation', 'diffuse_horizontal_radiation']
+    dataset = Buildings900K(dataset_path, index_file, context_len, pred_len, apply_scaler_transform, scaler_transform_path, weather_inputs)
+    
+    print(f'Number of time series: {len(dataset)}')
+    print(f'First sample: {dataset[0]}')

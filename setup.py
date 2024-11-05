@@ -44,7 +44,7 @@ setup(
       license='BSD 3-Clause',
       python_requires='>=3.8',
       extras_require={
-            'benchmark': ['transformers', 'wandb', 'properscoring', 'matplotlib', 'seaborn', 'jupyterlab']
+            'benchmark': ['wandb', 'properscoring', 'matplotlib', 'seaborn', 'jupyterlab']
       },
       keywords=['forecasting', 'energy', 'buildings', 'benchmark'],
       classifiers=[

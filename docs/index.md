@@ -2,10 +2,11 @@
 
 ## Overview 
 
-BuildingsBench is a platform for:
+BuildingsBench is a platform for enabling
 
-- Large-scale pretraining with the synthetic Buildings-900K dataset for short-term load forecasting (STLF). Buildings-900K is statistically representative of the entire U.S. building stock and is extracted from the NREL [End-Use Load Profiles database](https://www.nrel.gov/buildings/end-use-load-profiles.html).
-- Benchmarking on two tasks evaluating generalization: zero-shot STLF and transfer learning for STLF.
+- Large-scale pretraining with energy timeseries using the synthetic Buildings-900K dataset, on a short-term load forecasting (STLF) task. Buildings-900K is statistically representative of the entire U.S. building stock and is extracted from the NREL [End-Use Load Profiles database](https://www.nrel.gov/buildings/end-use-load-profiles.html).
+- Benchmarking such models on two tasks evaluating difficult generalization challenges: zero-shot STLF and transfer learning for STLF.
+
 
 We provide an index-based PyTorch [Dataset](https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#the-buildings-900k-pytorch-dataset) for large-scale pretraining, easy data loading for multiple real building energy consumption datasets as [PyTorch Tensors](https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#torchbuildingdatasetsfromcsv) or [Pandas DataFrames](https://nrel.github.io/BuildingsBench/API/data/buildings_bench-data/#pandasbuildingdatasetsfromcsv), from simple persistence to advanced transformer baselines, [metrics management](https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-evaluation/), a [tokenizer](https://nrel.github.io/BuildingsBench/API/utilities/buildings_bench-tokenizer/) based on KMeans for load time series, and more.
 
@@ -26,7 +27,7 @@ pip install buildings_bench
 
 Otherwise, clone this repository and install it in editable mode in a virtual environment or a conda environment.
 
-1. Create an environment with `python>=3.8`, for example: `conda create -n buildings_bench python=3.8`.
+1. Create an environment with `python>=3.9`, for example: `conda create -n buildings_bench python=3.9`.
 2. Install the package in editable mode with
 ```bash
 git clone https://github.com/NREL/BuildingsBench.git
@@ -75,7 +76,7 @@ If using `wandb`, set the following:
 Verify your installation by running unit tests:
 
 ```bash
-python -m unittest
+python3 -m unittest
 ```
 
 ## Next steps
@@ -93,9 +94,11 @@ If you use BuildingsBench in your research, please cite our preprint:
 
 ```
 @article{emami2023buildingsbench,
-  title={BuildingsBench: A Large-Scale Dataset of 900K Buildings and Benchmark for Short-Term Load Forecasting},
+  title={Buildingsbench: A large-scale dataset of 900k buildings and benchmark for short-term load forecasting},
   author={Emami, Patrick and Sahu, Abhijeet and Graf, Peter},
-  journal={arXiv preprint arXiv:2307.00142},
+  journal={Advances in Neural Information Processing Systems},
+  volume={36},
+  pages={19823--19857},
   year={2023}
 }
 ```

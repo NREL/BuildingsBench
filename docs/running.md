@@ -1,5 +1,3 @@
-## Getting Started
-
 We provide scripts in the `./scripts` directory for pretraining and to run the benchmark tasks (zero-shot STLF and transfer learning), either with our provided baselines or your own model.
 
 PyTorch checkpoint files for our trained models are available for download as a single tar file  [here](https://oedi-data-lake.s3.amazonaws.com/buildings-bench/v1.0.0/compressed/checkpoints.tar.gz) or as individual files on S3 [here](https://data.openei.org/s3_viewer?bucket=oedi-data-lake&prefix=buildings-bench%2Fv1.0.0%2Fcheckpoints%2F).
@@ -19,9 +17,13 @@ Our benchmark assumes each model takes as input a dictionary of torch tensors wi
 }
 ```
 
-To use these scripts with your model you'll need to register your model with our platform. 
+As of v2.0.0, models can also optionally take a `temperature` timeseries tensor as input. 
 
-### Registering your model
+Arguments for each model are specified in a TOML configuration file in the `./buildings_bench/configs` directory.
+If you just want to modify the arguments for a provided model type, you can do so either by modifying the provided TOML config file or by creating a new TOML config file.
+To add your own custom model, you'll need to follow a few steps to register your model with our platform.
+
+## Registering your model
 
 Please see this [step-by-step tutorial](https://github.com/NREL/BuildingsBench/blob/main/tutorials/registering_your_model_with_the_benchmark.ipynb) for a Jupyter Notebook version of the following instructions.
 
@@ -49,7 +51,7 @@ The TOML config file should look something like this:
 ```
 See `./buildings_bench/configs/TransformerWithTokenizer-S.toml` for an example.
 
-### Pretraining
+## Pretraining
 
 #### Without SLURM
 
@@ -94,12 +96,60 @@ srun python3 scripts/pretrain.py \
 ```
 
 
-### Zero-shot STLF
+## Zero-shot Evaluation
 
-This script `scripts/zero_shot.py` and the script for transfer learning `scripts/transfer_learning_torch.py` do not use `DistributedDataParallel` so they can be run without `torchrun`.
+The script `scripts/zero_shot.py` and the script for transfer learning `scripts/transfer_learning_torch.py` do not use `DistributedDataParallel` so they can be run without `torchrun`.
 
 `python3 scripts/zero_shot.py --model TransformerWithGaussian-S --checkpoint /path/to/checkpoint.pt`
 
-### Transfer Learning for STLF
+## Transfer Learning Evaluation
 
 `python3 scripts/transfer_learning_torch.py --model TransformerWithGaussian-S --checkpoint /path/to/checkpoint.pt`  
+
+## Weather Timeseries
+
+An important data source for forecasting building energy usage is the external weather condition. This significantly impacts energy usage in buildings, for example, when high temperatures lead to increases in cooling demand. In BuildingsBench v2.0.0, we have added weather timeseries data for each building in Buildings-900K and for each test building in the BuildingBench evaluation suite. In particular, we support pretraining and evaluation with a temperature timeseries input. The outdoor *temperature* is the most impactful weather feature for load forecasting. 
+
+In detail, a forecasting model can be provided with both the past one week of temperature timeseries data as well as the temperature for the 24 hour prediction horizon. We note that some of the building datasets in our benchmark have more variables available beyond just temperature.
+
+Summary of available weather data: 
+
+* Buildings-900K weather: For each PUMA and year (`amy2018`, `tmy3`), there is a corresponding weather csv file. That is, a residential building in the same PUMA has the same `amy2018` weather timeseries as a commercial building in that PUMA for `amy2018`. This file has hourly annual weather data with the following 7 variables: Dry Bulb Temperature (°C), Relative Humidity (%), Wind Speed (m/s), Wind Direction (Deg),Global Horizontal Radiation (W/m2), Direct Normal Radiation (W/m2), Diffuse Horizontal Radiation (W/m2). We note that these weather files are the same ones used by the EnergyPlus simulator to create these synthetic load timeseries. 
+
+* BDG-2 and SMART datasets weather: These datasets provide per-building hourly temperature and humidity timeseries, which we include.  
+
+* Other BuildingsBench evaluation datasets: The Electricity, Borealis, IDEAL, LCL, Sceaux do not provide weather data. We collected the temperature timeseries ourselves from the National Oceanic and Atmospheric Administration's (NOAA) Integrated Surface Database (ISD), managed by the National Centers for Environmental Information (NCEI).  
+
+An important caveat is that we are *not* using 24-hour weather *forecasts* as inputs to our load forecasting model. Rather, we are providing the models with the actual day-ahead weather that was recorded. In reality, we do not know tomorrow's weather and so our models must normally rely on a (potentially inaccurate) weather forecast. 
+
+#### Training and evaluation with weather data
+
+To train or evaluate a model that uses temperature timeseries inputs, create a new model configuration TOML file in the `buildings_bench/configs` folder to include the `weather_inputs` key:
+
+```toml
+[model]
+
+weather_inputs = ['temperature']
+
+```
+
+The `weather_inputs` key is a list of strings that correspond to the weather variables you want to include in your model and load from the corresponding datasets. 
+
+This will automatically add keys to the model's batch dictionary with the same names as the weather variables:
+
+```python
+{
+    'load': torch.Tensor,               # (batch_size, seq_len, 1)
+    'building_type': torch.LongTensor,  # (batch_size, seq_len, 1)
+    'day_of_year': torch.FloatTensor,   # (batch_size, seq_len, 1)
+    'hour_of_day': torch.FloatTensor,   # (batch_size, seq_len, 1)
+    'day_of_week': torch.FloatTensor,   # (batch_size, seq_len, 1)
+    'latitude': torch.FloatTensor,      # (batch_size, seq_len, 1)
+    'longitude': torch.FloatTensor,     # (batch_size, seq_len, 1)
+    'temperature': torch.FloatTensor,   # (batch_size, seq_len, 1)
+}
+```
+
+Then, launch model training in the usual way: 
+
+`python3 scripts/zero_shot.py --model TransformerWithGaussian-weather-S`

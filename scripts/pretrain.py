@@ -42,7 +42,7 @@ def validation(model, val_dataloader, args, loss, load_transform, transform, inv
             scoring_rule=scoring_rule_factory('rps')
         )
 
-    for batch in val_dataloader:   
+    for batch in val_dataloader:  
         building_types_mask = batch['building_type'][:,0,0] == 1
 
         for k,v in batch.items():
@@ -55,7 +55,7 @@ def validation(model, val_dataloader, args, loss, load_transform, transform, inv
         batch['load'] = transform(batch['load'])
         targets = batch['load'][:, model.module.context_len:]
 
-        with torch.cuda.amp.autocast():
+        with torch.amp.autocast('cuda'):
             preds = model(batch)
             batch_loss = loss(preds, targets)
             predictions, distribution_params = predict(batch)
@@ -85,7 +85,7 @@ def validation(model, val_dataloader, args, loss, load_transform, transform, inv
                 if args.tokenizer_without_merge else load_transform.merged_centroids
         else:
             centroids = None
-
+        
         metrics_manager(
             continuous_targets,
             predictions,
@@ -155,8 +155,11 @@ def main(args, model_args):
     print(f'dataset path = {os.environ.get("BUILDINGS_BENCH", "")}')
 
     checkpoint_dir = SCRIPT_PATH / '..' / 'checkpoints'
-    transform_path = Path(os.environ.get('BUILDINGS_BENCH', '')) / 'metadata' / 'transforms'
+    checkpoint_name = f'{experiment_args.model}'
+    if args.note != '':
+        checkpoint_name += f'_{args.note}'
 
+    transform_path = Path(os.environ.get('BUILDINGS_BENCH', '')) / 'metadata' / 'transforms'
 
     if args.rank == 0:
         if not checkpoint_dir.exists():
@@ -188,7 +191,7 @@ def main(args, model_args):
     global_batch_size = args.world_size * args.batch_size
 
     #################### Model setup ####################
-
+    
     model, loss, predict = model_factory(args.model, model_args)
     model = model.to(local_rank)
     print(f'rank {args.rank} number of trainable parameters is '\
@@ -199,31 +202,45 @@ def main(args, model_args):
     train_dataset = load_pretraining('buildings-900k-train',
                                      args.num_buildings,
                                      args.apply_scaler_transform,
-                                     transform_path)
+                                     transform_path,
+                                     weather_inputs=model_args['weather_inputs'],
+                                     custom_idx_filename=args.train_idx_filename)
     
     val_dataset = load_pretraining('buildings-900k-val',
                                    args.num_buildings,
                                    args.apply_scaler_transform,
-                                   transform_path)
+                                   transform_path,
+                                   weather_inputs=model_args['weather_inputs'],
+                                   custom_idx_filename=args.val_idx_filename)
 
     train_sampler = torch.utils.data.distributed.DistributedSampler(
                                      dataset=train_dataset,
                                      num_replicas=args.world_size,
                                      rank=args.rank, shuffle=True)
-    val_sampler = torch.utils.data.distributed.DistributedSampler(
-                                     dataset=val_dataset,
-                                     num_replicas=args.world_size,
-                                     rank=args.rank, shuffle=True)
+    # val_sampler = torch.utils.data.distributed.DistributedSampler(
+    #                                  dataset=val_dataset,
+    #                                  num_replicas=args.world_size,
+    #                                  rank=args.rank, shuffle=False)
 
     train_dataloader = torch.utils.data.DataLoader(
-        train_dataset, batch_size=args.batch_size, sampler=train_sampler,
-        drop_last=False, worker_init_fn=utils.worker_init_fn_eulp,
-        shuffle=(train_sampler is None), num_workers=args.num_workers, pin_memory=True)
+        train_dataset,
+        batch_size=args.batch_size,
+        sampler=train_sampler,
+        drop_last=False,
+        worker_init_fn=utils.worker_init_fn_eulp,
+        collate_fn=train_dataset.collate_fn(),
+        shuffle=(train_sampler is None),
+        num_workers=args.num_workers, pin_memory=True)
     
     val_dataloader = torch.utils.data.DataLoader(
-        val_dataset, batch_size=args.batch_size, sampler=val_sampler,
-        drop_last=False, worker_init_fn=utils.worker_init_fn_eulp,
-        shuffle=(val_sampler is None), num_workers=args.num_workers, pin_memory=True)
+        val_dataset,
+        batch_size=args.batch_size,
+        #sampler=val_sampler,
+        drop_last=False,
+        worker_init_fn=utils.worker_init_fn_eulp,
+        collate_fn=val_dataset.collate_fn(),
+        shuffle=True,
+        num_workers=args.num_workers, pin_memory=True)
     
     if not model.continuous_loads:
         load_transform = LoadQuantizer(
@@ -247,7 +264,9 @@ def main(args, model_args):
     #################### Optimizer setup ##########################
 
     # wrap model with DistributedDataParallel
-    model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[local_rank], output_device=local_rank)
+    model = torch.nn.parallel.DistributedDataParallel(model,
+                                                     device_ids=[local_rank],
+                                                     output_device=local_rank)
 
     print(f'rank {args.rank} wrapped model in DDP', flush=True)
     optimizer = torch.optim.AdamW(model.parameters(), lr=args.lr,
@@ -258,7 +277,7 @@ def main(args, model_args):
                             num_warmup_steps=args.warmup_steps,
                             num_training_steps=train_steps)
         
-    scaler = torch.cuda.amp.GradScaler()
+    scaler = torch.amp.GradScaler()
 
     #################### Resume from checkpoint ####################
 
@@ -280,7 +299,7 @@ def main(args, model_args):
 
     # fix sampling seed such that each gpu gets different part of dataset        
     train_sampler.set_epoch(0)
-    val_sampler.set_epoch(0)    
+    #val_sampler.set_epoch(0)    
     model.train()
     start_time = timer()
 
@@ -295,7 +314,7 @@ def main(args, model_args):
         batch['load'] = transform(batch['load'])
         
         # backwards is called in here
-        with torch.cuda.amp.autocast():
+        with torch.amp.autocast('cuda'):
             preds = model(batch)    
             targets = batch['load'][:, model.module.context_len:]                
             # preds are [bsz_sz, pred_len, vocab_size] if logits
@@ -336,20 +355,21 @@ def main(args, model_args):
                                                         transform, inverse_transform, predict)
             # only rank 0 needs to save model
             if val_loss < best_val_loss:
-                # delete old checkpoint
-                if args.note != '':
-                    for f in checkpoint_dir.glob(f'ckpt-step-*-{args.note}-loss-{best_val_loss:.3f}.pt'):
-                        f.unlink()
-                else:
-                    for f in checkpoint_dir.glob(f'ckpt-step-*-loss-{best_val_loss:.3f}.pt'):
-                        f.unlink()
-
+                
                 best_val_loss = val_loss
-                if args.note != '':
-                    model_name = f'ckpt-step-{step}-{args.note}-loss-{best_val_loss:.3f}.pt'
-                else:
-                    model_name = f'ckpt-step-{step}-loss-{best_val_loss:.3f}.pt'
+
+                model_name = checkpoint_name + '_best.pt'
+
+                # delete previous
+                if (checkpoint_dir / model_name).exists():
+                    Path(checkpoint_dir / model_name).unlink()
+                # save best
                 utils.save_model_checkpoint(model, optimizer, scheduler, step, checkpoint_dir / model_name)
+
+            # we always save the last val model
+            last_model_name = checkpoint_name + '_last.pt'
+            utils.save_model_checkpoint(model, optimizer, scheduler, step, checkpoint_dir / last_model_name)
+                
             for building_type in [BuildingTypes.RESIDENTIAL, BuildingTypes.COMMERCIAL]:
                 for metric_name, metric_result in val_metrics[building_type].items():
                     if metric_result.type == MetricType.SCALAR:
@@ -367,7 +387,7 @@ def main(args, model_args):
                 'val/loss': val_loss,
                 'val/ppl': val_ppl,
             }, step=step)
-            print(f'finished validation at step {step}...')
+            print(f'finished validation with loss {val_loss:.5f} at step {step}...')
         
         if step == train_steps:
             # stop training after this many steps/train_tokens
@@ -375,12 +395,9 @@ def main(args, model_args):
 
     # save final checkpoint
     if args.rank == 0:
-        if args.note != '':
-            model_name = f'ckpt-step-{step}-{args.note}.pt'
-        else:
-            model_name = f'ckpt-step-{step}.pt'
-        utils.save_model_checkpoint(model, optimizer, scheduler, step, checkpoint_dir / model_name)
-
+        last_model_name = checkpoint_name + '_last.pt'
+        utils.save_model_checkpoint(model, optimizer, scheduler, step, checkpoint_dir / last_model_name)
+              
     torch.distributed.destroy_process_group()        
     run.finish()
 
@@ -397,7 +414,9 @@ if __name__ == '__main__':
     parser.add_argument('--batch_size', type=int, default=256)
     parser.add_argument('--lr', type=float, default=0.00006)
     parser.add_argument('--warmup_steps', type=int, default=10000)
-    parser.add_argument('--train_tokens', type=int, default=1000000000) # 1B
+    parser.add_argument('--train_tokens', type=int, default=1000000000,# 1B
+                        help='This script pretrains a model for as many steps' \
+                         ' as it takes to see `train_tokens`.') 
     parser.add_argument('--random_seed', type=int, default=99)
     parser.add_argument('--ignore_scoring_rules', action='store_true',
                         help='Do not compute a scoring rule for this model.')
@@ -437,8 +456,13 @@ if __name__ == '__main__':
     parser.add_argument('--apply_scaler_transform', type=str, default='',
                         choices=['', 'standard', 'boxcox'], 
                         help='Apply a scaler transform to the load values.')
-        
+    parser.add_argument('--train_idx_filename', type=str, default='',
+                        help='Name of index files for training')
+    parser.add_argument('--val_idx_filename', type=str, default='',
+                        help='Name of index files for validation')
+
     experiment_args = parser.parse_args()
+
 
     # validate hyperopt args, if any
     for arg in experiment_args.hyper_opt:
@@ -460,6 +484,8 @@ if __name__ == '__main__':
                     setattr(experiment_args, k, v)
         if not model_args['continuous_loads'] or 'apply_scaler_transform' not in experiment_args:
             setattr(experiment_args, 'apply_scaler_transform', '')
+        if 'weather_inputs' not in model_args:
+            model_args['weather_inputs'] = None
     else:
         raise ValueError(f'Config {experiment_args.model}.toml not found.')
 

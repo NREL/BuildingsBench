@@ -3,24 +3,26 @@ from buildings_bench.models.base_model import BaseModel
 from buildings_bench.models.transformers import TimeSeriesSinusoidalPeriodicEmbedding
 import torch.nn as nn
 import torch.nn.functional as F
-import numpy as np
-from typing import Tuple, Dict
+from typing import Tuple, Dict, List
 
 
 class DeepAutoregressiveRNN(BaseModel):
 
-    def __init__(self, hidden_size = 40, lstm_layers = 3, 
-                 context_len = 168, pred_len=24,
-                 for_pretraining=False, 
+    def __init__(self,
+                 hidden_size = 40,
+                 lstm_layers = 3, 
+                 context_len = 168,
+                 pred_len=24,
+                 ignore_exogenous=False, 
                  continuous_head='gaussian_nll',
-                 continuous_loads=True):
+                 continuous_loads=True,
+                 weather_inputs: List[str] = None):
         super(DeepAutoregressiveRNN,self).__init__(context_len, pred_len, continuous_loads)
         self.continuous_head = continuous_head
         out_dim = 1 if self.continuous_head == 'mse' else 2
         self.logits = nn.Linear(hidden_size, out_dim)
-        
-        self.for_pretraining = for_pretraining
-        if self.for_pretraining:
+        self.ignore_exogenous = ignore_exogenous
+        if not self.ignore_exogenous:
 
             self.power_embedding = nn.Linear(1, 64)
             self.building_embedding = nn.Embedding(2, 32)
@@ -32,6 +34,10 @@ class DeepAutoregressiveRNN(BaseModel):
 
             self.encoder = nn.LSTM(256, hidden_size, num_layers=lstm_layers, batch_first=True)
             self.decoder = nn.LSTM(256, hidden_size, num_layers=lstm_layers, batch_first=True)
+            self.weather_features = weather_inputs
+            if self.weather_features:
+                self.weather_embedding = nn.Linear(len(self.weather_features), 64)
+                
         else:
             self.encoder = nn.LSTM(1, hidden_size, num_layers=lstm_layers, batch_first=True)
             self.decoder = nn.LSTM(1, hidden_size, num_layers=lstm_layers, batch_first=True)
@@ -46,9 +52,8 @@ class DeepAutoregressiveRNN(BaseModel):
                                    [batch_size, pred_len, 1] if continuous_loads and continuous_head == 'mse', 
                                    [batch_size, pred_len, 2] if continuous_loads and continuous_head == 'gaussian_nll'.
         """
-        if self.for_pretraining:
-            # [batch_size, seq_len, 256]
-            time_series_embed = torch.cat([
+        if not self.ignore_exogenous:
+            time_series_inputs = [
                 self.lat_embedding(x['latitude']),
                 self.lon_embedding(x['longitude']),
                 self.building_embedding(x['building_type']).squeeze(2),
@@ -56,7 +61,16 @@ class DeepAutoregressiveRNN(BaseModel):
                 self.day_of_week_encoding(x['day_of_week']),
                 self.hour_of_day_encoding(x['hour_of_day']),
                 self.power_embedding(x['load']).squeeze(2),
-            ], dim=2)
+            ]
+            if self.weather_features:
+                time_series_inputs += [
+                    self.weather_embedding(
+                        torch.cat(
+                            [x[ft] for ft in self.weather_features],
+                        dim=2)).squeeze(2)
+                    ]
+            # [batch_size, seq_len, 256]
+            time_series_embed = torch.cat(time_series_inputs, dim=2)
         else:
             time_series_embed = x['load']
 
@@ -118,8 +132,8 @@ class DeepAutoregressiveRNN(BaseModel):
             predictions (torch.Tensor): of shape [batch_size, pred_len, 1] or shape [batch_size, num_samples, pred_len] if num_samples > 1.
             distribution_parameters (torch.Tensor): of shape [batch_size, pred_len, 1]. Not returned if sampling.
         """
-        if self.for_pretraining:
-            time_series_embed = torch.cat([
+        if not self.ignore_exogenous:
+            time_series_inputs = [
                 self.lat_embedding(x['latitude']),
                 self.lon_embedding(x['longitude']),
                 self.building_embedding(x['building_type']).squeeze(2),
@@ -127,7 +141,16 @@ class DeepAutoregressiveRNN(BaseModel):
                 self.day_of_week_encoding(x['day_of_week']),
                 self.hour_of_day_encoding(x['hour_of_day']),
                 self.power_embedding(x['load']).squeeze(2),
-            ], dim=2)
+            ]
+            if self.weather_features:
+                time_series_inputs += [
+                    self.weather_embedding(
+                        torch.cat(
+                            [x[ft] for ft in self.weather_features],
+                        dim=2)).squeeze(2)
+                    ]
+            # [batch_size, seq_len, 256]
+            time_series_embed = torch.cat(time_series_inputs, dim=2)
         else:
             time_series_embed = x['load']
         # [batch_size, context_len, d_model]
@@ -176,6 +199,7 @@ class DeepAutoregressiveRNN(BaseModel):
                     next_decoder_input = torch.cat([ next_decoder_input[:, :-1], outputs ], dim=1)
                 # Append the next decoder input to the decoder input
                 decoder_input = torch.cat([decoder_input, next_decoder_input.unsqueeze(1)], dim=1)
+        
         if num_samples == 1 or greedy:
             if self.continuous_head == 'gaussian_nll':
                 # [batch_size, pred_len, 2]

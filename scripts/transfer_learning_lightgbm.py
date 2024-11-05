@@ -36,9 +36,11 @@ def transfer_learning(args, results_path: Path):
         with open(metadata_dir / 'transfer_learning_residential_buildings.txt', 'r') as f:
             target_buildings += f.read().splitlines()
 
-    for dataset in args.benchmark:
-        dataset_generator = load_pandas_dataset(dataset, feature_set='engineered',
-                                                include_outliers=args.include_outliers)
+    for dataset_name in args.benchmark:
+        dataset_generator = load_pandas_dataset(dataset_name, 
+                                                feature_set='engineered',
+                                                include_outliers=args.include_outliers,
+                                                weather_inputs=['temperature'] if args.use_temperature_input else None)
         # Filter to target buildings
         if len(target_buildings) > 0:
             dataset_generator = keep_buildings(dataset_generator, target_buildings)
@@ -53,13 +55,13 @@ def transfer_learning(args, results_path: Path):
 
             # if date range is less than 120 days, skip - 90 days training, 30+ days eval.
             if len(bldg_df) < (args.num_training_days+30)*24:
-                print(f'{dataset} {building_name} has too few days {len(bldg_df)}')
+                print(f'{dataset_name} {building_name} has too few days {len(bldg_df)}')
                 continue
 
-            print(f'dataset {dataset} building {building_name}')
+            print(f'dataset {dataset_name} building {building_name}')
             
             metrics_manager.add_building_to_dataset_if_missing(
-                 dataset, f'{building_name}',
+                 dataset_name, f'{building_name}',
             )
 
             # Split into fine-tuning and evaluation set by date
@@ -105,7 +107,7 @@ def transfer_learning(args, results_path: Path):
                 )
 
                 metrics_manager(
-                    dataset,
+                    dataset_name,
                     f'{building_name}',
                     torch.from_numpy(ground_truth['power'].values).float().view(1,24,1),
                     torch.from_numpy(predictions.values).float().view(1,24,1),
@@ -140,6 +142,8 @@ if __name__ == '__main__':
                         help='Number of days for fine-tuning (last 30 used for early stopping)')
     parser.add_argument('--dont_subsample_buildings', action='store_true', default=False,
                         help='Evaluate on all instead of a subsample of 100 res/100 com buildings')      
+    parser.add_argument('--use_temperature_input', action='store_true',
+                        help='Include temperature as an additional feature in the model')
 
     args = parser.parse_args()
     utils.set_seed(args.seed)

@@ -16,7 +16,7 @@ class TestMetricsManager(unittest.TestCase):
 
         self.assertEqual(len(metrics_manager.metrics[BuildingTypes.RESIDENTIAL]), 1)
         self.assertEqual(len(metrics_manager.metrics[BuildingTypes.COMMERCIAL]), 1)
-        self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].name, 'mae-scalar')
+        self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].name, 'mae')
 
     def test_create_dataset_metrics_manager_multiple_metrics(self):
         metrics_manager = MetricsManager(
@@ -25,8 +25,8 @@ class TestMetricsManager(unittest.TestCase):
 
         self.assertEqual(len(metrics_manager.metrics[BuildingTypes.RESIDENTIAL]), 2)
         self.assertEqual(len(metrics_manager.metrics[BuildingTypes.COMMERCIAL]), 2)
-        self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].name, 'mae-scalar')
-        self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][1].name, 'rmse-scalar')
+        self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].name, 'mae')
+        self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][1].name, 'rmse')
     
     def test_create_dataset_metrics_manager_with_scoring_rule(self):
         metrics_manager = MetricsManager(
@@ -45,7 +45,7 @@ class TestMetricsManager(unittest.TestCase):
 
         self.assertEqual(len(metrics_manager.metrics[BuildingTypes.RESIDENTIAL]), 1)
         self.assertEqual(len(metrics_manager.metrics[BuildingTypes.COMMERCIAL]), 1)
-        self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].name, 'mae-scalar')
+        self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].name, 'mae')
         self.assertEqual(metrics_manager.scoring_rules[BuildingTypes.RESIDENTIAL].name, 'rps')
         self.assertEqual(metrics_manager.scoring_rules[BuildingTypes.COMMERCIAL].name, 'rps')
 
@@ -61,7 +61,7 @@ class TestMetricsManager(unittest.TestCase):
             building_types_mask=torch.BoolTensor([False])
         )
 
-        self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].name, 'mae-scalar')
+        self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].name, 'mae')
         metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].mean()
         self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].value, 0)
 
@@ -79,7 +79,7 @@ class TestMetricsManager(unittest.TestCase):
             loss=loss,
         )
 
-        self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].name, 'mae-scalar')
+        self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].name, 'mae')
         metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].mean()
         self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].value, 0)
         self.assertEqual(metrics_manager.get_ppl(), torch.exp( loss * 3 ) / 3)
@@ -101,7 +101,7 @@ class TestMetricsManager(unittest.TestCase):
 
         summary = metrics_manager.summary(with_loss=True, with_ppl=True)
 
-        self.assertEqual(summary[BuildingTypes.RESIDENTIAL]['mae-scalar'].value, 0)
+        self.assertEqual(summary[BuildingTypes.RESIDENTIAL]['mae'].value, 0)
         self.assertEqual(summary['ppl'], torch.exp( loss * 3 ) / 3)
         self.assertEqual(summary['loss'], loss)
 
@@ -123,7 +123,7 @@ class TestMetricsManager(unittest.TestCase):
 
         self.assertEqual(len(metrics_manager.metrics[BuildingTypes.RESIDENTIAL]), 1)
         self.assertEqual(len(metrics_manager.metrics[BuildingTypes.COMMERCIAL]), 1)
-        self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].name, 'mae-scalar')
+        self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].name, 'mae')
         self.assertEqual(metrics_manager.accumulated_unnormalized_loss, 0)
 
         metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].mean()
@@ -144,7 +144,7 @@ class TestMetricsManager(unittest.TestCase):
             building_type = BuildingTypes.RESIDENTIAL_INT
         )
 
-        self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].name, 'mae-scalar')
+        self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].name, 'mae')
         metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].mean()
         self.assertEqual(metrics_manager.metrics[BuildingTypes.RESIDENTIAL][0].value, 0)
 
@@ -189,7 +189,7 @@ class TestBenchmarkMetricsManager(unittest.TestCase):
             dataset_name='test',
             building_id='0001')
         
-        self.assertEqual(buliding_mm.metrics[BuildingTypes.RESIDENTIAL][0].name, 'cvrmse-scalar')
+        self.assertEqual(buliding_mm.metrics[BuildingTypes.RESIDENTIAL][0].name, 'cvrmse')
         buliding_mm.metrics[BuildingTypes.RESIDENTIAL][0].mean()
         self.assertEqual(buliding_mm.metrics[BuildingTypes.RESIDENTIAL][0].value, 0)
 
