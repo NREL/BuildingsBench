@@ -15,7 +15,7 @@ class TestMetrics(unittest.TestCase):
         self.assertEqual(len(mae), 1)
 
         mae = mae[0]
-        self.assertEqual(mae.name, 'mae-scalar')
+        self.assertEqual(mae.name, 'mae')
         self.assertEqual(mae.type, evaluation.MetricType.SCALAR)
         self.assertEqual(mae.UNUSED_FLAG, True)
         # Test call
@@ -34,7 +34,7 @@ class TestMetrics(unittest.TestCase):
                                             types=[evaluation.MetricType.SCALAR])
         self.assertEqual(len(cvrmse), 1)
         cvrmse = cvrmse[0]
-        self.assertEqual(cvrmse.name, 'cvrmse-scalar')
+        self.assertEqual(cvrmse.name, 'cvrmse')
         self.assertEqual(cvrmse.type, evaluation.MetricType.SCALAR)
         self.assertEqual(cvrmse.UNUSED_FLAG, True)
         # Test call
@@ -52,7 +52,7 @@ class TestMetrics(unittest.TestCase):
                                          types=[evaluation.MetricType.SCALAR])
         self.assertEqual(len(mbe), 1)
         mbe = mbe[0]
-        self.assertEqual(mbe.name, 'mbe-scalar')
+        self.assertEqual(mbe.name, 'mbe')
         self.assertEqual(mbe.type, evaluation.MetricType.SCALAR)
         self.assertEqual(mbe.UNUSED_FLAG, True)
         # Test call

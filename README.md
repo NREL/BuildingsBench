@@ -29,7 +29,7 @@ pip install buildings_bench
 
 Otherwise, clone this repository and install it in editable mode in a virtual environment or a conda environment.
 
-1. Create an environment with `python>=3.8`, for example: `conda create -n buildings_bench python=3.8`.
+1. Create an environment with `python>=3.9`, for example: `conda create -n buildings_bench python=3.9`.
 2. Install the package in editable mode with
 ```bash
 git clone https://github.com/NREL/BuildingsBench.git

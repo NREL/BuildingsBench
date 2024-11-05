@@ -395,7 +395,7 @@ class PandasBuildingDatasetsFromCSV:
             df = pd.read_csv(data_path / (building_year_file + '.csv'),
                              index_col=0, header=0, parse_dates=True)
             df.index = pd.to_datetime(df.index, format='%Y-%m-%d %H:%M:%S')
-            df = df.asfreq('H')
+            df = df.asfreq('h')
             df = df.sort_index()
             
             bldg_dfs =[]

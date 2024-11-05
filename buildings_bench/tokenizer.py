@@ -1,10 +1,15 @@
-import faiss
-import faiss.contrib.torch_utils 
 from typing import Union
 import numpy as np
 from pathlib import Path
 import torch
 
+try:
+    import faiss
+    import faiss.contrib.torch_utils 
+except ImportError:
+    print('Faiss is not installed. Follow instructions at '
+          'https://github.com/NREL/BuildingsBench/tree/v2.0.0?tab=readme-ov-file#installing-faiss-gpu to install faiss-gpu.')
+    
 
 class LoadQuantizer:
     """Quantize load timeseries with KMeans. Merge centroids that are within a threshold."""
