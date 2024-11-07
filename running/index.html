@@ -729,7 +729,8 @@ See <code>./scripts/pretrain.sh</code> for an example.</p>
 </span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="p">}</span>
 </span></code></pre></div>
 <p>Then, launch model training in the usual way: </p>
-<p><code>python3 scripts/zero_shot.py --model TransformerWithGaussian-weather-S</code></p>
+<p><code>python3 scripts/zero_shot.py --model TransformerWithGaussian-t-S</code></p>
+<p>We provide default small (S), medium (M), and large (L) model configs for models that expect <code>temperature</code> timeseries inputs: <code>TransformerWithGaussian-t-*</code>, <code>temperature</code> and <code>humidity</code> inputs: <code>TransformerWithGaussian-th-*</code>, and all available weather variables for the synthetic Buildings-900K data: <code>TransformerWithGaussian-weather-*</code>.</p>
 
 
 
