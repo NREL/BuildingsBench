@@ -152,4 +152,6 @@ This will automatically add keys to the model's batch dictionary with the same n
 
 Then, launch model training in the usual way: 
 
-`python3 scripts/zero_shot.py --model TransformerWithGaussian-weather-S`
+`python3 scripts/zero_shot.py --model TransformerWithGaussian-t-S`
+
+We provide default small (S), medium (M), and large (L) model configs for models that expect `temperature` timeseries inputs: `TransformerWithGaussian-t-*`, `temperature` and `humidity` inputs: `TransformerWithGaussian-th-*`, and all available weather variables for the synthetic Buildings-900K data: `TransformerWithGaussian-weather-*`.
