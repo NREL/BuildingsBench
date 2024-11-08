@@ -152,8 +152,6 @@ This will automatically add keys to the model's batch dictionary with the same n
 
 Then, launch model training in the usual way: 
 
-`python3 scripts/zero_shot.py --model TransformerWithGaussian-t-S`
-
 ```bash
 export WORLD_SIZE=1
 
