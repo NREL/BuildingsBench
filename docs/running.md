@@ -154,4 +154,17 @@ Then, launch model training in the usual way:
 
 `python3 scripts/zero_shot.py --model TransformerWithGaussian-t-S`
 
+```bash
+export WORLD_SIZE=1
+
+torchrun \
+    --nnodes=1 \
+    --nproc_per_node=1 \
+    --rdzv-backend=c10d \
+    --rdzv-endpoint=localhost:0 \
+    scripts/pretrain.py \
+    --model TransformerWithGaussian-t-S \
+    --disable_slurm
+```
+
 We provide default small (S), medium (M), and large (L) model configs for models that expect `temperature` timeseries inputs: `TransformerWithGaussian-t-*`, `temperature` and `humidity` inputs: `TransformerWithGaussian-th-*`, and all available weather variables for the synthetic Buildings-900K data: `TransformerWithGaussian-weather-*`.
