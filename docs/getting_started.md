@@ -1,3 +1,15 @@
+## Datasets 
+
+### Buildings-900K
+
+This is a dataset of energy timeseries derived from simulations of 900K building energy models. The timeseries are hourly and span an entire year. Each building energy model was simulated for two distinct weather years, so in total there are 1.8M timeseries. The weather timeseries and building metadata are also provided. 
+
+### BuildingsBench datasets
+
+In our work, we used Buildings-900K for large-scale pretraining and the BuildingsBench real building datasets for zero-shot forecasting and transfer learning. The BuildingsBench benchmark is a collection of 7 datasets containing smart meter electricity timeseries of real, individual residential and commercial buildings. We also provide temperature timeseries that can be used to condition load forecasts.  
+
+### Accessing the data
+
 The pretraining dataset and evaluation data is available for download [here](https://data.openei.org/submissions/5859) as tar files, or can be accessed via AWS S3 [here](https://data.openei.org/s3_viewer?bucket=oedi-data-lake&prefix=buildings-bench). The benchmark datasets are < 1GB in size in total and the pretraining data is ~110GB in size. 
 
 The pretraining data is divided into 4 compressed files
